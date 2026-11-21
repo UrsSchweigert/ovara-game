@@ -42,7 +42,11 @@ A small fact the game needs and the sources do not give, which changes nothing t
 - Anything needing a token, an account, a signature, a purchase, or a change to GitHub's settings.
 - Approving a plan, promoting a run to `main`, or cancelling an issue. You never cancel: cancelling drops every issue that depends on it.
 - A change to a protected path that the task cannot be done without.
-- A sign that the harness itself is broken: the same failure on an untouched base, or a sandbox missing a tool.
+- A sign that the sandbox or the setup is broken: the same failure on an untouched base, or a sandbox missing a tool.
+
+**5. A defect in the harness's own code. Escalate, with class `harness_defect`.**
+
+If the failure comes from the code under `tools/harness/` (a prompt that asks for one thing while a schema demands another, a check that cannot pass, a crash), say so with class `harness_defect`. In `reason`, name the file, quote the lines, and say what the fix is. The script then prepares that fix as a pull request for the owner. It never merges it. Do not use this class for a worker's mistake.
 
 If you cannot tell which class a question is in, it is class 3.
 
@@ -63,6 +67,8 @@ or
 ```json
 {"decision": "escalate", "class": "core_plot", "reason": "what the owner must decide, and what you would choose and why"}
 ```
+
+The classes are `process`, `minor_canon`, `core_plot`, `human_only` and `harness_defect`.
 
 `guidance` is given to the worker as it stands, so write it to the worker. `reason` is written to the steward's log for the owner. Never put a secret, a token or a personal detail in either.
 
