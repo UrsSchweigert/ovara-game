@@ -47,3 +47,7 @@ python3 -m venv .venv
 ```
 
 See [docs/harness/README.md](docs/harness/README.md) for what the harness needs first and what it will ask you.
+
+## Licence
+
+All rights reserved. This repository is public so that it can be read; it is not open source, and nothing in it may be copied, changed, reused or built on without written permission. See [LICENSE](LICENSE). The harness in `tools/harness/` has its own licence there.
