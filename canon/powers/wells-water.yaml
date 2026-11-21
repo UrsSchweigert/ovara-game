@@ -1,0 +1,16 @@
+id: power.wells-water
+name: Water of the Wells
+type: power
+kind: water-condition
+summary: >
+  At the Wells the gift is one reach stronger.
+facts:
+  - The gift is one reach stronger.
+  - Healers say it is the oldest water in the world, and nothing has ever been put in it but care.
+  - Restore is only reliably possible at the Wells.
+links:
+  powers: [power.clean-sea]
+  places: [place.north-well, place.kettle-house, place.ember-house]
+  factions: [faction.wellwalkers]
+sources:
+  - world-bible.md#6

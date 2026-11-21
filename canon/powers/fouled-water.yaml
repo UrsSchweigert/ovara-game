@@ -1,0 +1,17 @@
+id: power.fouled-water
+name: Fouled water
+type: power
+kind: water-condition
+summary: >
+  Polluted water joined to the sea. The gift answers one reach weaker.
+facts:
+  - The gift is one reach weaker.
+  - Filth can be drawn out of water itself by Purge.
+  - Water can also be deafened by filth; see power.deaf-water.
+links:
+  powers: [power.clean-sea, power.deaf-water]
+changes:
+  ch11: In fouled water the hero's asking tears one net and frees eleven people.
+sources:
+  - world-bible.md#6
+  - campaign.md#chapter-11

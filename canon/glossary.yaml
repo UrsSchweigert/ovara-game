@@ -34,6 +34,18 @@
   meaning: The scale of the gift a person can use safely, 1 to 5.
   banned: [level, power level, tier, rank]
 
+- term: Touched
+  meaning: Reach 1, a room's worth of water; about one mariner in ten.
+  banned: [novice caller, hedge caller]
+
+- term: the Mighty
+  meaning: Reach 3, a ship's worth of water; about one per hold.
+  banned: [archmage, high caller, master caller]
+
+- term: the ebb
+  meaning: Being cold, shaking, parched and unable to call after real effort with the gift. A caller in it is ebbed.
+  banned: [mana burn, cooldown]
+
 - term: ebbed
   meaning: Exhausted by using the gift and unable to call.
   banned: [out of mana, drained, depleted]

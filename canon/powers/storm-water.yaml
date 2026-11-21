@@ -1,0 +1,15 @@
+id: power.storm-water
+name: Storm and rain
+type: power
+kind: water-condition
+summary: >
+  Storm and rain make the gift stronger but wild: easy to raise, hard to hold.
+facts:
+  - The gift is stronger but wild.
+  - Easy to raise, hard to hold.
+  - The sources give no reach figure for how much stronger.
+links:
+  powers: [power.clean-sea]
+  places: [place.belt-storms]
+sources:
+  - world-bible.md#6

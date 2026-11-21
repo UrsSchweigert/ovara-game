@@ -1,0 +1,22 @@
+id: power.reach-touched
+name: Touched
+type: power
+kind: reach
+summary: >
+  Reach 1, the smallest scale of the gift: a room's worth of water. About one
+  mariner in ten.
+facts:
+  - Reach 1 of 5.
+  - About one mariner in ten is Touched.
+  - Can work a room's worth of water, such as an air bubble, a nudged current or a cut closed.
+  - Everyone with the gift starts with Listen; children are taught the forms in order.
+links:
+  powers: [power.reach-caller, power.reach-mighty, power.reach-chorus, power.reach-unheard-of]
+  factions: [faction.mariners]
+first_appears: ch01
+changes:
+  ch17: Every Touched net-mender of two hundred holds is among those the hero is a way through for.
+sources:
+  - world-bible.md#6
+  - world-bible.md#15
+  - campaign.md#chapter-17

@@ -1,0 +1,33 @@
+id: power.ordering
+name: Ordering
+type: power
+kind: way
+summary: >
+  Commanding the sea instead of asking it. It obeys at once and exactly, and
+  the water that obeyed goes deaf for good.
+facts:
+  - The first rule taught to every child with the gift is ask, do not order.
+  - The caller puts everything out of themselves except one will, with no doubt, no pity and no please.
+  - The sea obeys at once and exactly; it takes a breath and costs no effort.
+  - The water that obeyed goes deaf and does not answer again.
+  - Water deafened by an order cannot be purged; it can only be restored, slowly, by many healers.
+  - The caller is left empty, which is what the undertow looks for.
+  - Ordering is not taught and has no name among callers; "ordering" is the game's term.
+  - The Makers' great engine works the same way.
+links:
+  powers: [power.deaf-water, power.undertow]
+changes:
+  ch10: Rook drives the engine's governor through the Thread into a soup bowl of sea; the water goes deaf for good. The hero learns how ordering is done.
+  ch11: The hero orders the sea at Fallow; ten kilometres go deaf and 161 sailors drown.
+  ch12: The Moot forbids the hero ever to command the sea again.
+  ch14: Hesper's chorus of twelve has each ordered a piece of a wave to stand, and it will not hear them.
+  ch17: Ordered water at Site Nine is restored by healers for the first time.
+sources:
+  - world-bible.md#6
+  - world-bible.md#13
+  - world-bible.md#15
+  - campaign.md#chapter-10
+  - campaign.md#chapter-11
+  - campaign.md#chapter-12
+  - campaign.md#chapter-14
+  - campaign.md#chapter-17
