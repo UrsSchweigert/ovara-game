@@ -1,0 +1,608 @@
+{
+ "name": "ovara",
+ "size": 64,
+ "colours": [
+  {
+   "name": "deep-0",
+   "hex": "#0a1018",
+   "ramp": "deep",
+   "luma": 15
+  },
+  {
+   "name": "deep-1",
+   "hex": "#102030",
+   "ramp": "deep",
+   "luma": 29
+  },
+  {
+   "name": "deep-2",
+   "hex": "#163a4a",
+   "ramp": "deep",
+   "luma": 49
+  },
+  {
+   "name": "deep-3",
+   "hex": "#1f5a68",
+   "ramp": "deep",
+   "luma": 74
+  },
+  {
+   "name": "deep-4",
+   "hex": "#2f8588",
+   "ramp": "deep",
+   "luma": 108
+  },
+  {
+   "name": "deep-5",
+   "hex": "#58b4b0",
+   "ramp": "deep",
+   "luma": 152
+  },
+  {
+   "name": "deep-6",
+   "hex": "#98e0d8",
+   "ramp": "deep",
+   "luma": 202
+  },
+  {
+   "name": "deep-7",
+   "hex": "#dcfaf2",
+   "ramp": "deep",
+   "luma": 240
+  },
+  {
+   "name": "kelp-0",
+   "hex": "#0e1a14",
+   "ramp": "kelp",
+   "luma": 22
+  },
+  {
+   "name": "kelp-1",
+   "hex": "#16301f",
+   "ramp": "kelp",
+   "luma": 38
+  },
+  {
+   "name": "kelp-2",
+   "hex": "#1f4a28",
+   "ramp": "kelp",
+   "luma": 57
+  },
+  {
+   "name": "kelp-3",
+   "hex": "#2f6a30",
+   "ramp": "kelp",
+   "luma": 82
+  },
+  {
+   "name": "kelp-4",
+   "hex": "#4f8a38",
+   "ramp": "kelp",
+   "luma": 111
+  },
+  {
+   "name": "kelp-5",
+   "hex": "#82aa48",
+   "ramp": "kelp",
+   "luma": 147
+  },
+  {
+   "name": "kelp-6",
+   "hex": "#b8cc6c",
+   "ramp": "kelp",
+   "luma": 187
+  },
+  {
+   "name": "kelp-7",
+   "hex": "#e4eaa0",
+   "ramp": "kelp",
+   "luma": 224
+  },
+  {
+   "name": "brass-0",
+   "hex": "#2a1a14",
+   "ramp": "brass",
+   "luma": 30
+  },
+  {
+   "name": "brass-1",
+   "hex": "#4a3018",
+   "ramp": "brass",
+   "luma": 53
+  },
+  {
+   "name": "brass-2",
+   "hex": "#6e4a1c",
+   "ramp": "brass",
+   "luma": 80
+  },
+  {
+   "name": "brass-3",
+   "hex": "#9a6e20",
+   "ramp": "brass",
+   "luma": 114
+  },
+  {
+   "name": "brass-4",
+   "hex": "#c89a30",
+   "ramp": "brass",
+   "luma": 156
+  },
+  {
+   "name": "brass-5",
+   "hex": "#e8c250",
+   "ramp": "brass",
+   "luma": 192
+  },
+  {
+   "name": "brass-6",
+   "hex": "#f6dc88",
+   "ramp": "brass",
+   "luma": 218
+  },
+  {
+   "name": "brass-7",
+   "hex": "#fff2c4",
+   "ramp": "brass",
+   "luma": 241
+  },
+  {
+   "name": "stone-0",
+   "hex": "#15121c",
+   "ramp": "stone",
+   "luma": 20
+  },
+  {
+   "name": "stone-1",
+   "hex": "#2a2733",
+   "ramp": "stone",
+   "luma": 41
+  },
+  {
+   "name": "stone-2",
+   "hex": "#413e4a",
+   "ramp": "stone",
+   "luma": 64
+  },
+  {
+   "name": "stone-3",
+   "hex": "#5c5a64",
+   "ramp": "stone",
+   "luma": 92
+  },
+  {
+   "name": "stone-4",
+   "hex": "#7c7a80",
+   "ramp": "stone",
+   "luma": 123
+  },
+  {
+   "name": "stone-5",
+   "hex": "#a09e9e",
+   "ramp": "stone",
+   "luma": 159
+  },
+  {
+   "name": "stone-6",
+   "hex": "#c6c4c0",
+   "ramp": "stone",
+   "luma": 196
+  },
+  {
+   "name": "stone-7",
+   "hex": "#eceae4",
+   "ramp": "stone",
+   "luma": 234
+  },
+  {
+   "name": "rust-0",
+   "hex": "#2a1218",
+   "ramp": "rust",
+   "luma": 26
+  },
+  {
+   "name": "rust-1",
+   "hex": "#4a1e1e",
+   "ramp": "rust",
+   "luma": 43
+  },
+  {
+   "name": "rust-2",
+   "hex": "#6e2c1c",
+   "ramp": "rust",
+   "luma": 62
+  },
+  {
+   "name": "rust-3",
+   "hex": "#9a4220",
+   "ramp": "rust",
+   "luma": 88
+  },
+  {
+   "name": "rust-4",
+   "hex": "#c46228",
+   "ramp": "rust",
+   "luma": 121
+  },
+  {
+   "name": "rust-5",
+   "hex": "#e88a38",
+   "ramp": "rust",
+   "luma": 157
+  },
+  {
+   "name": "rust-6",
+   "hex": "#f8b05c",
+   "ramp": "rust",
+   "luma": 188
+  },
+  {
+   "name": "rust-7",
+   "hex": "#ffd890",
+   "ramp": "rust",
+   "luma": 219
+  },
+  {
+   "name": "neon-0",
+   "hex": "#1e0c38",
+   "ramp": "neon",
+   "luma": 22
+  },
+  {
+   "name": "neon-1",
+   "hex": "#3c1068",
+   "ramp": "neon",
+   "luma": 39
+  },
+  {
+   "name": "neon-2",
+   "hex": "#5a1c98",
+   "ramp": "neon",
+   "luma": 61
+  },
+  {
+   "name": "neon-3",
+   "hex": "#2848d0",
+   "ramp": "neon",
+   "luma": 78
+  },
+  {
+   "name": "neon-4",
+   "hex": "#e03aa8",
+   "ramp": "neon",
+   "luma": 120
+  },
+  {
+   "name": "neon-5",
+   "hex": "#2c8cf0",
+   "ramp": "neon",
+   "luma": 123
+  },
+  {
+   "name": "neon-6",
+   "hex": "#ff7ac8",
+   "ramp": "neon",
+   "luma": 171
+  },
+  {
+   "name": "neon-7",
+   "hex": "#ffc0e8",
+   "ramp": "neon",
+   "luma": 215
+  },
+  {
+   "name": "sand-0",
+   "hex": "#3a2a2e",
+   "ramp": "sand",
+   "luma": 47
+  },
+  {
+   "name": "sand-1",
+   "hex": "#6a5048",
+   "ramp": "sand",
+   "luma": 87
+  },
+  {
+   "name": "sand-2",
+   "hex": "#9a7a64",
+   "ramp": "sand",
+   "luma": 129
+  },
+  {
+   "name": "sand-3",
+   "hex": "#c4a47e",
+   "ramp": "sand",
+   "luma": 169
+  },
+  {
+   "name": "sand-4",
+   "hex": "#dcc496",
+   "ramp": "sand",
+   "luma": 198
+  },
+  {
+   "name": "sand-5",
+   "hex": "#eedcb0",
+   "ramp": "sand",
+   "luma": 220
+  },
+  {
+   "name": "sand-6",
+   "hex": "#f8eed0",
+   "ramp": "sand",
+   "luma": 238
+  },
+  {
+   "name": "sand-7",
+   "hex": "#fffaf0",
+   "ramp": "sand",
+   "luma": 250
+  },
+  {
+   "name": "ember-0",
+   "hex": "#080406",
+   "ramp": "ember",
+   "luma": 5
+  },
+  {
+   "name": "ember-1",
+   "hex": "#1a0a0c",
+   "ramp": "ember",
+   "luma": 15
+  },
+  {
+   "name": "ember-2",
+   "hex": "#380e12",
+   "ramp": "ember",
+   "luma": 27
+  },
+  {
+   "name": "ember-3",
+   "hex": "#5e1216",
+   "ramp": "ember",
+   "luma": 41
+  },
+  {
+   "name": "ember-4",
+   "hex": "#8c1a1a",
+   "ramp": "ember",
+   "luma": 60
+  },
+  {
+   "name": "ember-5",
+   "hex": "#c02a20",
+   "ramp": "ember",
+   "luma": 86
+  },
+  {
+   "name": "ember-6",
+   "hex": "#e85a30",
+   "ramp": "ember",
+   "luma": 128
+  },
+  {
+   "name": "ember-7",
+   "hex": "#ff9a60",
+   "ramp": "ember",
+   "luma": 178
+  }
+ ],
+ "ramps": {
+  "deep": [
+   "deep-0",
+   "deep-1",
+   "deep-2",
+   "deep-3",
+   "deep-4",
+   "deep-5",
+   "deep-6",
+   "deep-7"
+  ],
+  "kelp": [
+   "kelp-0",
+   "kelp-1",
+   "kelp-2",
+   "kelp-3",
+   "kelp-4",
+   "kelp-5",
+   "kelp-6",
+   "kelp-7"
+  ],
+  "brass": [
+   "brass-0",
+   "brass-1",
+   "brass-2",
+   "brass-3",
+   "brass-4",
+   "brass-5",
+   "brass-6",
+   "brass-7"
+  ],
+  "stone": [
+   "stone-0",
+   "stone-1",
+   "stone-2",
+   "stone-3",
+   "stone-4",
+   "stone-5",
+   "stone-6",
+   "stone-7"
+  ],
+  "rust": [
+   "rust-0",
+   "rust-1",
+   "rust-2",
+   "rust-3",
+   "rust-4",
+   "rust-5",
+   "rust-6",
+   "rust-7"
+  ],
+  "neon": [
+   "neon-0",
+   "neon-1",
+   "neon-2",
+   "neon-3",
+   "neon-4",
+   "neon-5",
+   "neon-6",
+   "neon-7"
+  ],
+  "sand": [
+   "sand-0",
+   "sand-1",
+   "sand-2",
+   "sand-3",
+   "sand-4",
+   "sand-5",
+   "sand-6",
+   "sand-7"
+  ],
+  "ember": [
+   "ember-0",
+   "ember-1",
+   "ember-2",
+   "ember-3",
+   "ember-4",
+   "ember-5",
+   "ember-6",
+   "ember-7"
+  ]
+ },
+ "subsets": {
+  "pale": [
+   "deep-0",
+   "deep-1",
+   "deep-2",
+   "deep-3",
+   "deep-4",
+   "deep-5",
+   "deep-6",
+   "deep-7",
+   "stone-0",
+   "stone-2",
+   "stone-4",
+   "stone-7",
+   "kelp-1",
+   "kelp-3",
+   "brass-5",
+   "sand-7"
+  ],
+  "anthem": [
+   "kelp-0",
+   "kelp-1",
+   "kelp-2",
+   "kelp-3",
+   "kelp-4",
+   "kelp-5",
+   "kelp-6",
+   "kelp-7",
+   "brass-1",
+   "brass-3",
+   "brass-4",
+   "brass-5",
+   "brass-6",
+   "deep-2",
+   "deep-4",
+   "sand-5"
+  ],
+  "girdle": [
+   "deep-1",
+   "deep-2",
+   "deep-3",
+   "deep-4",
+   "stone-0",
+   "stone-1",
+   "stone-2",
+   "stone-3",
+   "stone-5",
+   "rust-1",
+   "rust-3",
+   "rust-5",
+   "neon-3",
+   "neon-4",
+   "neon-5",
+   "neon-6"
+  ],
+  "shelves": [
+   "sand-3",
+   "sand-4",
+   "sand-5",
+   "sand-6",
+   "sand-7",
+   "deep-3",
+   "deep-4",
+   "deep-5",
+   "deep-6",
+   "deep-7",
+   "kelp-5",
+   "kelp-6",
+   "brass-5",
+   "stone-2",
+   "stone-5",
+   "neon-6"
+  ],
+  "quiet": [
+   "ember-0",
+   "ember-1",
+   "ember-2",
+   "ember-3",
+   "ember-4",
+   "ember-5",
+   "ember-6",
+   "ember-7",
+   "stone-0",
+   "stone-1",
+   "stone-2",
+   "stone-4",
+   "stone-6",
+   "sand-6",
+   "deep-0",
+   "deep-2"
+  ]
+ },
+ "water": {
+  "clean": {
+   "colour": "deep-4",
+   "pattern": "sparse light flecks",
+   "movement": "flecks drift slowly",
+   "hex": "#2f8588",
+   "luma": 108
+  },
+  "fouled": {
+   "colour": "brass-2",
+   "pattern": "diagonal dither bands, dark motes",
+   "movement": "motes sink",
+   "hex": "#6e4a1c",
+   "luma": 80
+  },
+  "deaf": {
+   "colour": "stone-5",
+   "pattern": "none, dotted edge",
+   "movement": "none at all",
+   "hex": "#a09e9e",
+   "luma": 159
+  },
+  "orphan": {
+   "colour": "kelp-7",
+   "pattern": "fine square grid",
+   "movement": "slow slosh at the edges",
+   "hex": "#e4eaa0",
+   "luma": 224
+  },
+  "storm": {
+   "colour": "stone-1",
+   "pattern": "streaks along the wind",
+   "movement": "fast",
+   "hex": "#2a2733",
+   "luma": 41
+  },
+  "well": {
+   "colour": "deep-0",
+   "pattern": "concentric rings",
+   "movement": "rings widen slowly",
+   "hex": "#0a1018",
+   "luma": 15
+  }
+ }
+}
