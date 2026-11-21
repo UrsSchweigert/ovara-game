@@ -10,6 +10,5 @@ facts:
 links:
   places: [place.port-halcyon]
   factions: [faction.halcyon-dredge]
-first_appears: ch14
 sources:
   - campaign.md#chapter-14

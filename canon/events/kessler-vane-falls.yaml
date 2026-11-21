@@ -11,6 +11,5 @@ facts:
 links:
   places: [place.kessler-banks]
   factions: [faction.kessler-vane]
-first_appears: ch09
 sources:
   - campaign.md#chapter-9

@@ -13,6 +13,5 @@ facts:
 links:
   places: [place.fallow]
   powers: [power.ordering, power.deaf-water, power.undertow]
-first_appears: ch11
 sources:
   - campaign.md#chapter-11

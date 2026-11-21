@@ -6,9 +6,6 @@ when: about 3,000 years ago
 summary: >
   The sea rose or the land fell; the altered went below and the rest clung to the islands.
 facts:
-  - The cause is not known.
-links:
-  events: [event.the-makers, event.the-long-forgetting]
-first_appears: ch01
+  - The altered went below; the rest clung to the islands.
 sources:
   - world-bible.md#3

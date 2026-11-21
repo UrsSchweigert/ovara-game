@@ -11,6 +11,5 @@ facts:
 links:
   places: [place.meridian-exchange, place.tidehall]
   factions: [faction.meridian]
-first_appears: ch18
 sources:
   - campaign.md#chapter-18

@@ -13,6 +13,5 @@ facts:
 links:
   places: [place.the-lantern, place.north-well]
   machines: [machine.dart, machine.the-thread]
-first_appears: ch04
 sources:
   - campaign.md#chapter-4

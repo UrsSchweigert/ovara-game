@@ -11,6 +11,5 @@ facts:
 links:
   places: [place.orrin-spire]
   factions: [faction.orrin-signal]
-first_appears: ch13
 sources:
   - campaign.md#chapter-13

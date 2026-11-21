@@ -5,7 +5,6 @@ kind: seal-like
 summary: >
   Seal-like working animal of every hold: herder, guard, companion.
 facts:
-  - Found in all holds.
-  - Loyal and nosy.
+  - Found in all holds; loyal and nosy.
 sources:
   - world-bible.md#12

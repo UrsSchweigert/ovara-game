@@ -14,6 +14,5 @@ links:
   places: [place.port-halcyon]
   machines: [machine.the-dragon]
   powers: [power.chorus, power.purge, power.ebb]
-first_appears: ch14
 sources:
   - campaign.md#chapter-14

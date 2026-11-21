@@ -12,6 +12,5 @@ facts:
 links:
   places: [place.site-nine]
   machines: [machine.the-dragon, machine.deep-works]
-first_appears: ch15
 sources:
   - campaign.md#chapter-15

@@ -12,6 +12,5 @@ facts:
 links:
   places: [place.the-wheel]
   factions: [faction.great-rays]
-first_appears: ch07
 sources:
   - campaign.md#chapter-7

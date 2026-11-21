@@ -12,6 +12,5 @@ facts:
 links:
   places: [place.site-nine]
   powers: [power.restore]
-first_appears: ch17
 sources:
   - campaign.md#chapter-17

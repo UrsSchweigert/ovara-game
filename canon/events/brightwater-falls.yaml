@@ -11,6 +11,5 @@ facts:
 links:
   places: [place.saltgate, place.wet-market]
   factions: [faction.brightwater, faction.wellwalkers]
-first_appears: ch08
 sources:
   - campaign.md#chapter-8

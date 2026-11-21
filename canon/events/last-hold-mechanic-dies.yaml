@@ -9,7 +9,6 @@ facts:
   - The last archive wall in the Lantern went out about the same time.
 links:
   machines: [machine.archive-wall]
-first_appears: ch01
 sources:
   - world-bible.md#3
   - world-bible.md#7

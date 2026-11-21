@@ -11,6 +11,5 @@ facts:
 links:
   places: [place.tidehall, place.deep-chorus]
   factions: [faction.mariners, faction.breakers]
-first_appears: ch12
 sources:
   - campaign.md#chapter-12

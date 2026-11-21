@@ -12,6 +12,5 @@ facts:
 links:
   powers: [power.ordering]
   factions: [faction.meridian]
-first_appears: ch10
 sources:
   - campaign.md#chapter-10

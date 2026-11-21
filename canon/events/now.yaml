@@ -9,6 +9,5 @@ facts:
   - Jef is alive, the holds are quietly failing and nobody has heard of Ilan Voss.
 links:
   events: [event.charter-wars]
-first_appears: ch01
 sources:
   - world-bible.md#3

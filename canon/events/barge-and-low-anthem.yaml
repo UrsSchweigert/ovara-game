@@ -13,6 +13,5 @@ links:
   places: [place.low-anthem]
   factions: [faction.halcyon-dredge]
   powers: [power.raise]
-first_appears: ch02
 sources:
   - campaign.md#chapter-2

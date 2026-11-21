@@ -13,6 +13,5 @@ facts:
 links:
   places: [place.sounding]
   machines: [machine.dart]
-first_appears: ch01
 sources:
   - world-bible.md#3
