@@ -460,6 +460,7 @@ Defined in `.claude/agents/`. One agent session takes one role and one task.
 | **Art director** | The look: palette, tiles, figures, portraits, dungeon textures, interface art | `game/assets/`, `docs/style/art.md` |
 | **Verifier** | Independent checking of finished tasks | Nothing; reads, runs, reports |
 | **Overseer** | Looks at a stuck issue before the owner is asked: retry, extend a budget, or refine | Nothing |
+| **Steward** | Answers the harness's process questions in the owner's place (`tools/steward.py`); refers core plot and anything only a person can do | Nothing |
 
 The human owner approves canon proposals, design decisions and each milestone gate.
 
