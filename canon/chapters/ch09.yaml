@@ -1,0 +1,16 @@
+chapter: 9
+title: The engineers
+region: place.keelhaven
+hero_name: Ilan Voss
+hero_knows_past: true
+hero_abilities: [power.calling, power.listen, power.move, power.shape, power.hold, power.raise, machine.the-thread, power.intending, power.mend, power.purge, power.ease]
+hero_craft: mend
+alive: {person.davin: false, person.elder-oro: false, person.jef: false, person.linnea-marsh: true, person.anselm-rook: true, person.nerys-voss: false, person.tomas-voss: false}
+corporations_fallen: [faction.brightwater, faction.kessler-vane]
+dragon: running
+known_to_mariners: [low-anthem-bombed, the-barge-rose, jef-is-dead, meridian-refuge-offer]
+known_to_agravars: [low-anthem-attack-on-shipping-claimed, sea-terrorists-sinking-ships, free-clinics-broke-brightwater]
+companions_available: [person.sefa, person.dace]
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance
+  - campaign-the-man-the-tide-brought-in.md#chapter-9

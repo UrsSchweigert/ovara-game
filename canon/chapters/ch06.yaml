@@ -1,0 +1,16 @@
+chapter: 6
+title: The eldest brother
+region: place.deep-chorus
+hero_name: Wrack
+hero_knows_past: false
+hero_abilities: [power.calling, power.listen, power.move, power.shape, power.hold, power.raise, machine.the-thread]
+hero_craft: mend
+alive: {person.davin: false, person.elder-oro: false, person.jef: false, person.linnea-marsh: true, person.anselm-rook: true, person.nerys-voss: false, person.tomas-voss: false}
+corporations_fallen: []
+dragon: stalled
+known_to_mariners: [low-anthem-bombed, the-barge-rose, jef-is-dead, meridian-refuge-offer]
+known_to_agravars: [low-anthem-attack-on-shipping-claimed]
+companions_available: [person.okonta, person.sefa]
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance
+  - campaign-the-man-the-tide-brought-in.md#chapter-6
