@@ -54,7 +54,10 @@ case "$cmd" in
   test)  godot_headless -s res://tests/run_tests.gd ;;
   map)   godot_headless -s res://tools/print_map.gd -- "$@" ;;
   play)  godot_headless -s res://tools/autoplay.gd -- "$@" ;;
-  shot)  "$GODOT" --path "$ROOT/game" -s res://tools/shot.gd -- "$@" ;;
+  shot)  # shot <scene> <file.png>: the picture's folder is made if missing, and a relative path is taken from here
+         out="${2:-shots/shot.png}"; case "$out" in /*) ;; *) out="$PWD/$out" ;; esac
+         mkdir -p "$(dirname "$out")"
+         "$GODOT" --path "$ROOT/game" -s res://tools/shot.gd -- "${1:?scene path needed}" "$out" ;;
   index) "$PY" "$ROOT/tools/checks.py" index ;;
   run)   "$GODOT" --path "$ROOT/game" ;;
   edit)  "$GODOT" --path "$ROOT/game" --editor ;;

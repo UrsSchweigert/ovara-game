@@ -1,4 +1,3 @@
-# Installed into .venv by the bootstrap. Pin exact versions when you install them.
-pyyaml
-jsonschema
-pillow
+PyYAML==6.0.3
+jsonschema==4.25.1
+pillow==11.3.0
