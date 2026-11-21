@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A canon form as a mechanic (PLAN.md section 3, Abilities).",
+  "type": "object",
+  "required": [
+    "id",
+    "form",
+    "type",
+    "size"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "form": {
+      "enum": [
+        "listen",
+        "move",
+        "shape",
+        "hold",
+        "raise",
+        "mend",
+        "purge",
+        "ease",
+        "restore",
+        "tend",
+        "thread",
+        "chorus",
+        "shared-calling",
+        "held-skin",
+        "ordering"
+      ]
+    },
+    "type": {
+      "enum": [
+        "calling",
+        "intending",
+        "craft",
+        "group",
+        "hero"
+      ]
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "chapter": {
+      "$ref": "content-defs.schema.json#/$defs/chapter"
+    }
+  }
+}

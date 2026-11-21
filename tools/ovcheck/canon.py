@@ -9,7 +9,7 @@ LINK_PREFIX = {"places": "place", "people": "person", "factions": "faction", "po
                "machines": "machine", "creatures": "creature", "flora": "flora", "events": "event"}
 TYPE_DIR = {"place": "places", "person": "people", "faction": "factions", "power": "powers",
             "machine": "machines", "creature": "creatures", "flora": "flora", "event": "events",
-            "world": "world"}
+            "trait": "traits", "world": "world"}
 
 
 def _yaml():
@@ -56,6 +56,7 @@ def _validate(data, schema, path, errors):
 def load_entries(canon, errors, warnings):
     """Return {id: (path, data)} for every entry, with schema errors appended."""
     schema = _schema("canon-entry.schema.json")
+    trait_schema = _schema("canon-trait.schema.json")
     entries = {}
     for path in sorted(Path(canon).glob("*/*.yaml")):
         if path.parent.name in SKIP:
@@ -65,6 +66,8 @@ def load_entries(canon, errors, warnings):
             continue
         normalise_facts(data, path, warnings)
         _validate(data, schema, path, errors)
+        if data.get("type") == "trait":
+            _validate(data, trait_schema, path, errors)
         eid, typ = data.get("id"), data.get("type")
         if isinstance(eid, str):
             if eid in entries:

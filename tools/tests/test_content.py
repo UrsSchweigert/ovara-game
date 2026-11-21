@@ -167,5 +167,69 @@ class StoryContentTests(ContentCase):
         self.assertFails("x.json", "/steps/0")
 
 
+SHEET = {"id": "p", "canon": "person.bea", "attributes": {"body": 10, "hands": 10, "mind": 10, "standing": 10},
+         "reach": 2, "skills": {"listen": 3}, "traits": ["trait.water-breather"]}
+ABILITY = {"id": "listen", "form": "listen", "type": "calling", "size": 2}
+SKILL = {"id": "listen", "skill": "listen", "attribute": "standing"}
+TRAIT = {"id": "water_breather", "canon": "trait.water-breather"}
+TEACHER = {"id": "t", "person": "person.hesper", "place": "place.low-anthem", "skill": "listen", "max_step": 2,
+           "chapter": 2, "trial": "Name the water."}
+
+
+def sheet(**kw):
+    return {**SHEET, **kw}
+
+
+class SheetContentTests(ContentCase):
+    def test_valid_sheet_kinds_pass(self):
+        for kind, data in (("units", sheet(faction="faction.halcyon")), ("people", sheet(join_chapter=3)),
+                           ("abilities", ABILITY), ("skills", SKILL), ("traits", TRAIT), ("teachers", TEACHER)):
+            self.put(kind, data)
+        self.assertEqual(self.errors(), [])
+
+    def test_attribute_range_fails(self):
+        for v in (7, 15):
+            self.put("people", sheet(attributes={**SHEET["attributes"], "body": v}))
+            self.assertFails("x.json", "/attributes/body")
+        self.put("units", sheet(attributes={"body": 10, "hands": 10, "mind": 10}))
+        self.assertFails("x.json", "'standing' is a required property")
+
+    def test_reach_range_fails(self):
+        self.put("people", sheet(reach=6))
+        self.assertFails("x.json", "/reach")
+
+    def test_skill_step_and_name_fail(self):
+        for steps in ({"listen": 0}, {"listen": 6}, {"juggling": 1}):
+            self.put("people", sheet(skills=steps))
+            self.assertFails("x.json", "/skills")
+
+    def test_trait_needs_canon_prefix_fails(self):
+        self.put("units", sheet(traits=["water-breather"]))
+        self.assertFails("x.json", "/traits/0")
+        self.put("traits", {**TRAIT, "canon": "person.bea"})
+        self.assertFails("x.json", "/canon")
+
+    def test_ability_fails(self):
+        self.put("abilities", {**ABILITY, "size": 6})
+        self.assertFails("x.json", "/size")
+        self.put("abilities", {**ABILITY, "form": "sing"})
+        self.assertFails("x.json", "/form")
+        self.put("abilities", {**ABILITY, "type": "magic"})
+        self.assertFails("x.json", "/type")
+
+    def test_skill_def_fails(self):
+        self.put("skills", {**SKILL, "attribute": "luck"})
+        self.assertFails("x.json", "/attribute")
+
+    def test_teacher_fails(self):
+        for key in ("trial", "max_step", "place", "chapter"):
+            self.put("teachers", {k: v for k, v in TEACHER.items() if k != key})
+            self.assertFails("x.json", f"'{key}' is a required property")
+        self.put("teachers", {**TEACHER, "max_step": 6})
+        self.assertFails("x.json", "/max_step")
+        self.put("teachers", {**TEACHER, "trial": ""})
+        self.assertFails("x.json", "/trial")
+
+
 if __name__ == "__main__":
     unittest.main()

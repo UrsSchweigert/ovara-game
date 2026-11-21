@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A content trait: a canon trait by id.",
+  "type": "object",
+  "required": [
+    "id",
+    "canon"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "canon": {
+      "type": "string",
+      "pattern": "^trait\\.[a-z0-9]+(-[a-z0-9]+)*$"
+    }
+  }
+}
