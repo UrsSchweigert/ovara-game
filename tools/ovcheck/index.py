@@ -1,5 +1,6 @@
 """Generate canon/index.md: one line per entry."""
 from .canon import TYPE_DIR, load_entries
+MAX_LINES = 400
 
 
 def build_index(canon):
@@ -15,4 +16,6 @@ def build_index(canon):
             summary = " ".join(str(d.get("summary", "")).split())
             out.append(f"- `{eid}` {d.get('name', '')}: {summary}")
         out.append("")
+    if len(out) >= MAX_LINES:
+        errors.append(f"canon/index.md would have {len(out) + 1} lines; the limit is {MAX_LINES - 1}")
     return "\n".join(out), errors
