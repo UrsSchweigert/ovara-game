@@ -36,6 +36,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import steward_milestone  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RULES = os.path.join(ROOT, ".claude", "agents", "steward.md")
 
@@ -88,6 +91,8 @@ class Book:
         if self.path and os.path.exists(self.path):
             with open(self.path) as fh:
                 self.data = json.load(fh)
+        for key, empty in (("issues", {}), ("escalated", []), ("milestones", {}), ("signed", {})):
+            self.data.setdefault(key, empty)
 
     def issue(self, issue_id):
         return self.data["issues"].setdefault(issue_id, {"decisions": 0, "budget_extensions": 0})
@@ -114,11 +119,36 @@ class Book:
             fh.write(text + "\n")
 
 
-def ask_claude(task_text, issue_text, model):
-    """One headless, read-only call. Returns the decision dict, or raises."""
+def claude_json(prompt, cwd, model, key):
+    """One headless, read-only call to Claude. Returns the last JSON object in the reply that has `key`."""
     claude = shutil.which("claude")
     if not claude:
         raise RuntimeError("the `claude` command is not on the PATH")
+    # The prompt goes in on standard input: it may begin with dashes, which the CLI would read as an option.
+    command = [claude, "-p", "--output-format", "json"]
+    if model:
+        command += ["--model", model]
+    command += ["--allowedTools", "Read", "Grep", "Glob"]
+    out = subprocess.run(command, cwd=cwd, input=prompt, capture_output=True, text=True, timeout=1800)
+    if out.returncode != 0:
+        raise RuntimeError("claude failed: %s" % (out.stderr or out.stdout).strip()[:300])
+    try:
+        text = json.loads(out.stdout).get("result", "")
+    except ValueError:
+        text = out.stdout
+    decoder = json.JSONDecoder()
+    for start in reversed([m.start() for m in re.finditer(r"\{", text)]):
+        try:
+            found, _ = decoder.raw_decode(text[start:])
+        except ValueError:
+            continue
+        if isinstance(found, dict) and key in found:
+            return found
+    raise RuntimeError("no answer in the reply: %s" % text.strip()[-300:])
+
+
+def ask_claude(task_text, issue_text, model):
+    """The steward's decision on one open task."""
     with open(RULES, encoding="utf-8") as fh:
         rules = re.sub(r"\A---\n.*?\n---\n", "", fh.read(), flags=re.S).strip()
     prompt = (
@@ -127,22 +157,7 @@ def ask_claude(task_text, issue_text, model):
         "Read what you need in this repository, then decide. End with the JSON object and nothing after it."
         % (rules, task_text, issue_text[:12000])
     )
-    # The prompt goes in on standard input: it begins with dashes, which the CLI would read as an option.
-    command = [claude, "-p", "--output-format", "json"]
-    if model:
-        command += ["--model", model]
-    command += ["--allowedTools", "Read", "Grep", "Glob"]
-    out = subprocess.run(command, cwd=ROOT, input=prompt, capture_output=True, text=True, timeout=900)
-    if out.returncode != 0:
-        raise RuntimeError("claude failed: %s" % (out.stderr or out.stdout).strip()[:300])
-    try:
-        text = json.loads(out.stdout).get("result", "")
-    except ValueError:
-        text = out.stdout
-    found = re.findall(r"\{[^{}]*\"decision\"[^{}]*\}", text, re.S)
-    if not found:
-        raise RuntimeError("no decision in the reply: %s" % text.strip()[-300:])
-    return json.loads(found[-1])
+    return claude_json(prompt, ROOT, model, "decision")
 
 
 def judge(decision, block, counts):
@@ -172,6 +187,13 @@ def one_round(args):
     book = Book(status.get("store", ""))
     tasks = [t for t in status.get("human_tasks", []) if t.get("state") == "Requested"]
     blocks = task_blocks() if tasks else {}
+    try:
+        _answer_tasks(args, status, book, tasks, blocks)
+    finally:
+        after_tasks(args, status)
+
+
+def _answer_tasks(args, status, book, tasks, blocks):
     for task in tasks:
         task_id, kind = task.get("task_id", ""), task.get("kind")
         block = blocks.get(task_id, "")
@@ -234,6 +256,12 @@ def one_round(args):
         book.save()
 
 
+def after_tasks(args, status):
+    """Between milestones: audit, promote, follow up gaps, wait for the owner's gate, draft the next plan."""
+    book = Book(status.get("store", ""))
+    steward_milestone.milestone_round(ROOT, args, status, book, harness, claude_json)
+
+
 def try_file(path, model):
     with open(path, encoding="utf-8") as fh:
         block = fh.read()
@@ -254,9 +282,28 @@ def main():
     ap.add_argument("--interval", type=int, default=300, help="seconds between rounds (default 300)")
     ap.add_argument("--model", help="model for the steward's decisions (default: the CLI's own default)")
     ap.add_argument("--try", dest="try_path", metavar="FILE", help="decide on a task text in FILE and show it; answers nothing")
+    ap.add_argument("--audit", metavar="PLAN_ID", help="check and audit that plan's run branch now and print the report; changes nothing")
+    ap.add_argument("--sign-off", metavar="PLAN_ID", help="record that you have looked at what that milestone needs from you")
     args = ap.parse_args()
     if args.try_path:
         try_file(args.try_path, args.model)
+        return 0
+    if args.audit or args.sign_off:
+        status = read_status()
+        plans = {p["plan_id"]: p for p in status.get("plans", [])}
+        plan_id = args.audit or args.sign_off
+        if plan_id not in plans:
+            print("no such plan: %s (known: %s)" % (plan_id, ", ".join(plans) or "none"))
+            return 2
+        if args.sign_off:
+            book = Book(status.get("store", ""))
+            book.data["signed"][plan_id] = datetime.datetime.now().isoformat(timespec="seconds")
+            book.save()
+            book.log("signed  %s: the owner has recorded its gate as passed" % plan_id)
+            return 0
+        source = steward_milestone.file_for_plan(ROOT, plan_id)
+        result = steward_milestone.audit(ROOT, plans[plan_id]["run_branch"], source, claude_json, args.model)
+        print(steward_milestone.audit_report(plan_id, result))
         return 0
     while True:
         try:

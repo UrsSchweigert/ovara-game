@@ -12,6 +12,8 @@ The harness runs one milestone at a time and does not know about the next one. T
 6. When the plan is finished, check that its run branch is merged into `main`.
 7. Do "The gate". Only then move on.
 
+If `tools/steward.py` is running, it does steps 3 to 6 for you and drafts the next plan. What stays yours is each plan's approval (`./ov harness approve <plan-id>`) and the parts of each gate that need a person, which you record with `python3 tools/steward.py --sign-off <plan-id>`.
+
 Workers cannot open a window. Everything that must be seen, heard or tried on a phone comes to you as a manual test.
 
 ---
