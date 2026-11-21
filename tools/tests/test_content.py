@@ -26,7 +26,7 @@ def dungeon(**level):
     return {"id": "d", "canon": "place.low-anthem", "levels": [{**lv, **level}]}
 
 
-class ContentTests(unittest.TestCase):
+class ContentCase(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
@@ -44,6 +44,8 @@ class ContentTests(unittest.TestCase):
         errs = self.errors()
         self.assertTrue(any(all(p in e for p in parts) for e in errs), errs)
 
+
+class ContentTests(ContentCase):
     def test_valid_maps_pass(self):
         self.put("areas", area())
         self.put("battles", battle())
@@ -102,6 +104,67 @@ class ContentTests(unittest.TestCase):
     def test_dungeon_door_without_wall_fails(self):
         self.put("dungeons", dungeon(doors=[{"cell": [0, 0], "edge": "S", "kind": "seam"}]))
         self.assertFails("/levels/0/doors/0", "not set in walls")
+
+
+ITEM = {"id": "i", "canon": "item.hook", "name": "Hook", "slot": "weapon", "kind": "hook"}
+SHOP = {"id": "s", "person": "person.mender", "stock": [{"from_chapter": 1, "to_chapter": 3, "items": ["i"]}]}
+PANEL = {"speaker": "person.mender", "portrait": "mender", "lines": ["One.", "Two.", "Three."]}
+DIALOGUE = {"id": "dl", "person": "person.mender", "topics": [
+    {"topic": "place.low-anthem", "when": {"chapter_min": 1, "not_flag": "jef.dead"}, "panels": [PANEL]}]}
+QUEST = {"id": "q", "kind": "fetch", "giver": "person.mender", "chapters": [1, 3], "clears": "q.done", "sets": ["q.done"],
+         "steps": [{"id": "s1", "intent": "Carry it.", "points": 2, "difficulty": 10}]}
+CUTSCENE = {"id": "c", "skippable": True, "steps": [
+    {"op": "walk", "who": "person.mender", "to": [1, 2]}, {"op": "say", "who": "person.mender", "lines": ["Hm."]},
+    {"op": "camera", "to": [0, 0]}, {"op": "light", "level": 0.5}]}
+
+
+class StoryContentTests(ContentCase):
+    def test_valid_story_content_passes(self):
+        for kind, d in [("items", ITEM), ("shops", SHOP), ("dialogue", DIALOGUE), ("quests", QUEST),
+                        ("cutscenes", CUTSCENE)]:
+            self.put(kind, d)
+        self.assertEqual(self.errors(), [])
+
+    def test_item_bad_slot_fails(self):
+        self.put("items", {**ITEM, "slot": "hat"})
+        self.assertFails("x.json", "/slot")
+
+    def test_key_item_needs_key_flag(self):
+        self.put("items", {**ITEM, "slot": "key"})
+        self.assertFails("x.json", "key_flag")
+
+    def test_intended_water_needs_fade_days(self):
+        self.put("items", {**ITEM, "kind": "intended_water"})
+        self.assertFails("x.json", "fade_days")
+        self.put("items", {**ITEM, "kind": "intended_water", "fade_days": {"sea": 3, "land": 1}})
+        self.assertEqual(self.errors(), [])
+
+    def test_shop_without_stock_fails(self):
+        self.put("shops", {**SHOP, "stock": []})
+        self.assertFails("x.json", "/stock")
+
+    def test_dialogue_four_lines_fail(self):
+        self.put("dialogue", {**DIALOGUE, "topics": [{"topic": "place.low-anthem", "panels": [
+            {**PANEL, "lines": ["a", "b", "c", "d"]}]}]})
+        self.assertFails("x.json", "/topics/0/panels/0/lines")
+
+    def test_dialogue_topic_must_be_canon_id(self):
+        self.put("dialogue", {**DIALOGUE, "topics": [{"topic": "Low Anthem", "panels": [PANEL]}]})
+        self.assertFails("x.json", "/topics/0/topic")
+
+    def test_quest_bad_kind_fails(self):
+        self.put("quests", {**QUEST, "kind": "battle"})
+        self.assertFails("x.json", "/kind")
+
+    def test_quest_bad_points_and_difficulty_fail(self):
+        step = {"id": "s1", "intent": "x", "points": 4, "difficulty": 9}
+        self.put("quests", {**QUEST, "steps": [step]})
+        self.assertFails("/steps/0/points")
+        self.assertFails("/steps/0/difficulty")
+
+    def test_cutscene_bad_step_fails(self):
+        self.put("cutscenes", {**CUTSCENE, "steps": [{"op": "dance"}]})
+        self.assertFails("x.json", "/steps/0")
 
 
 if __name__ == "__main__":

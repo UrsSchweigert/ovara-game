@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "An item. Key things take no room and have a key_flag. Intended water must carry its fade time in days (PLAN.md section 2).",
+  "type": "object",
+  "required": [
+    "id",
+    "canon",
+    "name",
+    "slot",
+    "kind"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "canon": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slot": {
+      "enum": [
+        "weapon",
+        "garment",
+        "small",
+        "supply",
+        "key"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "key_flag": {
+      "$ref": "content-defs.schema.json#/$defs/flag"
+    },
+    "fade_days": {
+      "type": "object",
+      "required": [
+        "sea",
+        "land"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "sea": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "land": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "slot": {
+            "const": "key"
+          }
+        },
+        "required": [
+          "slot"
+        ]
+      },
+      "then": {
+        "required": [
+          "key_flag"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "intended_water"
+          }
+        },
+        "required": [
+          "kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "fade_days"
+        ]
+      }
+    }
+  ]
+}

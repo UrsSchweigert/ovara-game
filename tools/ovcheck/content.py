@@ -1,4 +1,4 @@
-"""Validate map content (areas, dungeons, battles) under game/content/."""
+"""Validate content under game/content/."""
 import json
 from pathlib import Path
 
@@ -7,7 +7,8 @@ KINDS = {"abilities", "areas", "battles", "cutscenes", "dialogue", "dungeons", "
          "quests", "shops", "skills", "teachers", "traits", "units"}
 # kind -> (max columns, max rows)
 LIMITS = {"areas": (64, 48), "dungeons": (32, 32), "battles": (12, 9)}
-KIND_NAME = {"areas": "area", "dungeons": "dungeon", "battles": "battle"}
+KIND_NAME = {"areas": "area", "dungeons": "dungeon", "battles": "battle", "items": "item", "shops": "shop",
+             "dialogue": "dialogue", "quests": "quest", "cutscenes": "cutscene"}
 EDGE_BIT = {"N": 1, "E": 2, "S": 4, "W": 8}
 
 
@@ -63,7 +64,7 @@ def check_content(root):
         if d.name not in KINDS:
             errors.append(f"{d}: unknown content kind {d.name!r}")
             continue
-        validator = _validator(d.name) if d.name in LIMITS else None
+        validator = _validator(d.name) if d.name in KIND_NAME else None
         for f in sorted(d.rglob("*.json")):
             try:
                 data = json.loads(f.read_text(encoding="utf-8"))
@@ -77,6 +78,8 @@ def check_content(root):
                 path = "/" + "/".join(str(p) for p in e.absolute_path)
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
+                continue
+            if d.name not in LIMITS:
                 continue
             if d.name == "dungeons":
                 for i, level in enumerate(data["levels"]):
