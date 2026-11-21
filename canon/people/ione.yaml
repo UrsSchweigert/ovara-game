@@ -1,0 +1,17 @@
+id: person.ione
+name: Ione
+type: person
+kind: supporting
+region: place.low-anthem
+summary: >
+  Healer of Low Anthem and Sefa's mother; later its speaker.
+facts:
+  - Healer of Low Anthem.
+  - Sefa's mother.
+  - Later the speaker of Low Anthem.
+links:
+  people: [person.sefa]
+  places: [place.low-anthem]
+first_appears: ch01
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

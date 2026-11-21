@@ -1,0 +1,18 @@
+id: person.dace
+name: Dace
+type: person
+kind: companion
+region: place.lashing
+summary: >
+  Driftfolk smuggler out of Lashing; boats, ports, people, no gift.
+facts:
+  - Driftfolk smuggler out of Lashing.
+  - Has boats, ports and people; no gift.
+  - Has an aunt who cooks bream in stormgrass ash.
+links:
+  factions: [faction.driftfolk]
+  places: [place.lashing]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#companions
+  - campaign-the-man-the-tide-brought-in.md#chapter-9

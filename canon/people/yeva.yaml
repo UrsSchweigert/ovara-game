@@ -1,0 +1,19 @@
+id: person.yeva
+name: Yeva
+type: person
+kind: supporting
+region: place.saltgate
+summary: >
+  The Wellwalker held captive by Brightwater in its clinic tower.
+facts:
+  - A Wellwalker.
+  - Held by Brightwater in a clinic tower in Saltgate while it tries to make intended water last.
+  - Teaches the hero that intending means wanting nothing for yourself.
+links:
+  factions: [faction.wellwalkers, faction.brightwater]
+  places: [place.saltgate]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#chapter-8
+  - world-bible.md#13

@@ -1,0 +1,16 @@
+id: person.pell
+name: Pell
+type: person
+kind: supporting
+region: place.saltgate
+summary: >
+  Port-office clerk in Saltgate, of the Clean Hands.
+facts:
+  - Port-office clerk in Saltgate.
+  - Of the Clean Hands.
+links:
+  factions: [faction.clean-hands]
+  places: [place.saltgate]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

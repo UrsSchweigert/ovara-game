@@ -1,0 +1,19 @@
+id: person.hanne
+name: Hanne
+type: person
+kind: supporting
+region: place.kessler-banks
+summary: >
+  Kessler-Vane engine designer who hid a Maker lamp behind her stove for nineteen years; the first agravar to open one.
+facts:
+  - Kessler-Vane engine designer.
+  - Hid a Maker lamp behind her stove for nineteen years.
+  - The first agravar to open one, with the hero's help and Jef's tool.
+links:
+  factions: [faction.kessler-vane]
+  people: [person.teodora-raske]
+  places: [place.kessler-banks]
+first_appears: ch09
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#chapter-9

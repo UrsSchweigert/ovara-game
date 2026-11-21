@@ -1,0 +1,20 @@
+id: person.teodora-raske
+name: Teodora Raske
+type: person
+kind: board-head
+region: place.kessler-banks
+summary: >
+  Head of Kessler-Vane, who walks out with three hundred engineers.
+facts:
+  - Head of Kessler-Vane.
+  - Walks out with three hundred engineers.
+  - Remembers a man in grey who put a paper on her desk and said, make an engineer of this one.
+  - Calls sections in the work at Site Nine, chapter 17.
+links:
+  factions: [faction.kessler-vane]
+  people: [person.hanne]
+  places: [place.kessler-banks]
+first_appears: ch09
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-five-boards
+  - campaign-the-man-the-tide-brought-in.md#chapter-9

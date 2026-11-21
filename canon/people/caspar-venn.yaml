@@ -1,0 +1,20 @@
+id: person.caspar-venn
+name: Caspar Venn
+type: person
+kind: board-head
+region: place.orrin-spire
+summary: >
+  Head of Orrin, who owns the Spire and offers the hero the air as Rook's trap.
+facts:
+  - Head of Orrin; owns the Spire.
+  - Offers the hero the main channel; it is Rook's trap.
+  - Exposed live on his own screens.
+  - Grave and handsome.
+links:
+  factions: [faction.orrin-signal]
+  people: [person.anselm-rook, person.marit-coyle]
+  places: [place.orrin-spire]
+first_appears: ch13
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-five-boards
+  - campaign-the-man-the-tide-brought-in.md#chapter-13

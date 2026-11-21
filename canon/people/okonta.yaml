@@ -1,0 +1,22 @@
+id: person.okonta
+name: Okonta
+type: person
+kind: companion
+region: place.deep-chorus
+summary: >
+  Threaded guardian of the Anthem Waters for thirty years, born a herder in Deep Chorus; teaches the hero to fight.
+facts:
+  - Threaded; thirty years a guardian of the Anthem Waters.
+  - Born a herder in Deep Chorus.
+  - Took the Thread after an agravar trawler killed her brother.
+  - Teaches the hero to fight.
+  - Carries a needle and has the Thread's long hearing.
+  - Corin was her flying partner of twenty years.
+links:
+  people: [person.corin]
+  factions: [faction.threaded]
+  places: [place.deep-chorus]
+first_appears: ch03
+sources:
+  - campaign-the-man-the-tide-brought-in.md#companions
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

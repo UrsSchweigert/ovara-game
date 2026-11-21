@@ -1,0 +1,25 @@
+id: person.jef
+name: Jef
+type: person
+kind: maker
+region: place.the-lantern
+summary: >
+  Mariner of about nine hundred years, the last who understands the craft; keeper of the Dragon and maker of the Threaded.
+facts:
+  - A mariner about nine hundred years old with no gift; kept alive by a Maker medicine machine.
+  - Born in Sounding; carried to the Lantern at six with a wasting fever, where he stayed and swept the halls.
+  - Spent eleven years before the archive walls while they could still be read.
+  - Has had eight wives and trained sixty apprentices, none able to carry the craft away.
+  - Does not rule: repairs what he can reach, decides who may ride the Dragon and makes the Threaded.
+  - Has laid no Thread for six years.
+  - Wife of fifty-one years: Maelis.
+  - Dies at the end of chapter 4.
+links:
+  people: [person.maelis, person.anselm-rook]
+  factions: [faction.threaded]
+  places: [place.the-lantern, place.sounding, place.kettle-house, place.ember-house]
+first_appears: ch03
+sources:
+  - world-bible.md#8
+  - world-bible.md#13
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance

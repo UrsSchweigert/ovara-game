@@ -1,0 +1,20 @@
+id: person.nerys-voss
+name: Nerys Voss
+type: person
+kind: supporting
+region: place.saltgate
+summary: >
+  Ilan's mariner mother, who hid ashore and is dead.
+facts:
+  - A mariner who hid ashore and taught her son to hide too.
+  - Dried out and died in a tenement on the Sluice.
+  - Dead before the campaign starts.
+links:
+  people: [person.ilan-voss, person.tomas-voss]
+  factions: [faction.mariners]
+  places: [place.the-sluice]
+first_appears: ch07
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#what-the-game-master-knows-from-the-start
+  - campaign-the-man-the-tide-brought-in.md#chapter-8

@@ -1,0 +1,18 @@
+id: person.linnea-marsh
+name: Dr Linnea Marsh
+type: person
+kind: board-head
+region: place.saltgate
+summary: >
+  Head of Brightwater, who tries to open her wards to the healers.
+facts:
+  - Head of Brightwater.
+  - Tries to open her wards to the healers.
+  - Dies in a clinic fire after asking Rook's leave.
+links:
+  factions: [faction.brightwater]
+  people: [person.anselm-rook]
+  places: [place.saltgate]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-five-boards

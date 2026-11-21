@@ -1,0 +1,20 @@
+id: person.marit-coyle
+name: Marit Coyle
+type: person
+kind: companion
+region: place.orrin-spire
+summary: >
+  Presenter of the evening bulletin on Orrin One, secretly of the Clean Hands.
+facts:
+  - Presenter of the evening bulletin on Orrin One.
+  - Secretly of the Clean Hands since she found the missing tonnage in Halcyon's returns.
+  - Has fed the Clean Hands for years.
+  - Offers access, nerve and a camera.
+links:
+  factions: [faction.clean-hands, faction.orrin-signal]
+  people: [person.caspar-venn, person.bertil]
+  places: [place.orrin-spire]
+first_appears: ch13
+sources:
+  - campaign-the-man-the-tide-brought-in.md#companions
+  - campaign-the-man-the-tide-brought-in.md#chapter-13

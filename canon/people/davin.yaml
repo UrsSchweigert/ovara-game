@@ -1,0 +1,20 @@
+id: person.davin
+name: Davin
+type: person
+kind: supporting
+region: place.low-anthem
+summary: >
+  Net-mender of Low Anthem and Hesper's husband of nineteen years; dies in the bombing.
+facts:
+  - Net-mender of Low Anthem and a Tender.
+  - Hesper's husband of nineteen years.
+  - Showed the hero the gate latch four times.
+  - Dies in the bombing of Low Anthem, chapter 2.
+links:
+  people: [person.hesper]
+  factions: [faction.tenders]
+  places: [place.low-anthem]
+first_appears: ch01
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#chapter-1
