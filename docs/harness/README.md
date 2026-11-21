@@ -97,6 +97,14 @@ The harness's own code, `tools/harness/`, is protected. No worker may change it 
 
 A fix prepared some other way can be handed to it: `python3 tools/steward.py --adopt-fix <pull request> --for-task <task id>`. `--no-fix` turns the preparing off.
 
+**What is waiting for you**
+
+Each round the steward works out what only you can do next, most pressing first, each with its command: a pull request to merge, a plan to approve, a follow-up to finish, a gate to sign off, a task it referred. It writes the list to `next-steps.md` in the harness's state folder and shows a macOS notification when the list changes. To see it at any time:
+
+```sh
+python3 tools/steward.py --next
+```
+
 **Know this before you rely on it**
 
 - Its answers are recorded by the harness as yours, because it runs as you. `steward.log` in the state folder is the record of what it answered and why. Read it.
