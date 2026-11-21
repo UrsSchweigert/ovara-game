@@ -1,0 +1,18 @@
+id: event.the-eldest-brother
+name: Rook's offer and the first lost fight
+type: event
+kind: turning-point
+chapter: ch06
+summary: In the stalled Dragon Rook offers the Threaded paid work; Corin, Tam and a third take the hero into the Slick, and afterwards he rebuilds the Dragon's heart on two wheels.
+facts:
+  - Rook offers the Threaded work as pilots and guides for the refuges, paid in deeded ground; fourteen needles leave after him.
+  - The hero loses his first fight; Okonta rescues him from the Slick, and slick eels take Tam.
+  - Okonta teaches him to fight with Hold, an arm's length of sea already listening.
+  - The rebuilt heart runs on two wheels instead of three; the spare wheel is lashed to a rib.
+  - Nineteen needles are left in a row of cradles built for two hundred.
+links:
+  places: [place.the-slick]
+  machines: [machine.the-dragon, machine.needle]
+  powers: [power.hold]
+sources:
+  - campaign.md#chapter-6

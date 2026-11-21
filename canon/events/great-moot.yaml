@@ -1,0 +1,14 @@
+id: event.great-moot
+name: The Great Moot
+type: event
+kind: turning-point
+chapter: ch12
+summary: The first Moot of all the waters tries the hero and binds him to the mending of the holds for life.
+facts:
+  - He is never again to command the sea; any caller who sees him do it may put him down.
+  - Hesper and eleven other Mighty leave for Port Halcyon.
+links:
+  places: [place.tidehall, place.deep-chorus]
+  factions: [faction.mariners, faction.breakers]
+sources:
+  - campaign.md#chapter-12

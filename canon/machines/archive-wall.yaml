@@ -1,0 +1,19 @@
+id: machine.archive-wall
+name: Archive wall
+type: machine
+kind: record
+summary: A surface of light that holds records and shows, in moving pictures, how each Maker thing was built.
+facts:
+  - Almost all are dark or unreadable.
+  - The last in the Lantern went out about six hundred years ago; Jef never learned to mend them.
+  - Jef taught himself the craft from the Lantern's walls.
+links:
+  places: [place.the-lantern]
+changes:
+  ch17: A wall in the vault at Site Nine lights and shows the ring used rightly.
+  ch18: Walls in a sealed workshop under the eastern quarter still read and show how to Make.
+sources:
+  - world-bible.md#3
+  - world-bible.md#7
+  - campaign.md#chapter-17
+  - campaign.md#chapter-18

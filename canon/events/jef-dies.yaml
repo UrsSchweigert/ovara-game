@@ -1,0 +1,16 @@
+id: event.jef-dies
+name: Jef's death
+type: event
+kind: turning-point
+chapter: ch04
+summary: A riderless dart strikes the Lantern's heart and Jef dies at the end of chapter 4, after laying a last Thread on the hero.
+facts:
+  - The visitor Anselm came in the seventh week asking Jef to come and seat an engine.
+  - The dart is one of the forty Jef built at nineteen.
+  - Jef's last instruction: the hero must ask for his memory himself.
+  - Nobody can make new Threaded after this.
+links:
+  places: [place.the-lantern, place.north-well]
+  machines: [machine.dart, machine.the-thread]
+sources:
+  - campaign.md#chapter-4

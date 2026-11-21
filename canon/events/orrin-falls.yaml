@@ -1,0 +1,14 @@
+id: event.orrin-falls
+name: Orrin falls
+type: event
+kind: turning-point
+chapter: ch13
+summary: A live broadcast exposes Caspar Venn's trap and Orrin loses its hold on the news.
+facts:
+  - Marit Coyle's backup transmitter carries the hero's confession to every screen.
+  - Halcyon's fleet sails with the engine two days early.
+links:
+  places: [place.orrin-spire]
+  factions: [faction.orrin-signal]
+sources:
+  - campaign.md#chapter-13

@@ -1,0 +1,16 @@
+id: event.hold-wars
+name: The Hold Wars
+type: event
+kind: history
+when: about 900 years ago
+summary: The last time mariners fought each other, begun over a kelp boundary; eleven holds were destroyed.
+facts:
+  - Jef, nineteen, built armed darts for his own hold, Sounding.
+  - Sounding was the last hold broken, by two of Jef's darts in enemy hands.
+  - Jef swore never again to build anything that could not keep someone alive.
+  - Since then mariners have had no army and no hold commands another.
+links:
+  places: [place.sounding]
+  machines: [machine.dart]
+sources:
+  - world-bible.md#3
