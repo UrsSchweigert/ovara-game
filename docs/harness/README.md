@@ -87,6 +87,16 @@ When a plan has finished, the harness opens one pull request from its run branch
 
 `python3 tools/steward.py --audit <plan-id>` runs the audit at any time and changes nothing.
 
+**When the harness itself is at fault**
+
+The harness's own code, `tools/harness/`, is protected. No worker may change it and the steward never merges a change to it. When the steward judges that a task is blocked by a defect in that code, it:
+
+1. **Prepares a fix.** In a throwaway copy of `main`, Claude makes the smallest change under `tools/harness/`. The script discards it if any other file was touched or if the harness's own tests fail. Otherwise it pushes a branch and opens a pull request that states the diagnosis, the change and the test result.
+2. **Waits for you.** You read it and merge it, or close it.
+3. **Restarts.** Once it is merged, the steward pauses the run so that workers in flight can finish, pulls `main`, starts the run again so that it loads the fix, and answers the blocked task with "retry as is".
+
+A fix prepared some other way can be handed to it: `python3 tools/steward.py --adopt-fix <pull request> --for-task <task id>`. `--no-fix` turns the preparing off.
+
 **Know this before you rely on it**
 
 - Its answers are recorded by the harness as yours, because it runs as you. `steward.log` in the state folder is the record of what it answered and why. Read it.

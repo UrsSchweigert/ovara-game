@@ -16,8 +16,9 @@ How it works, each round:
   5. Everything else (manual tests, assets, promotions, anything the AI escalates) is left for the owner and
      listed as waiting.
 
-What it can never do: cancel an issue, approve a plan, promote a run, answer a manual test or an asset request,
-touch GitHub, tokens, files or the harness's store. Its answers are recorded by the harness as the owner's, because
+What it can never do: cancel an issue, approve a plan, answer a manual test or an asset request, merge a change
+to the harness, or touch tokens or the harness's store. Between milestones and for harness defects it does more;
+see steward_milestone.py and steward_fixes.py. Its answers are recorded by the harness as the owner's, because
 it runs as the owner. Every answer, with its reason, is written to steward.log beside the harness store.
 
     python3 tools/steward.py               # every 5 minutes until Ctrl+C
@@ -37,6 +38,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import steward_fixes  # noqa: E402
 import steward_milestone  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -91,7 +93,7 @@ class Book:
         if self.path and os.path.exists(self.path):
             with open(self.path) as fh:
                 self.data = json.load(fh)
-        for key, empty in (("issues", {}), ("escalated", []), ("milestones", {}), ("signed", {})):
+        for key, empty in (("issues", {}), ("escalated", []), ("milestones", {}), ("signed", {}), ("fixes", {})):
             self.data.setdefault(key, empty)
 
     def issue(self, issue_id):
@@ -119,7 +121,7 @@ class Book:
             fh.write(text + "\n")
 
 
-def claude_json(prompt, cwd, model, key):
+def claude_json(prompt, cwd, model, key, tools=("Read", "Grep", "Glob")):
     """One headless, read-only call to Claude. Returns the last JSON object in the reply that has `key`."""
     claude = shutil.which("claude")
     if not claude:
@@ -128,7 +130,7 @@ def claude_json(prompt, cwd, model, key):
     command = [claude, "-p", "--output-format", "json"]
     if model:
         command += ["--model", model]
-    command += ["--allowedTools", "Read", "Grep", "Glob"]
+    command += ["--allowedTools", *tools]
     out = subprocess.run(command, cwd=cwd, input=prompt, capture_output=True, text=True, timeout=1800)
     if out.returncode != 0:
         raise RuntimeError("claude failed: %s" % (out.stderr or out.stdout).strip()[:300])
@@ -237,6 +239,12 @@ def _answer_tasks(args, status, book, tasks, blocks):
                           % (task_id, why, json.dumps(decision, indent=1)))
                 book.save()
             book.log("REFER   %s: %s" % (task_id, str(why)[:400]))
+            if decision.get("class") == "harness_defect" and not args.dry_run and not args.no_fix and task_id not in book.data["fixes"]:
+                try:
+                    steward_fixes.prepare(ROOT, book, task_id, decision.get("reason", ""), block,
+                                          steward_fixes.executing_plan(status), args.model, claude_json)
+                except Exception as exc:
+                    book.log("ERROR   preparing a fix for %s: %s" % (task_id, str(exc)[:300]))
             continue
         if args.dry_run:
             print("  would answer %s with %r (%s): %s" % (task_id, label, decision.get("class"), decision.get("reason", "")), flush=True)
@@ -259,6 +267,7 @@ def _answer_tasks(args, status, book, tasks, blocks):
 def after_tasks(args, status):
     """Between milestones: audit, promote, follow up gaps, wait for the owner's gate, draft the next plan."""
     book = Book(status.get("store", ""))
+    steward_fixes.fixes_round(ROOT, args, status, book, harness, options_in, task_blocks)
     steward_milestone.milestone_round(ROOT, args, status, book, harness, claude_json)
 
 
@@ -282,11 +291,21 @@ def main():
     ap.add_argument("--interval", type=int, default=300, help="seconds between rounds (default 300)")
     ap.add_argument("--model", help="model for the steward's decisions (default: the CLI's own default)")
     ap.add_argument("--try", dest="try_path", metavar="FILE", help="decide on a task text in FILE and show it; answers nothing")
+    ap.add_argument("--no-fix", action="store_true", help="never prepare a pull request for a harness defect")
+    ap.add_argument("--adopt-fix", metavar="PR", help="wait on this pull request as the harness fix for --for-task")
+    ap.add_argument("--for-task", metavar="TASK_ID", help="the blocked task that --adopt-fix will unblock")
     ap.add_argument("--audit", metavar="PLAN_ID", help="check and audit that plan's run branch now and print the report; changes nothing")
     ap.add_argument("--sign-off", metavar="PLAN_ID", help="record that you have looked at what that milestone needs from you")
     args = ap.parse_args()
     if args.try_path:
         try_file(args.try_path, args.model)
+        return 0
+    if args.adopt_fix:
+        if not args.for_task:
+            print("--adopt-fix needs --for-task TASK_ID")
+            return 2
+        status = read_status()
+        steward_fixes.adopt(Book(status.get("store", "")), status, args.adopt_fix, args.for_task)
         return 0
     if args.audit or args.sign_off:
         status = read_status()
