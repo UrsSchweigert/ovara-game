@@ -3,8 +3,7 @@
 
 Usage: python tools/checks.py <canon|glossary|references|flags|art|index>
 
-canon, glossary, references and index are real; references also validates content and flags. art is a placeholder until
-its task implements it; a placeholder passes and says so.
+canon, glossary, references and index are real; references also validates content and flags. art checks game/assets against the manifest and palette.
 `canon` also runs the Python tests in tools/tests.
 Keep this file free of third-party imports at module level, so that it runs
 before the virtual environment exists.
@@ -15,11 +14,6 @@ from pathlib import Path
 
 TOOLS = Path(__file__).resolve().parent
 CANON = TOOLS.parent / "canon"
-
-PLACEHOLDERS = {
-    "art": "art check (palette, sizes, manifest): nothing to check yet (task M0-05)",
-}
-
 
 def report(label, errors, warnings):
     for w in warnings:
@@ -65,11 +59,11 @@ def main(argv):
         (CANON / "index.md").write_text(text + "\n", encoding="utf-8")
         print(f"index: wrote canon/index.md ({text.count(chr(10)) + 2} lines)")
         return 0
-    if len(argv) != 2 or argv[1] not in PLACEHOLDERS:
-        print(__doc__)
-        return 2
-    print(PLACEHOLDERS[argv[1]])
-    return 0
+    if len(argv) == 2 and argv[1] == "art":
+        from ovcheck.art import check_art
+        return report("art", *check_art(CANON.parent))
+    print(__doc__)
+    return 2
 
 
 if __name__ == "__main__":

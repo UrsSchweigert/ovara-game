@@ -121,3 +121,7 @@ Base 640 by 360. Exploring tiles 32 by 32. Battle hexes 64 by 48. Figures 32 by 
 ## Review
 
 The swatch image `game/assets/palettes/ovara-swatch.png` shows the 64 colours, the five subsets, and each region's six water colours (well to orphan) beside their greys. **A person must look at it and approve the palette** before any art is made from it. No agent has looked at it.
+
+## Manifest
+
+Every PNG under `game/assets/` except `palettes/` is listed in `game/assets/manifest.json`: `{"assets": [{"path", "kind", "canon"?, "brief"?}]}`, with `path` relative to `game/assets/`. Kinds and sizes: `tile` 64x48, `figure` 32x48, `exploring-tile` 32x32, `dungeon-texture` 32x32 or 64x64, `thing` 24x24, `portrait` 96x96, `ui` any size. Pixels are fully transparent or fully opaque, and every opaque pixel is a palette colour. `bash ov check` fails naming the file otherwise.

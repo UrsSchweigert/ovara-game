@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Asset manifest",
+  "type": "object",
+  "required": ["assets"],
+  "additionalProperties": false,
+  "properties": {
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "path": {"type": "string", "pattern": "^[a-z0-9_./-]+\\.png$"},
+          "kind": {"enum": ["tile", "figure", "exploring-tile", "dungeon-texture", "thing", "portrait", "ui"]},
+          "canon": {"type": "string"},
+          "brief": {"type": "string"}
+        }
+      }
+    }
+  }
+}
