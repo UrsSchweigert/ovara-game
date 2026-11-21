@@ -47,7 +47,73 @@ class PlaceholderTests(unittest.TestCase):
         entries = json.loads((mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]
         _, cells = mp.contact_sheet(self.root)
         self.assertEqual(len(cells), len(entries))
-        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES))
+        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.THINGS))
+
+    def palette_hexes(self):
+        _, data = mp.load_palette(self.root)
+        return {tuple(int(c["hex"].lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)) for c in data["colours"]}
+
+    def test_figures_are_32_by_48_palette_only_with_feet_on_the_bottom_row(self):
+        mp.build(self.root)
+        palette = self.palette_hexes()
+        for key in mp.FIGURES:
+            img = Image.open(mp.assets_dir(self.root) / "sprites" / f"figure-{key}.png").convert("RGBA")
+            self.assertEqual(img.size, (32, 48))
+            used = {p[:3] for p in img.getdata() if p[3] == 255}
+            self.assertTrue(used <= palette, f"figure-{key}.png uses off-palette colours")
+            feet = [x for x in range(32) if img.getpixel((x, 47))[3] == 255 and abs(x - 16) <= 3]
+            self.assertTrue(feet, f"figure-{key}.png has no feet near x 16")
+
+    def test_figure_outlines_are_the_faction_colour(self):
+        mp.build(self.root)
+        rgb, _ = mp.load_palette(self.root)
+        for key, spec in mp.FIGURES.items():
+            if "rim" in spec or not spec.get("outline"):
+                continue
+            img = Image.open(mp.assets_dir(self.root) / "sprites" / f"figure-{key}.png").convert("RGBA")
+            edges = self.edge_colours(img, rgb[spec["ink"]] if spec["ink"] else None)
+            self.assertEqual(edges, {rgb[spec["outline"]]}, f"figure-{key}.png outline")
+
+    def test_fouled_has_dithered_rim_and_no_outline(self):
+        mp.build(self.root)
+        rgb, _ = mp.load_palette(self.root)
+        img = Image.open(mp.assets_dir(self.root) / "sprites" / "figure-fouled.png").convert("RGBA")
+        self.assertEqual(self.edge_colours(img, rgb[mp.FIGURES["fouled"]["ink"]]), {rgb["brass-1"], rgb["brass-2"]})
+
+    def edge_colours(self, img, ink):
+        """Colours of opaque pixels that touch a transparent pixel or the image edge, but not the label ink."""
+        w, h = img.size
+        opaque = {(x, y) for x in range(w) for y in range(h) if img.getpixel((x, y))[3] == 255}
+        edge = {img.getpixel(p)[:3] for p in opaque
+                if not all(n in opaque for n in ((p[0] + 1, p[1]), (p[0] - 1, p[1]), (p[0], p[1] + 1), (p[0], p[1] - 1)))}
+        return edge - {ink}
+
+    def test_things_are_24_by_24_and_generic(self):
+        mp.build(self.root)
+        palette = self.palette_hexes()
+        assets = mp.assets_dir(self.root)
+        entries = json.loads((assets / "manifest.json").read_text(encoding="utf-8"))["assets"]
+        for key in mp.THINGS:
+            img = Image.open(assets / "sprites" / f"thing-{key}.png").convert("RGBA")
+            self.assertEqual(img.size, (24, 24))
+            used = {p[:3] for p in img.getdata() if p[3] == 255}
+            self.assertTrue(used <= palette)
+        things = [e for e in entries if e["kind"] == "thing"]
+        self.assertEqual(len(things), len(mp.THINGS))
+        self.assertTrue(all("canon" not in e for e in things))
+
+    def test_figures_list_canon_ids_and_hero_has_none(self):
+        mp.build(self.root)
+        entries = {e["path"]: e for e in json.loads(
+            (mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]}
+        self.assertEqual(entries["sprites/figure-mariners.png"]["canon"], "faction.mariners")
+        self.assertEqual(entries["sprites/figure-fouled.png"]["canon"], "creature.the-fouled")
+        self.assertEqual(entries["sprites/figure-makers.png"]["canon"], "event.the-makers")
+        self.assertEqual(entries["sprites/figure-rays.png"]["canon"], "faction.great-rays")
+        self.assertNotIn("canon", entries["sprites/figure-hero.png"])
+        for key in mp.FIGURES:
+            e = entries[f"sprites/figure-{key}.png"]
+            self.assertTrue((mp.assets_dir(self.root) / e["brief"]).is_file())
 
     def test_every_tile_has_manifest_entry_and_brief(self):
         mp.build(self.root)

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Writes placeholder art for Ovara: the water tiles of each region, their briefs,
-their manifest entries and a contact sheet for the owner to look at.
+"""Writes placeholder art for Ovara: the water tiles of each region, eight faction
+figures, four generic things, their briefs, their manifest entries and a contact
+sheet for the owner to look at.
 
 Usage: python3 tools/art/make_placeholders.py
 
@@ -10,6 +11,7 @@ placeholders, not final art.
 """
 import json
 from pathlib import Path
+from typing import Optional
 
 from PIL import Image
 
@@ -22,6 +24,78 @@ REGION_NAMES = {"pale": "Pale", "anthem": "Anthem", "girdle": "Girdle",
 STATES = ["well", "storm", "fouled", "clean", "deaf", "orphan"]  # dark to light, art.md
 TILE_W, TILE_H = 64, 48  # battle hex, pointy-top
 SCALE, COLS, PAD = 2, 8, 8  # contact sheet: twice size, eight to a row
+FIG_W, FIG_H = 32, 48  # figures stand on the hex, feet on the bottom row at x 16
+THING_SIZE = 24
+LABEL_X, LABEL_Y = 12, 21  # two-letter label at chest height
+NEIGHBOURS = ((1, 0), (-1, 0), (0, 1), (0, -1))
+
+# Shapes are integer tests: ("box", x0, y0, x1, y1), ("disc", cx, cy, r), ("ring", cx, cy, r0, r1),
+# ("ellipse", cx, cy, rx, ry), ("trap", cx, y0, y1, w0, w1) with half-width growing from w0 to w1.
+# The first shape that hits a pixel gives it that part's colour. Outline and rim apply to edge pixels.
+# Figure colours are palette names (art.md, "Outlines by faction"). Meridian has no lettering (art.md).
+FIGURES = {
+    "mariners": {"canon": "faction.mariners", "parts": {"head": "sand-5", "body": "deep-3"},
+                 "outline": "deep-0", "ink": "sand-7", "label": "MA",
+                 "note": "long-limbed, unarmoured, cloth and cord hanging",
+                 "shapes": [("head", ("disc", 16, 6, 3)), ("body", ("box", 13, 10, 19, 25)),
+                            ("body", ("box", 9, 11, 11, 28)), ("body", ("box", 21, 11, 23, 28)),
+                            ("body", ("box", 13, 26, 15, 47)), ("body", ("box", 17, 26, 19, 47))]},
+    "agravars": {"canon": "faction.agravars", "parts": {"head": "stone-5", "body": "stone-3"},
+                 "outline": "stone-0", "ink": "brass-6", "label": "AG",
+                 "note": "squat, helmeted, blocky, straight edges",
+                 "shapes": [("head", ("box", 11, 2, 21, 9)), ("body", ("box", 8, 10, 24, 34)),
+                            ("body", ("box", 5, 12, 7, 30)), ("body", ("box", 25, 12, 27, 30)),
+                            ("body", ("box", 9, 35, 15, 47)), ("body", ("box", 17, 35, 23, 47))]},
+    "threaded": {"canon": "faction.threaded", "parts": {"head": "sand-5", "body": "kelp-3"},
+                 "outline": "deep-0", "ink": "sand-7", "label": "TH",
+                 "note": "long and low, lying along its needle",
+                 "shapes": [("head", ("disc", 28, 33, 3)), ("body", ("box", 4, 30, 28, 38)),
+                            ("body", ("box", 15, 39, 16, 47))]},
+    "fouled": {"canon": "creature.the-fouled", "parts": {"head": "brass-3", "body": "brass-3"},
+               "rim": ("brass-2", "brass-1"), "ink": "sand-7", "label": "FO",
+               "note": "no clear edge, dithered rim, no outline",
+               "shapes": [("body", ("disc", 16, 26, 11)), ("body", ("disc", 16, 38, 9))]},
+    "makers": {"canon": "event.the-makers", "parts": {"head": "stone-7", "body": "stone-7"},
+               "outline": "stone-2", "ink": "stone-0", "label": "MK",
+               "note": "seamless arcs, nothing straight, outline stone-2 on pale glass",
+               "shapes": [("body", ("ring", 16, 12, 6, 8)), ("body", ("ring", 16, 35, 11, 13))]},
+    "meridian": {"canon": "faction.meridian", "parts": {"head": "stone-4", "body": "stone-4"},
+                 "outline": "stone-0", "ink": None, "label": None,
+                 "note": "one grey, hard edges, no rivets",
+                 "shapes": [("head", ("box", 12, 2, 20, 10)), ("body", ("box", 8, 11, 24, 30)),
+                            ("body", ("box", 9, 31, 14, 47)), ("body", ("box", 18, 31, 23, 47))]},
+    "rays": {"canon": "faction.great-rays", "parts": {"head": "deep-4", "body": "deep-4"},
+             "outline": "ember-0", "ink": "sand-7", "label": "RA",
+             "note": "long slow shape with a trailing tail",
+             "shapes": [("body", ("ellipse", 16, 22, 14, 8)), ("body", ("box", 15, 30, 17, 47))]},
+    "hero": {"canon": None, "parts": {"head": "sand-5", "body": "deep-5", "tool": "brass-4"},
+             "outline": "deep-0", "ink": "brass-6", "label": "HE",
+             "note": "sea-silk shape with a worn tool at the belt",
+             "shapes": [("head", ("disc", 16, 6, 3)), ("body", ("box", 15, 9, 17, 11)),
+                        ("body", ("trap", 16, 12, 40, 4, 8)), ("body", ("box", 13, 41, 15, 47)),
+                        ("body", ("box", 17, 41, 19, 47)), ("tool", ("box", 21, 24, 23, 27))]},
+}
+THINGS = {
+    "weapon": {"parts": {"blade": "stone-6", "guard": "brass-4", "grip": "deep-2", "pommel": "brass-5"},
+               "shapes": [("blade", ("box", 11, 1, 12, 16)), ("guard", ("box", 8, 16, 15, 17)),
+                          ("grip", ("box", 11, 18, 12, 21)), ("pommel", ("box", 10, 22, 13, 23))]},
+    "garment": {"parts": {"cloth": "deep-3", "trim": "deep-6"},
+                "shapes": [("trim", ("box", 6, 21, 17, 21)), ("cloth", ("box", 6, 4, 17, 20))]},
+    "supply": {"parts": {"crate": "brass-3", "band": "brass-1", "rim": "brass-2"},
+               "shapes": [("band", ("box", 4, 13, 19, 14)), ("rim", ("box", 4, 6, 19, 7)),
+                          ("crate", ("box", 4, 8, 19, 20))]},
+    "key": {"parts": {"ring": "brass-5", "shaft": "brass-5", "tooth": "brass-4"},
+            "shapes": [("ring", ("ring", 6, 11, 2, 4)), ("shaft", ("box", 10, 10, 20, 12)),
+                       ("tooth", ("box", 17, 13, 18, 15)), ("tooth", ("box", 20, 13, 21, 14))]},
+}
+# 3 by 5 pixel letters for the figure labels
+GLYPHS = {
+    "A": [" # ", "# #", "###", "# #", "# #"], "E": ["###", "#  ", "###", "#  ", "###"],
+    "F": ["###", "#  ", "###", "#  ", "#  "], "G": ["###", "#  ", "# #", "# #", "###"],
+    "H": ["# #", "# #", "###", "# #", "# #"], "K": ["# #", "# #", "## ", "# #", "# #"],
+    "M": ["# #", "###", "# #", "# #", "# #"], "O": ["###", "# #", "# #", "# #", "###"],
+    "R": ["###", "# #", "###", "## ", "# #"], "T": ["###", " # ", " # ", " # ", " # "],
+}
 
 
 def assets_dir(root: Path) -> Path:
@@ -79,6 +153,80 @@ def tile_image(root: Path, region: str, state: str) -> Image.Image:
     return img
 
 
+def hit(shape: tuple, x: int, y: int) -> bool:
+    kind, a = shape[0], shape[1:]
+    if kind == "box":
+        return a[0] <= x <= a[2] and a[1] <= y <= a[3]
+    if kind == "disc":
+        return (x - a[0]) ** 2 + (y - a[1]) ** 2 <= a[2] ** 2
+    if kind == "ring":
+        return a[2] ** 2 <= (x - a[0]) ** 2 + (y - a[1]) ** 2 <= a[3] ** 2
+    if kind == "ellipse":  # (dx / rx) squared plus (dy / ry) squared, scaled to whole numbers
+        return (x - a[0]) ** 2 * a[3] ** 2 + (y - a[1]) ** 2 * a[2] ** 2 <= (a[2] * a[3]) ** 2
+    if kind == "trap":
+        if not a[1] <= y <= a[2]:
+            return False
+        half = a[3] + (y - a[1]) * (a[4] - a[3]) // (a[2] - a[1])
+        return abs(x - a[0]) <= half
+    raise ValueError(f"unknown shape: {kind}")
+
+
+def part_at(shapes: list, x: int, y: int) -> Optional[str]:
+    for part, shape in shapes:
+        if hit(shape, x, y):
+            return part
+    return None
+
+
+def sprite_image(root: Path, size: tuple[int, int], spec: dict) -> Image.Image:
+    """Draws the parts of a figure or thing. Edge pixels take the rim, else the outline, when the spec has one."""
+    rgb, _ = load_palette(root)
+    w, h = size
+    cells = {(x, y): part for y in range(h) for x in range(w)
+             if (part := part_at(spec["shapes"], x, y)) is not None}
+    img = Image.new("RGBA", size, (0, 0, 0, 0))
+    px = img.load()
+    for (x, y), part in cells.items():
+        name = spec["parts"][part]
+        if not all((x + dx, y + dy) in cells for dx, dy in NEIGHBOURS):
+            if "rim" in spec:
+                name = spec["rim"][(x + y) % 2]
+            elif spec.get("outline"):
+                name = spec["outline"]
+        px[x, y] = rgb[name] + (255,)
+    if spec.get("label"):
+        for i, letter in enumerate(spec["label"]):
+            for r, row in enumerate(GLYPHS[letter]):
+                for c, ch in enumerate(row):
+                    if ch == "#":
+                        px[LABEL_X + 4 * i + c, LABEL_Y + r] = rgb[spec["ink"]] + (255,)
+    return img
+
+
+def figure_entry(key: str) -> dict:
+    entry = {"path": f"sprites/figure-{key}.png", "kind": "figure"}
+    if FIGURES[key]["canon"]:
+        entry["canon"] = FIGURES[key]["canon"]
+    entry["brief"] = f"briefs/figure-{key}.md"
+    return entry
+
+
+def thing_entry(key: str) -> dict:
+    return {"path": f"sprites/thing-{key}.png", "kind": "thing", "brief": f"briefs/thing-{key}.md"}
+
+
+def figure_brief(key: str) -> str:
+    spec = FIGURES[key]
+    return (f"{key.capitalize()} figure, 32 by 48: {spec['note']}. "
+            f"Outline {spec.get('outline') or 'none'}; label {spec['label'] or 'none'}.\n"
+            "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
+
+
+def thing_brief(key: str) -> str:
+    return (f"{key.capitalize()} thing, 24 by 24, generic: no name and no canon fact.\n"
+            "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
+
+
 def entry_for(region: str, state: str) -> dict:
     return {"path": f"tiles/{region}-{state}.png", "kind": "tile",
             "canon": REGIONS[region], "brief": f"briefs/{region}-{state}.md"}
@@ -112,8 +260,8 @@ def upsert_manifest(root: Path, entries: list[dict]) -> list[dict]:
 def build(root: Path) -> list[dict]:
     """Writes the tiles and briefs, upserts their manifest entries, and returns the entries."""
     assets = assets_dir(root)
-    (assets / "tiles").mkdir(parents=True, exist_ok=True)
-    (assets / "briefs").mkdir(parents=True, exist_ok=True)
+    for folder in ("tiles", "sprites", "briefs"):
+        (assets / folder).mkdir(parents=True, exist_ok=True)
     entries = []
     for region in REGIONS:
         for state in STATES:
@@ -121,6 +269,16 @@ def build(root: Path) -> list[dict]:
             tile_image(root, region, state).save(assets / entry["path"])
             (assets / entry["brief"]).write_text(brief_text(root, region, state), encoding="utf-8")
             entries.append(entry)
+    for key in FIGURES:
+        entry = figure_entry(key)
+        sprite_image(root, (FIG_W, FIG_H), FIGURES[key]).save(assets / entry["path"])
+        (assets / entry["brief"]).write_text(figure_brief(key), encoding="utf-8")
+        entries.append(entry)
+    for key in THINGS:
+        entry = thing_entry(key)
+        sprite_image(root, (THING_SIZE, THING_SIZE), THINGS[key]).save(assets / entry["path"])
+        (assets / entry["brief"]).write_text(thing_brief(key), encoding="utf-8")
+        entries.append(entry)
     upsert_manifest(root, entries)
     return entries
 
@@ -155,7 +313,8 @@ def main() -> None:
     out = ROOT / "shots" / "placeholders.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out)
-    print(f"wrote {len(REGIONS) * len(STATES)} tiles, briefs and manifest entries; sheet {out} with {len(cells)} cells")
+    print(f"wrote {len(REGIONS) * len(STATES)} tiles, {len(FIGURES)} figures, {len(THINGS)} things, "
+          f"briefs and manifest entries; sheet {out} with {len(cells)} cells")
 
 
 if __name__ == "__main__":
