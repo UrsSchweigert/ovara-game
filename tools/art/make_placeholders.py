@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Writes placeholder art for Ovara: the six Pale water tiles, their briefs,
+"""Writes placeholder art for Ovara: the water tiles of each region, their briefs,
 their manifest entries and a contact sheet for the owner to look at.
 
 Usage: python3 tools/art/make_placeholders.py
@@ -14,8 +14,9 @@ from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-REGION = "pale"
-PLACE_ID = "place.the-pale"
+# region key -> canon place id; the key names the files and matches the palette's region_water
+REGIONS = {"pale": "place.the-pale", "anthem": "place.anthem-waters", "girdle": "place.the-girdle"}
+REGION_NAMES = {"pale": "Pale", "anthem": "Anthem", "girdle": "Girdle"}  # short names for briefs
 STATES = ["well", "storm", "fouled", "clean", "deaf", "orphan"]  # dark to light, art.md
 TILE_W, TILE_H = 64, 48  # battle hex, pointy-top
 SCALE, COLS, PAD = 2, 8, 8  # contact sheet: twice size, eight to a row
@@ -63,10 +64,10 @@ def pattern_hit(state: str, x: int, y: int) -> bool:
     raise ValueError(f"unknown water state: {state}")
 
 
-def tile_image(root: Path, state: str) -> Image.Image:
+def tile_image(root: Path, region: str, state: str) -> Image.Image:
     rgb, data = load_palette(root)
-    base = rgb[data["region_water"][REGION][state]]
-    pattern = rgb[data["region_pattern"][REGION][state]]
+    base = rgb[data["region_water"][region][state]]
+    pattern = rgb[data["region_pattern"][region][state]]
     img = Image.new("RGBA", (TILE_W, TILE_H), (0, 0, 0, 0))
     px = img.load()
     for y in range(TILE_H):
@@ -76,17 +77,17 @@ def tile_image(root: Path, state: str) -> Image.Image:
     return img
 
 
-def entry_for(state: str) -> dict:
-    return {"path": f"tiles/{REGION}-{state}.png", "kind": "tile",
-            "canon": PLACE_ID, "brief": f"briefs/{REGION}-{state}.md"}
+def entry_for(region: str, state: str) -> dict:
+    return {"path": f"tiles/{region}-{state}.png", "kind": "tile",
+            "canon": REGIONS[region], "brief": f"briefs/{region}-{state}.md"}
 
 
-def brief_text(root: Path, state: str) -> str:
+def brief_text(root: Path, region: str, state: str) -> str:
     _, data = load_palette(root)
     water = data["water"][state]
-    return (f"Pale water, {state}: {water['pattern']}; movement {water['movement']}.\n"
-            f"Pale subset only: base {data['region_water'][REGION][state]}, "
-            f"pattern {data['region_pattern'][REGION][state]}. Hex 64 by 48, outside transparent.\n"
+    return (f"{REGION_NAMES[region]} water, {state}: {water['pattern']}; movement {water['movement']}.\n"
+            f"{REGION_NAMES[region]} subset only: base {data['region_water'][region][state]}, "
+            f"pattern {data['region_pattern'][region][state]}. Hex 64 by 48, outside transparent.\n"
             "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
 
 
@@ -112,11 +113,12 @@ def build(root: Path) -> list[dict]:
     (assets / "tiles").mkdir(parents=True, exist_ok=True)
     (assets / "briefs").mkdir(parents=True, exist_ok=True)
     entries = []
-    for state in STATES:
-        entry = entry_for(state)
-        tile_image(root, state).save(assets / entry["path"])
-        (assets / entry["brief"]).write_text(brief_text(root, state), encoding="utf-8")
-        entries.append(entry)
+    for region in REGIONS:
+        for state in STATES:
+            entry = entry_for(region, state)
+            tile_image(root, region, state).save(assets / entry["path"])
+            (assets / entry["brief"]).write_text(brief_text(root, region, state), encoding="utf-8")
+            entries.append(entry)
     upsert_manifest(root, entries)
     return entries
 
@@ -151,7 +153,7 @@ def main() -> None:
     out = ROOT / "shots" / "placeholders.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out)
-    print(f"wrote {len(STATES)} tiles, briefs and manifest entries; sheet {out} with {len(cells)} cells")
+    print(f"wrote {len(REGIONS) * len(STATES)} tiles, briefs and manifest entries; sheet {out} with {len(cells)} cells")
 
 
 if __name__ == "__main__":
