@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canon chapter state",
+  "type": "object",
+  "required": ["chapter", "title", "region", "hero_name", "hero_knows_past", "hero_abilities", "alive",
+               "corporations_fallen", "dragon", "known_to_mariners", "known_to_agravars", "companions_available", "sources"],
+  "properties": {
+    "chapter": {"type": "integer", "minimum": 1, "maximum": 18},
+    "title": {"type": "string", "minLength": 1},
+    "region": {"type": "string"},
+    "hero_name": {"type": "string", "minLength": 1},
+    "hero_knows_past": {"type": "boolean"},
+    "hero_abilities": {"type": "array", "items": {"type": "string"}},
+    "hero_craft": {"type": "string"},
+    "without_gift": {"type": "array", "items": {"type": "string"}},
+    "alive": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "corporations_fallen": {"type": "array", "items": {"type": "string"}},
+    "dragon": {"type": "string", "minLength": 1},
+    "known_to_mariners": {"type": "array", "items": {"type": "string"}},
+    "known_to_agravars": {"type": "array", "items": {"type": "string"}},
+    "companions_available": {"type": "array", "items": {"type": "string"}},
+    "sources": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
