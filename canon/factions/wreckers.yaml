@@ -1,0 +1,11 @@
+id: faction.wreckers
+name: Wreckers
+type: faction
+kind: faction
+summary: >
+  Salvagers who dive on drowned Maker ruins for technology to sell to Kessler-Vane.
+facts:
+  - Dive on drowned Maker ruins.
+  - Sell what they find to Kessler-Vane.
+sources:
+  - world-bible.md#10

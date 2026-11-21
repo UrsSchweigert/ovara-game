@@ -1,0 +1,20 @@
+id: faction.agravars
+name: Agravars
+type: faction
+kind: people
+summary: >
+  The land-dwellers of Ovara, who belong to corporations as people elsewhere belong to countries.
+facts:
+  - Every square metre of land is owned; cities grow upward and outward on stilts and floating platforms.
+  - A citizen is housed, paid in scrip and conscripted by a corporation.
+  - Prize making, owning and novelty.
+  - Most have never seen a mariner and think them primitive fish-people or a fairy tale.
+  - Everything is dumped into the sea, as land is too valuable for landfill.
+  - Can never have the gift; a few can receive the Thread.
+  - Ordinary agravars think mariners are half myth, and the corporations keep it that way.
+  - Below the corporations are dozens of minor houses, the free ports and the Stubborns.
+links:
+  places: [place.the-girdle, place.the-stubborns]
+sources:
+  - world-bible.md#4
+  - world-bible.md#15

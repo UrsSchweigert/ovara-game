@@ -1,0 +1,22 @@
+id: faction.meridian
+name: Meridian Assurance
+type: faction
+kind: corporation
+summary: >
+  Corporation of Concord that deals in banking, insurance and mercenaries and owns the debts of the others.
+facts:
+  - Business - banking, insurance, mercenaries.
+  - Home - Concord, in the Sovereigns.
+  - Owns the debts of the others; wars are its product.
+  - Its chairman, Anselm Rook, has never been shown in public.
+  - Tests the top form of the dock schools each year for the Meridian Scholarship and pays for one child's education.
+  - Runs the refuges: white ships offer a hold passage to a tank-town of orphan water for twenty years' service from every person.
+  - Keeps the engine's ring in its vault.
+links:
+  places: [place.concord, place.the-sovereigns, place.meridian-exchange]
+changes:
+  ch18: Falls; its debts are priced on scarce land, and within thirty days three million people walk away from what they owe.
+sources:
+  - world-bible.md#4
+  - world-bible.md#13
+  - campaign.md#chapter-18

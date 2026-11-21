@@ -1,0 +1,12 @@
+id: faction.clean-hands
+name: The Clean Hands
+type: faction
+kind: faction
+summary: >
+  An agravar underground that sabotages dumping and smuggles information to the holds.
+facts:
+  - Made up of clerks, stokers and a few doctors who see the tonnage sheets.
+  - Sabotages dumping and smuggles information to the holds.
+  - Has no leader and no meetings, which is why its members are alive.
+sources:
+  - world-bible.md#10
