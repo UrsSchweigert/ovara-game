@@ -1,1 +1,8 @@
-{"assets": []}
+{"assets": [
+  {"path": "tiles/pale-clean.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-clean.md"},
+  {"path": "tiles/pale-deaf.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-deaf.md"},
+  {"path": "tiles/pale-fouled.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-fouled.md"},
+  {"path": "tiles/pale-orphan.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-orphan.md"},
+  {"path": "tiles/pale-storm.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-storm.md"},
+  {"path": "tiles/pale-well.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-well.md"}
+]}

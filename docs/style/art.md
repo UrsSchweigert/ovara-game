@@ -125,3 +125,5 @@ The swatch image `game/assets/palettes/ovara-swatch.png` shows the 64 colours, t
 ## Manifest
 
 Every PNG under `game/assets/` except `palettes/` is listed in `game/assets/manifest.json`: `{"assets": [{"path", "kind", "canon"?, "brief"?}]}`, with `path` relative to `game/assets/`. Kinds and sizes: `tile` 64x48, `figure` 32x48, `exploring-tile` 32x32, `dungeon-texture` 32x32 or 64x64, `thing` 24x24, `portrait` 96x96, `ui` any size. Pixels are fully transparent or fully opaque, and every opaque pixel is a palette colour. `bash ov check` fails naming the file otherwise.
+
+Placeholders: `python3 tools/art/make_placeholders.py` writes the Pale water tiles, their briefs and manifest entries, and `shots/placeholders.png` (a contact sheet of every manifest entry) for the owner to approve. It is deterministic; rerunning changes nothing.
