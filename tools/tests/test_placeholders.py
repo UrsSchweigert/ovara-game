@@ -48,7 +48,7 @@ class PlaceholderTests(unittest.TestCase):
         _, cells = mp.contact_sheet(self.root)
         self.assertEqual(len(cells), len(entries))
         self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.THINGS)
-                         + len(mp.EXPLORE_TILES) + len(mp.MAKER_PARTS))
+                         + len(mp.EXPLORE_TILES) + len(mp.SETS) * len(mp.MAKER_PARTS))
 
     def palette_hexes(self):
         _, data = mp.load_palette(self.root)
@@ -159,15 +159,15 @@ class PlaceholderTests(unittest.TestCase):
                   for s in mp.STATES]
         self.assertEqual(len(set(images)), len(mp.STATES))
 
-    def test_maker_textures_are_32_square_and_tile_without_a_seam(self):
+    def test_dungeon_textures_are_32_square_and_tile_without_a_seam(self):
         mp.build(self.root)
         palette = self.palette_hexes()
         entries = {e["path"]: e for e in json.loads(
             (mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]}
-        for part in mp.MAKER_PARTS:
-            path = f"tiles/maker-{part}.png"
+        for key, part in [(k, p) for k in mp.SETS for p in mp.MAKER_PARTS]:
+            path = f"tiles/{key}-{part}.png"
             self.assertEqual(entries[path]["kind"], "dungeon-texture")
-            self.assertEqual(entries[path]["canon"], "event.the-makers")
+            self.assertEqual(entries[path].get("canon"), mp.SETS[key]["canon"])
             img = Image.open(mp.assets_dir(self.root) / path).convert("RGBA")
             self.assertEqual(img.size, (32, 32))
             used = {p[:3] for p in img.getdata() if p[3] == 255}
@@ -177,6 +177,24 @@ class PlaceholderTests(unittest.TestCase):
                 for x in range(1, 32):
                     for y in range(32):
                         self.assertEqual(img.getpixel((x, y)), img.getpixel((32 - x, y)), path)
+
+    def test_island_texture_has_no_canon_and_briefs_are_two_lines(self):
+        mp.build(self.root)
+        assets = mp.assets_dir(self.root)
+        entries = {e["path"]: e for e in json.loads((assets / "manifest.json").read_text(encoding="utf-8"))["assets"]}
+        self.assertNotIn("canon", entries["tiles/island-wall.png"])
+        for key in mp.SETS:
+            for part in mp.MAKER_PARTS:
+                brief = (assets / f"briefs/{key}-{part}.md").read_text(encoding="utf-8").splitlines()
+                self.assertEqual(len(brief), 2)
+
+    def test_dungeon_picture_is_640_by_360_and_palette_only(self):
+        mp.build(self.root)
+        picture = mp.dungeon_picture(self.root)
+        self.assertEqual(picture.size, (640, 360))
+        used = {p[:3] for p in picture.convert("RGBA").getdata() if p[3] == 255}
+        self.assertTrue(used <= self.palette_hexes(), "dungeon picture uses off-palette colours")
+        self.assertEqual(mp.render_corridor(self.root).size, (320, 180))
 
     def test_manifest_upsert_keeps_other_entries(self):
         assets = mp.assets_dir(self.root)
