@@ -83,6 +83,21 @@ def check() -> None:
         assert b - a >= MIN_LUMA_GAP, f"water {ka}/{kb} too close in greyscale: {a} vs {b}"
 
 
+def compact(data: dict) -> str:
+    """One line per colour, ramp, subset and water state; still plain JSON."""
+    lines = []
+    for key, val in data.items():
+        if isinstance(val, list):
+            body = ",\n".join("  " + json.dumps(v) for v in val)
+            lines.append(f' "{key}": [\n{body}\n ]')
+        elif isinstance(val, dict):
+            body = ",\n".join(f"  {json.dumps(k)}: {json.dumps(v)}" for k, v in val.items())
+            lines.append(f' "{key}": {{\n{body}\n }}')
+        else:
+            lines.append(f" {json.dumps(key)}: {json.dumps(val)}")
+    return "{\n" + ",\n".join(lines) + "\n}\n"
+
+
 def write_json() -> None:
     colours = []
     for ramp, cols in RAMPS.items():
@@ -98,7 +113,7 @@ def write_json() -> None:
                       "hex": "#" + lookup(w["colour"]), "luma": luma(lookup(w["colour"]))}
                   for k, w in WATER.items()},
     }
-    (OUT / "ovara.json").write_text(json.dumps(data, indent=1) + "\n")
+    (OUT / "ovara.json").write_text(compact(data))
 
 
 def write_swatch() -> None:
