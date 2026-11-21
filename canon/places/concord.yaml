@@ -10,7 +10,7 @@ facts:
   - Glass towers, washed streets, guarded trees, screens the size of buildings, private security at every door.
   - Under the Meridian Exchange is a flooded dock that only the chairman uses.
 position:
-  km_east_of_concord: "0"
+  km_east_of_concord: 0
   km_from_north_tip: "not given"
 sources:
   - world-bible.md#2

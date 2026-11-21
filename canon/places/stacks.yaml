@@ -5,10 +5,9 @@ kind: district
 region: place.the-girdle
 parent: place.port-halcyon
 summary: >
-  The middle band of Port Halcyon: a thousand grey tenement blocks.
+  A band of Port Halcyon: a thousand grey tenement blocks.
 facts:
   - A thousand grey tenement blocks whose streets are stairs.
-  - The middle of the city's three bands.
 position:
   km_east_of_concord: "not given"
   km_from_north_tip: "not given"

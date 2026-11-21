@@ -11,7 +11,7 @@ facts:
   - In its lowest vault, behind three doors, is the Makers' engine: a ring forty metres across set flush in the floor, and a lance that can be pointed.
 position:
   km_east_of_concord: "about 2,600"
-  km_from_north_tip: "not given"
+  km_from_north_tip: "about 5,950"
 sources:
   - world-bible.md#2
   - world-bible.md#11

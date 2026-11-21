@@ -11,7 +11,7 @@ facts:
   - Forty turf-roofed stone houses on a crag above a six-boat cove.
   - Its shrine holds a worn carving of a long-limbed, large-eyed woman rising from a wave, whom the villagers call "the neighbours" and leave the first fish of every catch.
 position:
-  km_east_of_concord: "west of Concord, the nearest a day's sail off (The Stubborns, Old Tolla among them)"
+  km_east_of_concord: "west of Concord (among the Stubborns)"
   km_from_north_tip: "not given"
 sources:
   - world-bible.md#2

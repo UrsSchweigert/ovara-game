@@ -12,7 +12,7 @@ facts:
   - The harbour is deaf water.
   - Behind the sea-wall on the refinery quay stand two hundred Meridian tank-sheds with tin roofs.
 position:
-  km_east_of_concord: "3,000"
+  km_east_of_concord: 3000
   km_from_north_tip: "not given"
 sources:
   - world-bible.md#2
