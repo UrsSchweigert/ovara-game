@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A battle map: at most 12 columns by 9 rows of hexes, pointy-top, offset rows (PLAN.md sections 2 and 3). Each legend glyph gives a terrain and a water state from the PLAN.md section 3 tables.",
+  "type": "object",
+  "required": ["id", "canon", "legend", "rows"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "canon": {"$ref": "content-defs.schema.json#/$defs/canon_id"},
+    "chapter": {"$ref": "content-defs.schema.json#/$defs/chapter"},
+    "legend": {
+      "allOf": [{"$ref": "content-defs.schema.json#/$defs/legend"}],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["terrain", "water"],
+        "additionalProperties": false,
+        "properties": {
+          "terrain": {"enum": ["open_water", "kelp", "wreck", "rock", "coral", "maker_structure", "deck", "land", "surface"]},
+          "water": {"enum": ["clean", "fouled", "deaf", "orphan", "storm", "well"]}
+        }
+      }
+    },
+    "rows": {"$ref": "content-defs.schema.json#/$defs/rows"}
+  }
+}

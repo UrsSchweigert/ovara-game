@@ -3,7 +3,7 @@
 
 Usage: python tools/checks.py <canon|glossary|references|art|index>
 
-canon, glossary, references and index are real. art is a placeholder until
+canon, glossary, references and index are real; references also validates map content. art is a placeholder until
 its task implements it; a placeholder passes and says so.
 `canon` also runs the Python tests in tools/tests.
 Keep this file free of third-party imports at module level, so that it runs
@@ -42,10 +42,13 @@ def main(argv):
         return report("canon", *check_canon(CANON)) | run_tests()
     if len(argv) == 2 and argv[1] == "references":
         from ovcheck.chapters import check_chapters
+        from ovcheck.content import check_content
         from ovcheck.references import check_references
         errors, warnings = check_references(CANON)
         more_errors, more_warnings = check_chapters(CANON.parent)
-        return report("references", errors + more_errors, warnings + more_warnings)
+        content_errors, content_warnings = check_content(CANON.parent)
+        return report("references", errors + more_errors + content_errors,
+                      warnings + more_warnings + content_warnings)
     if len(argv) == 2 and argv[1] == "glossary":
         from ovcheck.glossary import check_glossary
         return report("glossary", *check_glossary(CANON.parent))

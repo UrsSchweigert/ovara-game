@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "An area: a tile map of at most 64 columns by 48 rows (PLAN.md section 2). Each row is a string of one glyph per tile; each glyph is a key of legend.",
+  "type": "object",
+  "required": ["id", "canon", "name", "legend", "rows"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "canon": {"$ref": "content-defs.schema.json#/$defs/canon_id"},
+    "name": {"type": "string", "minLength": 1},
+    "chapter": {"$ref": "content-defs.schema.json#/$defs/chapter"},
+    "legend": {"$ref": "content-defs.schema.json#/$defs/legend"},
+    "rows": {"$ref": "content-defs.schema.json#/$defs/rows"}
+  }
+}
