@@ -24,3 +24,7 @@ __pycache__/
 *.p12
 *.mobileprovision
 game/.godot/export_credentials.cfg
+
+# The investigator's drafts for each plan
+requirements/*_plan/
+requirements/gaps/*_plan/
