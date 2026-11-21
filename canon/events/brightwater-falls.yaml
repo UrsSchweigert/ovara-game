@@ -1,0 +1,16 @@
+id: event.brightwater-falls
+name: Brightwater falls
+type: event
+kind: turning-point
+chapter: ch08
+summary: >
+  Free clinics at the Wet Market break Brightwater's medicine monopoly within a month.
+facts:
+  - A freed Wellwalker and Sefa open the clinic; other healers follow in other ports.
+  - The hero gives his real name for the first time.
+links:
+  places: [place.saltgate, place.wet-market]
+  factions: [faction.brightwater, faction.wellwalkers]
+first_appears: ch08
+sources:
+  - campaign.md#chapter-8

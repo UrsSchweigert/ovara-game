@@ -1,0 +1,17 @@
+id: event.the-makers
+name: The Makers
+type: event
+kind: history
+when: over 3,000 years ago
+summary: >
+  One advanced people covered Ovara and built the undersea cities, the Dragon and the buildings in the Wells.
+facts:
+  - They altered some of their own to breathe water.
+  - The Makers' faces, both peoples in one, are shown by the walls at Site Nine in chapter 17.
+links:
+  machines: [machine.the-dragon]
+  events: [event.the-sinking]
+first_appears: ch01
+sources:
+  - world-bible.md#3
+  - campaign.md#chapter-17

@@ -1,0 +1,19 @@
+id: event.deep-chorus-failure
+name: The failure at Deep Chorus
+type: event
+kind: turning-point
+chapter: ch05
+summary: >
+  The hero can mend only two of Deep Chorus's hearts; the forty lowest tiers are sealed for good.
+facts:
+  - The first of the hero's three failures.
+  - Two hearts are cracked through and want making, which he cannot do.
+  - The undertow takes the tending song and the name of Sefa's hound.
+  - Sefa tells the whole hold the truth in the elders' high hall.
+links:
+  places: [place.deep-chorus]
+  powers: [power.undertow]
+  machines: [machine.air-heart]
+first_appears: ch05
+sources:
+  - campaign.md#chapter-5

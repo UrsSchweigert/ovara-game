@@ -1,0 +1,12 @@
+id: machine.deep-runner
+name: Deep-runner
+type: machine
+kind: vehicle
+summary: >
+  A stout, slow Maker vehicle built for the trenches and used for the Wells.
+facts:
+  - Built for the trenches.
+links:
+  places: [place.north-well]
+sources:
+  - world-bible.md#7

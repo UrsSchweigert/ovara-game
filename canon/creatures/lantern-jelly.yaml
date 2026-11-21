@@ -1,0 +1,13 @@
+id: creature.lantern-jelly
+name: Lantern jelly
+type: creature
+kind: jelly
+summary: >
+  Drifting light the size of a house; harmless.
+facts:
+  - Lives in the Pale.
+  - Northern children are told they are lost souls being walked home.
+links:
+  places: [place.the-pale]
+sources:
+  - world-bible.md#12

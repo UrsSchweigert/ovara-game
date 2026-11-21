@@ -1,0 +1,17 @@
+id: event.the-hero-remembers
+name: The hero remembers
+type: event
+kind: turning-point
+chapter: ch07
+summary: >
+  The rays weigh the hero and give back his whole past; he learns he is Ilan Voss.
+facts:
+  - He remembers the dumping orders with his signature, Site Nine and the engine.
+  - He learns the man who ate soup on Jef's step raised him and had him drowned.
+  - Maelis asks her question and tells two stories, of Rook and of Sounding.
+links:
+  places: [place.the-wheel]
+  factions: [faction.great-rays]
+first_appears: ch07
+sources:
+  - campaign.md#chapter-7

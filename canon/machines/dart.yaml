@@ -1,0 +1,18 @@
+id: machine.dart
+name: Dart
+type: machine
+kind: vehicle
+summary: >
+  An armed Maker vehicle.
+facts:
+  - Jef built armed darts for Sounding at nineteen; forty were made, he broke thirty-eight and never found the other two.
+  - Two darts in enemy hands broke Sounding, the last hold destroyed in the Hold Wars.
+links:
+  places: [place.sounding]
+  events: [event.hold-wars]
+changes:
+  ch04: A dart with no rider, driven from an old-pattern hull, strikes the Lantern's heart.
+sources:
+  - world-bible.md#3
+  - world-bible.md#7
+  - campaign.md#chapter-4

@@ -1,0 +1,15 @@
+id: creature.gale-skate
+name: Gale skate
+type: creature
+kind: fish
+summary: >
+  Winged fish that glide on storm winds in flocks of thousands.
+facts:
+  - Lives in the Girdle.
+  - Driftfolk read the weather from them.
+links:
+  places: [place.the-girdle]
+  factions: [faction.driftfolk]
+sources:
+  - world-bible.md#10
+  - world-bible.md#12

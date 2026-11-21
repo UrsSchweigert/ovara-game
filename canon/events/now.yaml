@@ -1,0 +1,14 @@
+id: event.now
+name: Now
+type: event
+kind: history
+when: the campaign opens
+summary: >
+  The corporations have run out of land to take from each other and are looking down.
+facts:
+  - Jef is alive, the holds are quietly failing and nobody has heard of Ilan Voss.
+links:
+  events: [event.charter-wars]
+first_appears: ch01
+sources:
+  - world-bible.md#3

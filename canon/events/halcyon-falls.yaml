@@ -1,0 +1,15 @@
+id: event.halcyon-falls
+name: Halcyon falls
+type: event
+kind: turning-point
+chapter: ch14
+summary: >
+  Halcyon's fleet is beached, its crimes broadcast and its lance dead.
+facts:
+  - Adler Crane stands on the bridge.
+links:
+  places: [place.port-halcyon]
+  factions: [faction.halcyon-dredge]
+first_appears: ch14
+sources:
+  - campaign.md#chapter-14

@@ -1,0 +1,29 @@
+id: machine.the-dragon
+name: The Dragon
+type: machine
+kind: transit
+summary: >
+  A Maker transit machine, a kilometre of pale metal ribs wound with bound, racing water, circling the world from Tip to Tip and taken by most for a living creature.
+facts:
+  - Has kept one pattern for three thousand years; a pole-to-pole run takes nearly five days.
+  - Inside is one flooded hall a kilometre long, the gallery, with two hundred cradles in the belly.
+  - Rounds each Well at walking pace; riders step off onto the landing.
+  - Crosses the Girdle a kilometre down in the trenches and has never surfaced or turned aside there.
+  - Jef tells it whom to let in; riders show a token from Jef.
+  - It steps its line a little to one side on each circuit; mariners keep dragon almanacs.
+  - It is slowing, and the almanacs are wrong more often.
+links:
+  machines: [machine.calling-stone, machine.air-heart, machine.the-thread]
+  creatures: [creature.pale-singer]
+changes:
+  ch03: Stops for the hero, who mends it enough to run slowly.
+  ch05: It stops; thirty pale lights move along its length.
+  ch14: The hero steers it off its course for the first time in three thousand years.
+  ch15: Its heart is taken out and it lies in a ring on the sea floor at Site Nine.
+  ch18: The two wheels are seated in it again.
+sources:
+  - world-bible.md#8
+  - campaign.md#chapter-3
+  - campaign.md#chapter-14
+  - campaign.md#chapter-15
+  - campaign.md#chapter-18

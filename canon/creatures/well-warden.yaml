@@ -1,0 +1,16 @@
+id: creature.well-warden
+name: Well-warden
+type: creature
+kind: squid
+summary: >
+  Giant squid that guard the descents of the two Wells; nobody trained them.
+facts:
+  - Found at the two Wells.
+  - Let visitors down when Jef's token is shown.
+links:
+  places: [place.north-well]
+changes:
+  ch04: A dart kills two wardens on its way down the Well.
+sources:
+  - world-bible.md#12
+  - campaign.md#chapter-4

@@ -1,0 +1,17 @@
+id: event.the-table
+name: The table
+type: event
+kind: turning-point
+chapter: ch10
+summary: >
+  Rook dines with the hero, admits his deeds and offers a chart; the hero refuses and learns how ordering is done.
+facts:
+  - Rook admits the order to Crane and the dart.
+  - The hero refuses because Rook's chart has nobody on it.
+  - Linnea Marsh dies in a fire at her Clearwell clinic.
+links:
+  powers: [power.ordering]
+  factions: [faction.meridian]
+first_appears: ch10
+sources:
+  - campaign.md#chapter-10

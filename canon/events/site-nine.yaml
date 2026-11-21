@@ -1,0 +1,17 @@
+id: event.site-nine
+name: Site Nine
+type: event
+kind: turning-point
+chapter: ch17
+summary: >
+  The waters restore the deaf sea, the hero seats the ring, and Rook dies in the vault.
+facts:
+  - Six thousand healers Restore the dead water; Corin brings thirteen of Rook's Threaded over.
+  - The archive wall shows the Makers' quarrel, and Marit puts it on every screen.
+  - Rook will not take the tool and stays in the vault as it fills.
+links:
+  places: [place.site-nine]
+  powers: [power.restore]
+first_appears: ch17
+sources:
+  - campaign.md#chapter-17

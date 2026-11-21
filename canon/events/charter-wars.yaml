@@ -1,0 +1,14 @@
+id: event.charter-wars
+name: The Charter Wars
+type: event
+kind: history
+when: about 200 years ago
+summary: >
+  Agravar trading houses swallow the island governments and declare the islands corporate property.
+facts:
+  - Began the rule of the corporations.
+links:
+  factions: [faction.agravars]
+first_appears: ch01
+sources:
+  - world-bible.md#3

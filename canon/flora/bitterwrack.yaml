@@ -1,0 +1,14 @@
+id: flora.bitterwrack
+name: Bitterwrack
+type: flora
+kind: weed
+summary: >
+  Weed that soaks up poison and turns black as it does.
+facts:
+  - Grows wherever there is dumping.
+  - Tenders plant it round dump sites.
+  - When it dies, the water is past saving.
+links:
+  factions: [faction.tenders]
+sources:
+  - world-bible.md#12

@@ -1,0 +1,11 @@
+id: machine.deep-works
+name: Deep works
+type: machine
+kind: sealed
+summary: >
+  Things the Makers sealed away, including at least one engine that can boil a sea.
+facts:
+  - Sealed by the Makers.
+  - At least one is an engine that can boil a sea.
+sources:
+  - world-bible.md#7

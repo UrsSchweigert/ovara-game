@@ -1,0 +1,13 @@
+id: flora.seagrass
+name: Seagrass
+type: flora
+kind: grass
+summary: >
+  Meadows that feed the herds.
+facts:
+  - Found in the Bright Shelves.
+links:
+  places: [place.bright-shelves]
+  creatures: [creature.silverback]
+sources:
+  - world-bible.md#12

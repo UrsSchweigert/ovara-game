@@ -1,0 +1,17 @@
+id: event.the-heart-taken
+name: The Dragon's heart is taken
+type: event
+kind: turning-point
+chapter: ch15
+summary: >
+  Rook takes the Dragon's heart and runs the ring at Site Nine; a wall of ordered water stands round a widening pit of mud.
+facts:
+  - The third of the hero's failures.
+  - Rook calls all debts on every island.
+  - Crane gives himself up and reports the engine is a lance and a ring forty metres across.
+links:
+  places: [place.site-nine]
+  machines: [machine.the-dragon, machine.deep-works]
+first_appears: ch15
+sources:
+  - campaign.md#chapter-15

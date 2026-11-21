@@ -1,0 +1,17 @@
+id: creature.pale-singer
+name: Pale singer
+type: creature
+kind: whale
+summary: >
+  White whale as long as a ship whose songs carry for hundreds of kilometres.
+facts:
+  - Lives in the Pale and the Anthem Waters.
+  - Each sings its own water, so pilots who know the songs can navigate by them.
+  - Calves in the Anthem Waters and dislikes the ice.
+  - Often runs alongside the Dragon in the north.
+links:
+  places: [place.the-pale, place.anthem-waters]
+  machines: [machine.the-dragon]
+sources:
+  - world-bible.md#8
+  - world-bible.md#12
