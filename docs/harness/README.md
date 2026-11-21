@@ -51,6 +51,16 @@ It checks the environment, lets the investigator draft phases and issues, shows 
 
 Before any of these reach you, an **overseer** looks at a stuck issue and may retry it, extend one budget or send it back to be refined. Its project notes are in `.claude/agents/overseer.md`.
 
+## Splits without being asked
+
+When an issue is too big, the harness has a strong model propose a split, checks the proposal itself, and then stops to ask you. The answer is nearly always "apply the proposed split". To have that one answer given for you, run this in its own terminal while a plan runs:
+
+```sh
+python3 tools/auto_split.py
+```
+
+It looks once a minute, applies only split proposals the harness has already checked, and writes each one to `auto_split.log` in the harness's state folder. It never answers anything else: canon proposals, design choices, manual tests, retries, budgets and cancellations still come to you, and it lists them as waiting. `--dry-run` shows what it would do; `--once` does one round.
+
 ## How the roles fit
 
 The harness has its own roles: investigator, refiner, implementer, reviewer, overseer. This project's roles (canon keeper, rules engineer, content author, client engineer, art director, verifier) are lanes: a worker takes the lane that matches the paths its issue may change. The table is in `CLAUDE.md`.
