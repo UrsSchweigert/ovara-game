@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Writes placeholder art for Ovara: the water tiles of each region, eight faction
 figures, four generic things, the exploring tiles (floor, wall, Anthem water), the
-Maker dungeon textures (wall, floor, ceiling, door), their briefs, their manifest
-entries and a contact sheet for the owner to look at.
+dungeon textures of four sets (Maker, island, mariner, Hush: wall, floor, ceiling,
+door), their briefs, their manifest entries, a contact sheet for the owner to look
+at, and a first-person corridor picture of the Hush for the same purpose.
 
 Usage: python3 tools/art/make_placeholders.py
 
@@ -94,8 +95,21 @@ THINGS = {
 # Exploring tiles use the Anthem Waters subset (art.md). Water states come from the region tables.
 EXPLORE_TILES = ["floor", "wall"] + [f"water-{state}" for state in STATES]
 # Maker materials (art.md, Frames and interface materials): stone-7 white metal with deep-6 arcs.
-# Dungeon textures are drawn by maker_name(), with arcs round the corners so they tile.
+# Dungeon textures are drawn by maker_name(), or by set_name() for the other sets, with arcs round
+# the corners so they tile. Canon ids name the set's place or faction; the island has none.
 MAKER_PARTS = ["wall", "floor", "ceiling", "door"]
+SETS = {
+    "maker": {"canon": "event.the-makers"},
+    "island": {"canon": None, "base": {"wall": "sand-4", "floor": "sand-3", "ceiling": "sand-5"},
+               "arc": "kelp-3", "opening": "kelp-1"},
+    "mariner": {"canon": "faction.mariners", "base": {"wall": "sand-4", "floor": "sand-5", "ceiling": "sand-6"},
+                "arc": "deep-5", "opening": "deep-1"},
+    "hush": {"canon": "place.the-hush", "base": {"wall": "stone-1", "floor": "stone-0", "ceiling": "stone-1"},
+             "arc": "stone-2", "opening": "stone-0"},
+}
+# The corridor picture is 320 by 180, the dungeon view (art.md); its far wall is 5 deep and 64 by 64.
+CORRIDOR_W, CORRIDOR_H = 320, 180
+CORRIDOR_DOOR = 32  # half the far wall's width and height, in pixels from the centre
 # 3 by 5 pixel letters for the figure labels
 GLYPHS = {
     "A": [" # ", "# #", "###", "# #", "# #"], "E": ["###", "#  ", "###", "#  ", "###"],
@@ -201,6 +215,21 @@ def maker_name(part: str, x: int, y: int) -> str:
     raise ValueError(f"unknown Maker texture: {part}")
 
 
+def set_name(key: str, part: str, x: int, y: int) -> str:
+    """The palette colour of one pixel of a dungeon texture from SETS: base, arcs round the corners, a door."""
+    style = SETS[key]
+    if part == "door":
+        if hit(("ellipse", 16, 20, 8, 11), x, y):
+            return style["opening"]
+        return style["arc"] if hit(("ellipse", 16, 20, 10, 13), x, y) else style["base"]["wall"]
+    radii = {"wall": (9, 10), "floor": (4, 5), "ceiling": (14, 15)}[part]
+    return style["arc"] if arc_hit(x, y, *radii) else style["base"][part]
+
+
+def texture_name(key: str, part: str, x: int, y: int) -> str:
+    return maker_name(part, x, y) if key == "maker" else set_name(key, part, x, y)
+
+
 def hit(shape: tuple, x: int, y: int) -> bool:
     kind, a = shape[0], shape[1:]
     if kind == "box":
@@ -261,13 +290,13 @@ def explore_image(root: Path, name: str) -> Image.Image:
     return img
 
 
-def maker_image(root: Path, part: str) -> Image.Image:
+def texture_image(root: Path, key: str, part: str) -> Image.Image:
     rgb, _ = load_palette(root)
     img = Image.new("RGBA", (DUNGEON_SIZE, DUNGEON_SIZE))
     px = img.load()
     for y in range(DUNGEON_SIZE):
         for x in range(DUNGEON_SIZE):
-            px[x, y] = rgb[maker_name(part, x, y)] + (255,)
+            px[x, y] = rgb[texture_name(key, part, x, y)] + (255,)
     return img
 
 
@@ -278,9 +307,12 @@ def explore_entry(name: str) -> dict:
     return entry
 
 
-def maker_entry(part: str) -> dict:
-    return {"path": f"tiles/maker-{part}.png", "kind": "dungeon-texture", "canon": "event.the-makers",
-            "brief": f"briefs/maker-{part}.md"}
+def texture_entry(key: str, part: str) -> dict:
+    entry = {"path": f"tiles/{key}-{part}.png", "kind": "dungeon-texture"}
+    if SETS[key]["canon"]:
+        entry["canon"] = SETS[key]["canon"]
+    entry["brief"] = f"briefs/{key}-{part}.md"
+    return entry
 
 
 def explore_brief(root: Path, name: str) -> str:
@@ -294,8 +326,13 @@ def explore_brief(root: Path, name: str) -> str:
     return text + "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n"
 
 
-def maker_brief(part: str) -> str:
-    return (f"Maker {part}, dungeon texture 32 by 32: stone-7 with deep-6 arcs, seamless, nothing straight.\n"
+def texture_brief(key: str, part: str) -> str:
+    if key == "maker":
+        look = "stone-7 with deep-6 arcs"
+    else:
+        style = SETS[key]
+        look = f"{style['base']['wall' if part == 'door' else part]} with {style['arc']} arcs"  # door sits on wall
+    return (f"{key.capitalize()} {part}, dungeon texture 32 by 32: {look}, seamless, nothing straight.\n"
             "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
 
 
@@ -380,11 +417,12 @@ def build(root: Path) -> list[dict]:
         explore_image(root, name).save(assets / entry["path"])
         (assets / entry["brief"]).write_text(explore_brief(root, name), encoding="utf-8")
         entries.append(entry)
-    for part in MAKER_PARTS:
-        entry = maker_entry(part)
-        maker_image(root, part).save(assets / entry["path"])
-        (assets / entry["brief"]).write_text(maker_brief(part), encoding="utf-8")
-        entries.append(entry)
+    for key in SETS:
+        for part in MAKER_PARTS:
+            entry = texture_entry(key, part)
+            texture_image(root, key, part).save(assets / entry["path"])
+            (assets / entry["brief"]).write_text(texture_brief(key, part), encoding="utf-8")
+            entries.append(entry)
     upsert_manifest(root, entries)
     return entries
 
@@ -413,15 +451,42 @@ def contact_sheet(root: Path) -> tuple[Image.Image, list[tuple[int, int]]]:
     return sheet, cells
 
 
+def render_corridor(root: Path) -> Image.Image:
+    """The Hush corridor, 320 by 180, from the Hush textures. Floor and ceiling are bands, side walls shrink
+    into the distance, and a door fills the far wall. Each pixel takes the nearest surface, nearest sampling."""
+    tex = {part: texture_image(root, "hush", part) for part in MAKER_PARTS}
+    img = Image.new("RGBA", (CORRIDOR_W, CORRIDOR_H))
+    cx, cy = CORRIDOR_W // 2, CORRIDOR_H // 2
+    for y in range(CORRIDOR_H):
+        for x in range(CORRIDOR_W):
+            dx, dy = x - cx, y - cy
+            if abs(dx) <= CORRIDOR_DOOR and abs(dy) <= CORRIDOR_DOOR:
+                part, u, v = "door", (dx + CORRIDOR_DOOR) // 2, (dy + CORRIDOR_DOOR) // 2
+            elif abs(dx) >= abs(dy):  # side walls, nearer the more they are off centre
+                part, u, v = "wall", 1280 // abs(dx) % 32, (dy + abs(dx)) * 16 // abs(dx)
+            else:  # floor or ceiling, nearer the more they are below or above centre
+                part = "floor" if dy > 0 else "ceiling"
+                u, v = (dx + abs(dy)) * 16 // abs(dy), 1280 // abs(dy) % 32
+            img.putpixel((x, y), tex[part].getpixel((min(u, 31), min(v, 31))))
+    return img
+
+
+def dungeon_picture(root: Path) -> Image.Image:
+    """The corridor twice size, for the owner to look at (shots/ is not committed)."""
+    return render_corridor(root).resize((CORRIDOR_W * 2, CORRIDOR_H * 2), Image.NEAREST)
+
+
 def main() -> None:
     build(ROOT)
     sheet, cells = contact_sheet(ROOT)
     out = ROOT / "shots" / "placeholders.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out)
+    picture = ROOT / "shots" / "dungeon-placeholder.png"
+    dungeon_picture(ROOT).save(picture)
     print(f"wrote {len(REGIONS) * len(STATES)} tiles, {len(FIGURES)} figures, {len(THINGS)} things, "
-          f"{len(EXPLORE_TILES)} exploring tiles, {len(MAKER_PARTS)} Maker textures, "
-          f"briefs and manifest entries; sheet {out} with {len(cells)} cells")
+          f"{len(EXPLORE_TILES)} exploring tiles, {len(SETS) * len(MAKER_PARTS)} dungeon textures, "
+          f"briefs and manifest entries; sheet {out} with {len(cells)} cells; dungeon picture {picture}")
 
 
 if __name__ == "__main__":
