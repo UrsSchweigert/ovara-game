@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canon trait",
+  "description": "Extra fields of a canon entry of type trait.",
+  "type": "object",
+  "required": [
+    "holders"
+  ],
+  "properties": {
+    "type": {
+      "const": "trait"
+    },
+    "holders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "who",
+          "from"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "who": {
+            "type": "string",
+            "pattern": "^[a-z]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "from": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 18
+          },
+          "to": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 18
+          }
+        }
+      }
+    },
+    "opens": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "closes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "forbids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]+\\.[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    }
+  },
+  "additionalProperties": true
+}

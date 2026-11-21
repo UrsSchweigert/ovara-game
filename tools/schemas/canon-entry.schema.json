@@ -4,9 +4,9 @@
   "type": "object",
   "required": ["id", "name", "type", "summary", "facts", "sources"],
   "properties": {
-    "id": {"type": "string", "pattern": "^(place|person|faction|power|machine|creature|flora|event|world)\\.[a-z0-9]+(-[a-z0-9]+)*$"},
+    "id": {"type": "string", "pattern": "^(place|person|trait|faction|power|machine|creature|flora|event|world)\\.[a-z0-9]+(-[a-z0-9]+)*$"},
     "name": {"type": "string", "minLength": 1},
-    "type": {"enum": ["place", "person", "faction", "power", "machine", "creature", "flora", "event", "world"]},
+    "type": {"enum": ["place", "person", "trait", "faction", "power", "machine", "creature", "flora", "event", "world"]},
     "kind": {"type": "string", "minLength": 1},
     "summary": {"type": "string", "minLength": 1},
     "facts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},

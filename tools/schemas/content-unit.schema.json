@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A battle unit's sheet (PLAN.md section 2, decision 0004).",
+  "type": "object",
+  "required": [
+    "id",
+    "canon",
+    "attributes",
+    "reach",
+    "skills",
+    "traits"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "canon": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "attributes": {
+      "$ref": "content-defs.schema.json#/$defs/attributes"
+    },
+    "reach": {
+      "$ref": "content-defs.schema.json#/$defs/reach"
+    },
+    "skills": {
+      "$ref": "content-defs.schema.json#/$defs/skills"
+    },
+    "traits": {
+      "$ref": "content-defs.schema.json#/$defs/trait_ids"
+    },
+    "faction": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    }
+  }
+}

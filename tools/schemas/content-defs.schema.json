@@ -53,6 +53,87 @@
           "$ref": "content-defs.schema.json#/$defs/flag"
         }
       }
+    },
+    "skill_id": {
+      "enum": [
+        "listen",
+        "move",
+        "shape",
+        "hold",
+        "raise",
+        "mend",
+        "purge",
+        "ease",
+        "restore",
+        "craft",
+        "riding",
+        "blades",
+        "spears",
+        "nets",
+        "bargaining",
+        "island-manner",
+        "reading-people"
+      ]
+    },
+    "attribute": {
+      "type": "integer",
+      "minimum": 8,
+      "maximum": 14
+    },
+    "reach": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "step": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "attributes": {
+      "type": "object",
+      "required": [
+        "body",
+        "hands",
+        "mind",
+        "standing"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/attribute"
+        },
+        "hands": {
+          "$ref": "#/$defs/attribute"
+        },
+        "mind": {
+          "$ref": "#/$defs/attribute"
+        },
+        "standing": {
+          "$ref": "#/$defs/attribute"
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/skill_id"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/step"
+      }
+    },
+    "trait_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^trait\\.[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "content_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
     }
   }
 }

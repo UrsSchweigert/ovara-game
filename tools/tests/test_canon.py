@@ -14,6 +14,35 @@ class CanonTests(CanonCase):
         self.assertEqual(check_canon(self.canon), ([], []))
         self.assertEqual(check_references(self.canon), ([], []))
 
+    TRAIT = """id: trait.water-breather
+name: Water-breather
+type: trait
+kind: trait
+summary: Breathes water.
+facts:
+  - It is so.
+holders:
+  - {who: person.bea, from: 1}
+opens: [place.alpha]
+sources: [world-bible.md#1]
+"""
+
+    def test_trait_entry(self):
+        self.write("traits/water-breather.yaml", self.TRAIT)
+        self.assertEqual(check_canon(self.canon), ([], []))
+        self.assertEqual(check_references(self.canon), ([], []))
+
+    def test_trait_broken_fixtures(self):
+        self.write("traits/water-breather.yaml", self.TRAIT.replace("from: 1", "from: 19"))
+        errors, _ = check_canon(self.canon)
+        self.assertTrue(any("water-breather.yaml" in e and "holders/0/from" in e for e in errors), errors)
+        self.write("traits/water-breather.yaml", self.TRAIT.replace("holders:\n  - {who: person.bea, from: 1}\n", ""))
+        errors, _ = check_canon(self.canon)
+        self.assertTrue(any("'holders' is a required property" in e for e in errors), errors)
+        self.write("traits/water-breather.yaml", self.TRAIT.replace("opens: [place.alpha]", "opens: [Alpha]"))
+        errors, _ = check_canon(self.canon)
+        self.assertTrue(any("opens/0" in e for e in errors), errors)
+
     def test_missing_field(self):
         self.write("people/bea.yaml", PERSON.replace("summary: A person.\n", ""))
         errors, _ = check_canon(self.canon)

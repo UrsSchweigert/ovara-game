@@ -8,7 +8,9 @@ KINDS = {"abilities", "areas", "battles", "cutscenes", "dialogue", "dungeons", "
 # kind -> (max columns, max rows)
 LIMITS = {"areas": (64, 48), "dungeons": (32, 32), "battles": (12, 9)}
 KIND_NAME = {"areas": "area", "dungeons": "dungeon", "battles": "battle", "items": "item", "shops": "shop",
-             "dialogue": "dialogue", "quests": "quest", "cutscenes": "cutscene"}
+             "dialogue": "dialogue", "quests": "quest", "cutscenes": "cutscene",
+             "units": "unit", "people": "person", "abilities": "ability", "skills": "skill", "traits": "trait",
+             "teachers": "teacher"}
 EDGE_BIT = {"N": 1, "E": 2, "S": 4, "W": 8}
 
 
@@ -77,9 +79,7 @@ def check_content(root):
             for e in problems:
                 path = "/" + "/".join(str(p) for p in e.absolute_path)
                 errors.append(f"{f}: {path}: {e.message}")
-            if problems:
-                continue
-            if d.name not in LIMITS:
+            if problems or d.name not in LIMITS:
                 continue
             if d.name == "dungeons":
                 for i, level in enumerate(data["levels"]):
