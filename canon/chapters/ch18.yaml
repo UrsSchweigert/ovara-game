@@ -3,7 +3,7 @@ title: Meet
 region: place.site-nine
 hero_name: Ilan Voss
 hero_knows_past: true
-hero_abilities: [power.calling, power.listen, power.move, power.shape, power.hold, power.raise, machine.the-thread, power.intending, power.mend, power.purge, power.ease, power.ordering, power.shared-calling, power.restore]
+hero_abilities: [power.calling, power.listen, power.move, power.shape, power.hold, power.raise, machine.the-thread, power.intending, power.mend, power.purge, power.ease, power.ordering, power.shared-calling]
 hero_craft: mend
 alive: {person.davin: false, person.elder-oro: false, person.jef: false, person.linnea-marsh: false, person.anselm-rook: false, person.nerys-voss: false, person.tomas-voss: false}
 corporations_fallen: [faction.brightwater, faction.kessler-vane, faction.orrin-signal, faction.halcyon-dredge, faction.meridian]

@@ -30,3 +30,4 @@ Things the sources do not say. Each needs the owner before it becomes a fact.
 - **Hero's craft.** There is no `power.*` entry for the craft, so `hero_craft` (`none`, `mend`) records it. The Make stage comes during chapter 18, so it is not yet in the file.
 - **Chapter 15.** The hero is ebbed and cannot call (Yeva: a month); abilities are what he knows, not what he can do that day.
 - **`known_to_*` and `dragon` values** are labels written for this file; the sources give the events, not the labels. Dragon: running, late (ch3), slow (ch4 to 5), stalled (ch6), heart-taken (ch16 on).
+- **Restore and the hero.** In chapter 17 the healers of the Hush and six thousand healers Restore, while the hero sits shut out of the sea; the growth table gives him no Restore. `power.restore` is not in any chapter's `hero_abilities`. Whether he ever learns it is for the owner.
