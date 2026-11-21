@@ -18,7 +18,8 @@ Places where sources, or a source and the world rules in `CLAUDE.md`, seem to di
 
 - **world-bible.md#6 (the four forms):** Restore is "only reliably possible at the Wells"; at the Hush it is used on minds.
 - **world-bible.md#6 (two kinds of deaf) and campaign.md#chapter-17:** the healers of the Hush restore ordered water in the open sea, six thousand of them, a hand's width at a time.
-- **Chosen:** the later, specific passage (many healers, slowly, with the living sea leaning in). "Reliably" leaves room for the slow, many-handed case. Order of authority: both are world bible, so the specific one wins over the general.
+- **world-bible.md#15 (decision 7):** "Ordered water can be restored, but only slowly and by many."
+- **Chosen:** ordered water can be restored in the open sea, slowly and by many healers (chapter 17). Order of authority: §15 decision 7 outranks the rest of the world bible and settles it directly; "only reliably possible at the Wells" is read as the general case, not a bar on the slow, many-handed one.
 
 ## place.the-hush: who built it
 
@@ -36,7 +37,7 @@ Places where sources, or a source and the world rules in `CLAUDE.md`, seem to di
 
 - **world-bible.md#8:** the Dragon circles "without ever stopping"; at each Tip it rounds the Well at walking pace.
 - **campaign.md#chapter-3:** when the Dragon comes to Greywatch Stone "it stops for him, which it has never done for anyone."
-- **Chosen:** the bible for the Dragon's normal behaviour; the campaign's stop is the event of chapter 3, recorded as a change on the entry. It stalls for good in chapter 5.
+- **Chosen:** the bible for the Dragon's normal behaviour; the campaign's stop is the event of chapter 3, recorded as a change on the entry. At the end of chapter 5 Elder Vey says it "will not run again"; chapter 6 opens at "the stalled Dragon". The chapter state files are the chosen version: `slow` in ch04 and ch05, `stalled` from ch06 (as in `gaps.md`).
 
 ## person.hesper: her reach
 
