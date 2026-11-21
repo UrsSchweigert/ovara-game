@@ -1,0 +1,23 @@
+id: place.kettle-house
+name: Kettle House
+type: place
+kind: house
+region: place.the-pale
+summary: >
+  Jef and Maelis's north home, a low stone house on the lip of the North
+  Well, half in the water and half out.
+facts:
+  - Jef and Maelis's north home.
+  - A low stone house on the lip of the Well, half in the water and half out.
+  - A seaweed garden edged in shells, a washing line and a kettle on the step.
+  - A workshop full of half-mended things.
+  - No guards.
+  - The Dragon's landing is a short walk down.
+position:
+  km_from_north_tip: 0
+look: Seaweed garden edged in shells, a washing line, a kettle on the step.
+links:
+  places: [place.north-well]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

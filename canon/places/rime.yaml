@@ -1,0 +1,23 @@
+id: place.rime
+name: Rime
+type: place
+kind: hold
+region: place.the-pale
+summary: >
+  The only hold of the Pale: an amber dome hung upside down from the
+  underside of the ice shelf, home to six hundred hunters and ice-divers.
+facts:
+  - The only hold of the Pale.
+  - A dome hung upside down from the underside of the ice shelf, glowing amber.
+  - Home to six hundred hunters and ice-divers.
+  - They feed the Lantern for nothing and the Lantern mends them for nothing; nobody has written it down.
+  - They see that nobody starves on Jef's doorstep.
+  - Blunt, generous people in sealskin who think the Shoulder holds are soft.
+position:
+  km_from_north_tip: 10
+look: An amber dome hanging upside down under the ice.
+links:
+  places: [place.the-lantern]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

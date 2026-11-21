@@ -1,0 +1,24 @@
+id: place.the-tangle
+name: The Tangle
+type: place
+kind: wild-kelp
+region: place.anthem-waters
+summary: >
+  Wild, unfarmed kelp east of the holds, littered with agravar wrecks from
+  the Charter Wars; Breakers hide here.
+facts:
+  - Wild, unfarmed kelp, dark and thick.
+  - Littered with agravar wrecks from the Charter Wars.
+  - Breakers hide here.
+  - So do things that should not be this far north.
+  - East of the holds.
+  - Sounding lies in it.
+position:
+  km_from_north_tip: "4,250 to 4,450"
+look: Dark, thick kelp and old wrecks.
+danger: Things that should not be this far north.
+links:
+  places: [place.sounding]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

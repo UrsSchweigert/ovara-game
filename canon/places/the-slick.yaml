@@ -1,0 +1,25 @@
+id: place.the-slick
+name: The Slick
+type: place
+kind: dead-zone
+region: place.anthem-waters
+summary: >
+  Deaf water in the kelp south-east of Low Anthem, where a current has
+  settled twenty years of dumping.
+facts:
+  - A dead zone in the kelp south-east of Low Anthem, some 250 km.
+  - A current has settled twenty years of dumping here.
+  - The carrying crews bring their sealed bladders here too, having nowhere else.
+  - Its border is a wall of dead bitterwrack a hundred metres deep.
+  - Black bitterwrack, no fish, no sound.
+  - It is deaf water; the gift does not answer here at all.
+position:
+  km_from_north_tip: "about 4,450"
+look: A wall of black, dead bitterwrack a hundred metres deep.
+sound: None.
+danger: Deaf water; the gift does not answer.
+links:
+  places: [place.low-anthem]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

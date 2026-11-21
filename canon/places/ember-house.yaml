@@ -1,0 +1,21 @@
+id: place.ember-house
+name: Ember House
+type: place
+kind: house
+region: place.the-quiet
+summary: >
+  Jef and Maelis's south home, on a black-sand islet with hot springs over
+  the South Well.
+facts:
+  - Jef and Maelis's south home.
+  - On a black-sand islet with hot springs.
+  - Much like Kettle House, with a still-room full of Maelis's jars instead of a workshop.
+  - Listed with the South Well at 12,000 km from the north Tip.
+position:
+  km_from_north_tip: 12000
+look: A black-sand islet with hot springs.
+links:
+  places: [place.kettle-house, place.the-hush]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

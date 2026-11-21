@@ -1,0 +1,23 @@
+id: place.the-hush
+name: The Hush
+type: place
+kind: hospital
+region: place.the-quiet
+summary: >
+  The southern hospital at the bottom of the South Well: built by mariner
+  hands of black stone, unlit, warm and completely silent.
+facts:
+  - The southern hospital, at the bottom of the Well.
+  - Not Maker work; built by mariner hands, block on block.
+  - Unlit, built of black stone, warm, and completely silent.
+  - Healers and patients do not speak inside.
+  - It treats the sicknesses of the mind as well as the body.
+position:
+  relative: "at the bottom of the Well"
+look: Black stone, unlit.
+sound: Complete silence.
+links:
+  places: [place.ember-house, place.the-lantern]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

@@ -1,0 +1,18 @@
+id: place.pearl-stair
+name: Pearl Stair
+type: place
+kind: hold-group
+region: place.bright-shelves
+summary: >
+  Terraces of shellfish beds down a long slope, worked by a dozen small
+  holds under one council.
+facts:
+  - Terraces of shellfish beds stepping down a long slope.
+  - Worked by a dozen small holds that share one council.
+  - Famous for sea-silk, pearls and stubbornness.
+position:
+  km_from_north_tip: "about 9,000"
+look: Shellfish terraces stepping down a long slope.
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

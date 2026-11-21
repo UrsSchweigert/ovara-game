@@ -1,0 +1,25 @@
+id: place.north-well
+name: The North Well
+type: place
+kind: well
+region: place.the-pale
+summary: >
+  The vast trench at the north Tip, a nine-hour descent through cold, heavy
+  water to the Lantern.
+facts:
+  - One of the two Wells, vast trenches at each Tip, the deepest water in the world.
+  - A descent of nine hours through water too cold and heavy for most.
+  - Its upper waters are lit by lantern jellies and glowing weed.
+  - Healers bring patients down on litters slung between two jellies.
+  - Giant squid called well-wardens circle it.
+  - The well-wardens let through only those travelling with a healer or a token.
+  - The Lantern stands at the bottom.
+position:
+  km_from_north_tip: 0
+look: Upper waters lit by lantern jellies and glowing weed.
+danger: Cold, heavy water and the well-wardens.
+links:
+  places: [place.kettle-house, place.the-lantern]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

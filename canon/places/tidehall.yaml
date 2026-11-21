@@ -1,0 +1,21 @@
+id: place.tidehall
+name: Tidehall
+type: place
+kind: amphitheatre
+region: place.bright-shelves
+summary: >
+  A drowned Maker amphitheatre a kilometre across with perfect sound, where
+  the southern Moots meet.
+facts:
+  - A drowned Maker amphitheatre, a bowl a kilometre across with perfect sound.
+  - Empty and unclaimed.
+  - The southern Moots meet here.
+  - It could seat every speaker of every hold, and never has.
+position:
+  relative: "Tidehall is a day's swim beyond [Nine Spires]"
+sound: Perfect sound.
+links:
+  places: [place.nine-spires]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

@@ -1,0 +1,27 @@
+id: place.deep-chorus
+name: Deep Chorus
+type: place
+kind: hold
+region: place.anthem-waters
+summary: >
+  The oldest hold in the north, twelve thousand people in galleries down
+  both walls of a canyon a kilometre wide.
+facts:
+  - The oldest hold in the north.
+  - Built down both walls of a canyon a kilometre wide.
+  - Hundreds of glass-fronted galleries, tier under tier, joined by slender bridges and hung with weed gardens.
+  - Every voice echoes, so that forty singers sound like four hundred.
+  - Twelve thousand people, forty choirs, proud of their age.
+  - Anything said in the elders' high hall carries to every gallery.
+  - Seven great air-hearts lie in vaults at the canyon's foot; they are failing and the elders are hiding it.
+  - The lowest tiers, which send no speakers, suffer first.
+  - Five days' swim from Fallow with children.
+position:
+  km_from_north_tip: 4400
+look: Glass-fronted galleries tier under tier, slender bridges, weed gardens.
+sound: Every voice echoes; forty singers sound like four hundred.
+links:
+  places: [place.fallow]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11
