@@ -1,0 +1,16 @@
+id: power.purge
+name: Purge
+type: power
+kind: form
+way: power.intending
+summary: >
+  The form of intending that draws out poison, infection or filth, from a
+  body or from water.
+facts:
+  - Draw out poison, infection or filth, from a body or from water itself. (world-bible.md#6)
+  - Water deafened by filth can be purged, by a healer strong enough who wants nothing for themselves. (world-bible.md#6)
+  - Water deafened by an order has nothing in it to take out and cannot be purged. (world-bible.md#6)
+links:
+  powers: [power.intending]
+sources:
+  - world-bible.md#6

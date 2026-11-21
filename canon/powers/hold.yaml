@@ -1,0 +1,14 @@
+id: power.hold
+name: Hold
+type: power
+kind: form
+way: power.calling
+summary: >
+  The form of calling that makes water still and unyielding.
+facts:
+  - 'Make water still and unyielding: pin a hull, calm a storm patch, stop a fall. (world-bible.md#6)'
+  - Callers who fight Hold a skin of water an arm's length about them and carry it all day like a shield. (world-bible.md#6)
+links:
+  powers: [power.calling]
+sources:
+  - world-bible.md#6

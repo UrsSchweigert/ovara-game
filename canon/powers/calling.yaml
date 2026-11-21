@@ -1,0 +1,23 @@
+id: power.calling
+name: Calling
+type: power
+kind: way
+summary: >
+  The way of the gift that asks the sea to move. Those who practise it are
+  Tidecallers; its forms are Listen, Move, Shape, Hold and Raise.
+facts:
+  - Calling asks the sea to move; intending asks it to care. They are the same act done differently. (world-bible.md#6)
+  - Almost nobody is strong in both calling and intending. (world-bible.md#6)
+  - Those who call are Tidecallers. (world-bible.md#6)
+  - The gift is true magic from the living sea, not from the person; the Makers did not make it and no machine can copy it. (world-bible.md#6, world-bible.md#15)
+  - 'The gift needs three things: contact with water that is joined to the sea; intention, one clear purpose held without wavering; and standing, since the sea answers those who live in it and tend it. (world-bible.md#6)'
+  - A divided mind gets nothing. (world-bible.md#6)
+  - The first rule taught to every child with the gift is "ask, do not order". (world-bible.md#6)
+  - The gift runs in mariner blood. No agravar has ever had it; shallowborn children inherit it rarely and usually weakly. (world-bible.md#6, world-bible.md#15)
+  - Children are taught the forms in order, beginning with Listen. Most callers never reach Raise. (world-bible.md#6)
+  - In a fight there is no time to ask. Callers who fight do their asking beforehand and Hold a skin of water an arm's length about them all day, already listening, and only have to lean. (world-bible.md#6)
+links:
+  powers: [power.intending, power.listen, power.move, power.shape, power.hold, power.raise]
+sources:
+  - world-bible.md#6
+  - world-bible.md#15

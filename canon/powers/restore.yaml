@@ -1,0 +1,24 @@
+id: power.restore
+name: Restore
+type: power
+kind: form
+way: power.intending
+summary: >
+  The form of intending that regrows what is lost and cures what is
+  long-rooted. Reliable only at the Wells; done by many healers, it can
+  slowly bring ordered water back.
+facts:
+  - Regrow what is lost and cure what is long-rooted. (world-bible.md#6)
+  - Only reliably possible at the Wells. (world-bible.md#6)
+  - At the Hush it is used on minds - the healer sits with the patient and wants nothing, not even a cure. (world-bible.md#6)
+  - Water deafened by an order can only be restored, not purged. (world-bible.md#6)
+  - Restoring ordered water takes many healers sitting with it, hands in, asking nothing of it, a hand's width at a time. (world-bible.md#6)
+  - The healers of the Hush know the way of it. (world-bible.md#6)
+  - It is slow at first and quickens as the living sea behind the healers leans in to help. (world-bible.md#6)
+  - Ordered water can be restored, but only slowly and by many. (world-bible.md#15)
+links:
+  powers: [power.intending, power.purge]
+  places: [place.the-hush, place.north-well]
+sources:
+  - world-bible.md#6
+  - world-bible.md#15

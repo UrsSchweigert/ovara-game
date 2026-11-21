@@ -1,0 +1,13 @@
+id: power.ease
+name: Ease
+type: power
+kind: form
+way: power.intending
+summary: >
+  The form of intending that takes away pain and fever and gives sleep.
+facts:
+  - Take away pain and fever; give sleep. (world-bible.md#6)
+links:
+  powers: [power.intending]
+sources:
+  - world-bible.md#6

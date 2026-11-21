@@ -1,0 +1,13 @@
+id: power.shape
+name: Shape
+type: power
+kind: form
+way: power.calling
+summary: >
+  The form of calling that gives water form.
+facts:
+  - 'Give water form: walls, air pockets, blades, ropes, a sphere held in air. (world-bible.md#6)'
+links:
+  powers: [power.calling]
+sources:
+  - world-bible.md#6

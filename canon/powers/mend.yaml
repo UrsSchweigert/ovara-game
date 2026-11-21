@@ -1,0 +1,13 @@
+id: power.mend
+name: Mend
+type: power
+kind: form
+way: power.intending
+summary: >
+  The form of intending that closes wounds and knits bone.
+facts:
+  - Close wounds, knit bone, stop bleeding. (world-bible.md#6)
+links:
+  powers: [power.intending]
+sources:
+  - world-bible.md#6
