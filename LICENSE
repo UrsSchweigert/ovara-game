@@ -1,0 +1,35 @@
+Copyright (c) 2026 Urs Schweigert (https://derschweigert.de). All rights reserved.
+
+This repository is published so that it can be read. It is not open source,
+and no licence is granted.
+
+Everything in this repository is covered: the world of Ovara, the novel "The
+Man the Tide Brought In", the world bible, the campaign, the game design, the
+quest outline, the art direction, the code, the data and every other file.
+
+Without the prior written permission of the copyright holder you may not:
+
+  - copy, reproduce or redistribute any part of this repository, in any form;
+  - modify it, translate it, adapt it or make derivative works from it,
+    including games, stories, artwork or other works set in the world of
+    Ovara or using its characters, places or names;
+  - use any part of it for any commercial purpose;
+  - use any part of it to train, fine-tune or evaluate machine-learning
+    models, or include it in a dataset made for that purpose;
+  - remove or alter this notice.
+
+The only permissions you have are those you cannot be denied: to view the
+repository on GitHub and to fork it there, as GitHub's Terms of Service
+provide for public repositories, and whatever the law of your country allows
+without a licence. A fork gives you no right to do any of the things listed
+above.
+
+One part is under different terms. The directory tools/harness/ is licensed
+under the PolyForm Strict License 1.0.0, as stated in tools/harness/LICENSE
+and tools/harness/NOTICE. Those terms apply to that directory only.
+
+The software and all other material are provided "as is", without warranty
+of any kind. The copyright holder is not liable for any claim, damage or
+other liability arising from them.
+
+For permissions, write to hello@derschweigert.de.
