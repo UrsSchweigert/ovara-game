@@ -1,0 +1,24 @@
+id: place.anthem-waters
+name: The Anthem Waters
+type: place
+kind: region
+summary: >
+  The north Shoulder of Ovara: a golden kelp forest sixty metres tall that
+  hums in the current.
+facts:
+  - The band of the north Shoulder.
+  - Character - golden kelp forest.
+  - Kelp begins at about 3,000 km from the north Tip, the north edge of the Anthem Waters.
+  - Kelp ends at about 5,300 km from the north Tip.
+  - The kelp is sixty metres tall and hums in the current; the mariners here sing with it.
+position:
+  km_from_north_tip: "about 3,000"
+  note: "Kelp begins: 'The north edge of the Anthem Waters'. No south edge is given."
+look: Green-gold light falling through kelp sixty metres tall.
+sound: The forest hums in the current, and the mariners sing with it.
+danger: Getting lost, and what dumping has done to the forest's edge.
+links:
+  places: [place.low-anthem, place.fallow, place.kelder, place.deep-chorus, place.greywatch-stone, place.the-tangle, place.sounding, place.the-slick]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

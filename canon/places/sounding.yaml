@@ -1,0 +1,23 @@
+id: place.sounding
+name: Sounding
+type: place
+kind: ruin
+region: place.anthem-waters
+summary: >
+  A ruined hold in the Tangle, its dome broken open like an egg nine hundred
+  years ago; Jef's birthplace.
+facts:
+  - A ruin in the Tangle.
+  - A dome three times the size of Low Anthem's, broken open like an egg nine hundred years ago.
+  - Six thousand people lived there.
+  - Nothing grows on it, and the kelp leaves a ring of bare sand around it.
+  - Jef's birthplace.
+position:
+  km_from_north_tip: "4,250 to 4,450"
+  note: "Shared row in the s.2 table: 'The Tangle and Sounding'."
+look: A broken dome in a ring of bare sand.
+links:
+  places: [place.the-tangle, place.low-anthem]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

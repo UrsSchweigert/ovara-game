@@ -1,0 +1,21 @@
+id: place.bright-shelves
+name: The Bright Shelves
+type: place
+kind: region
+summary: >
+  The south Shoulder of Ovara: shallow, clear, sunlit water over white
+  sand, where holds break the surface.
+facts:
+  - The band of the south Shoulder.
+  - Character - shallow, sunlit, sandy.
+  - Seagrass, glass coral and shellfish.
+  - Holds here break the surface.
+position:
+  km_from_north_tip: "7,200 to 9,700"
+look: Shallow, clear, sunlit water over white sand, as far as the eye can see.
+danger: There is nowhere to hide.
+links:
+  places: [place.nine-spires, place.pearl-stair, place.tidehall]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

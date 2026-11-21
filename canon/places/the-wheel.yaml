@@ -1,0 +1,22 @@
+id: place.the-wheel
+name: The Wheel
+type: place
+kind: open-water
+region: place.the-quiet
+summary: >
+  Open dark water where the great rays gather, turning slowly in a ring
+  kilometres wide.
+facts:
+  - Open dark water where the great rays gather.
+  - They turn slowly in a ring kilometres wide, as they have since before the Makers.
+  - No hold has ever been built within sight of it.
+position:
+  km_from_north_tip: "10,500 to 11,800"
+  note: "Shared row in the s.2 table: 'The Smokers and the Wheel'."
+look: A slow ring of great rays in dark water.
+danger: The rays' judgement.
+links:
+  places: [place.the-smokers]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

@@ -1,0 +1,25 @@
+id: place.the-lantern
+name: The Lantern
+type: place
+kind: hospital
+region: place.the-pale
+summary: >
+  The northern hospital at the bottom of the North Well: nine halls of
+  milk-pale Maker glass in a ring, seen from above as a single star.
+facts:
+  - The northern hospital, at the bottom of the Well.
+  - Nine great halls of milk-pale Maker glass set in a ring, joined by covered ways, lit from inside.
+  - Visible from far above as a single star in black water.
+  - One great heart under the centre of the ring feeds all nine halls.
+  - Four halls have been dark for centuries.
+  - Patients float in pools of intended water, each tended by three healers in shifts so the intention never lapses.
+  - About nine hundred healers work here.
+  - Rime feeds the Lantern for nothing and the Lantern mends Rime for nothing; nobody has written it down.
+position:
+  relative: "The Lantern is nine hours straight down"
+look: A ring of milk-pale glass halls, a single star in black water.
+links:
+  places: [place.north-well, place.rime]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11
