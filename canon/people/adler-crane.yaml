@@ -1,0 +1,19 @@
+id: person.adler-crane
+name: Adler Crane
+type: person
+kind: board-head
+region: place.port-halcyon
+summary: >
+  Head of Halcyon, who threw the hero overboard and later gives himself up.
+facts:
+  - Head of Halcyon.
+  - Threw the hero overboard with his wrists tied, on Rook's order.
+  - Gives himself up and ends in the hero's classroom.
+links:
+  factions: [faction.halcyon-dredge]
+  people: [person.anselm-rook, person.ilan-voss]
+  places: [place.port-halcyon]
+first_appears: ch14
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-five-boards
+  - campaign-the-man-the-tide-brought-in.md#what-the-game-master-knows-from-the-start

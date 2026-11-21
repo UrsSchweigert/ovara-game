@@ -1,0 +1,26 @@
+id: person.anselm-rook
+name: Anselm Rook
+type: person
+kind: villain
+region: place.meridian-exchange
+summary: >
+  Chairman of Meridian, an agravar of about seventy-two, Jef's fifty-ninth apprentice, Threaded for forty-nine years, with no gift.
+facts:
+  - About seventy-two; the only survivor of a ferry lost in the Belt Storms when he was fourteen.
+  - Carried by the rays to the Hush, where Jef found him sweeping it.
+  - Jef's fifty-ninth apprentice, given the Thread forty-nine years ago; in eight years he never opened a seam.
+  - Has no gift and cannot mend.
+  - Took his needle and left Jef after Jef refused to build for the islands.
+  - Wears a high collar over the Thread's scars.
+  - Courteous, patient, never raises his voice, never pretends.
+  - Wants ground for forty million islanders; needs the hero's hands and the Dragon's heart.
+  - Alive until chapter 17, where he stays with the engine as the sea comes back.
+links:
+  people: [person.jef, person.maelis, person.ilan-voss, person.corin]
+  factions: [faction.meridian, faction.threaded]
+  places: [place.meridian-exchange, place.site-nine]
+first_appears: ch04
+sources:
+  - world-bible.md#13
+  - campaign-the-man-the-tide-brought-in.md#the-villain-anselm-rook
+  - campaign-the-man-the-tide-brought-in.md#the-five-boards

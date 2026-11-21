@@ -1,0 +1,16 @@
+id: person.brask
+name: Brask
+type: person
+kind: supporting
+region: place.rime
+summary: >
+  Huge, blunt ice-diver of Rime who rides north with the hero and later speaks for him.
+facts:
+  - Ice-diver of Rime; huge and blunt.
+  - Rides north with the hero.
+  - Later speaks for him.
+links:
+  places: [place.rime]
+first_appears: ch03
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

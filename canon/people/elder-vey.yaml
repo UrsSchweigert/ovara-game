@@ -1,0 +1,17 @@
+id: person.elder-vey
+name: Elder Vey
+type: person
+kind: supporting
+region: place.deep-chorus
+summary: >
+  Speaker of Deep Chorus, who hid its failing air.
+facts:
+  - Speaker of Deep Chorus.
+  - Hid its failing air.
+links:
+  people: [person.aurel]
+  places: [place.deep-chorus]
+first_appears: ch05
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - world-bible.md#13

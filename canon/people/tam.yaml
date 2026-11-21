@@ -1,0 +1,15 @@
+id: person.tam
+name: Tam
+type: person
+kind: supporting
+summary: >
+  Young Threaded who goes over to Rook with Corin.
+facts:
+  - A young Threaded.
+  - Goes over to Rook with Corin.
+links:
+  people: [person.corin, person.anselm-rook]
+  factions: [faction.threaded]
+first_appears: ch06
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

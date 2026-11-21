@@ -1,0 +1,16 @@
+id: person.sabel
+name: Sabel
+type: person
+kind: supporting
+summary: >
+  Old Threaded who kept the Anthem Waters with Okonta and Corin until the Slick took her.
+facts:
+  - Old; a Threaded.
+  - Kept the Anthem Waters with Okonta and Corin.
+  - Taken by the Slick.
+links:
+  people: [person.okonta, person.corin]
+  factions: [faction.threaded]
+  places: [place.anthem-waters]
+sources:
+  - novel-the-man-the-tide-brought-in.md

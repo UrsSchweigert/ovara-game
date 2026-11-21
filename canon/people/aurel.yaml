@@ -1,0 +1,15 @@
+id: person.aurel
+name: Aurel
+type: person
+kind: supporting
+region: place.deep-chorus
+summary: >
+  The Mighty of Deep Chorus.
+facts:
+  - The Mighty of Deep Chorus.
+links:
+  people: [person.elder-vey]
+  places: [place.deep-chorus]
+first_appears: ch05
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

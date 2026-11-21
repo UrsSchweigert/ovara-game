@@ -1,0 +1,15 @@
+id: person.odile
+name: Odile
+type: person
+kind: supporting
+region: place.nine-spires
+summary: >
+  Speaker of Nine Spires, who presides at the Great Moot.
+facts:
+  - Speaker of Nine Spires.
+  - Presides at the Great Moot.
+links:
+  places: [place.nine-spires]
+first_appears: ch12
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

@@ -1,0 +1,14 @@
+id: person.calla
+name: Calla
+type: person
+kind: supporting
+summary: >
+  One of the twelve who hold Hesper's wave at Port Halcyon.
+facts:
+  - One of Hesper's twelve, holding the wave (left root of the wave).
+  - Gives up their part of the wave to Ilan when he takes it a piece at a time.
+links:
+  people: [person.hesper, person.ilan-voss]
+  factions: [faction.breakers]
+sources:
+  - novel-the-man-the-tide-brought-in.md

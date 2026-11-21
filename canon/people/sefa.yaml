@@ -1,0 +1,22 @@
+id: person.sefa
+name: Sefa
+type: person
+kind: companion
+region: place.low-anthem
+summary: >
+  Sixteen-year-old healer's apprentice of Low Anthem who found the hero and names him Wrack.
+facts:
+  - Sixteen; healer's apprentice of Low Anthem.
+  - Found the hero and named him Wrack.
+  - Travels with him from chapter 6.
+  - Intending, reach 2.
+  - Loses her gift in chapter 11 and has it returned in chapter 16.
+  - Daughter of Ione.
+  - Owns a tide hound, Bother.
+links:
+  people: [person.ione, person.bother, person.ilan-voss]
+  places: [place.low-anthem]
+first_appears: ch01
+sources:
+  - campaign-the-man-the-tide-brought-in.md#companions
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

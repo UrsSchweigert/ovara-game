@@ -1,0 +1,16 @@
+id: person.pim
+name: Pim
+type: person
+kind: supporting
+region: place.the-sluice
+summary: >
+  Garran's small daughter, one of the clinic's first patients.
+facts:
+  - Garran's small daughter.
+  - One of the clinic's first patients.
+links:
+  people: [person.garran]
+  places: [place.the-sluice]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

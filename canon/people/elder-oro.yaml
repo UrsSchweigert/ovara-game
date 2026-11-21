@@ -1,0 +1,17 @@
+id: person.elder-oro
+name: Elder Oro
+type: person
+kind: supporting
+region: place.low-anthem
+summary: >
+  Eldest of Low Anthem; dies in the bombing.
+facts:
+  - Eldest of Low Anthem.
+  - Speaks last at the elders' decision about the hero.
+  - Dies in the bombing of Low Anthem, chapter 2.
+links:
+  places: [place.low-anthem]
+first_appears: ch01
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#chapter-1
