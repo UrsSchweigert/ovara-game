@@ -31,3 +31,15 @@ Things the sources do not say. Each needs the owner before it becomes a fact.
 - **Chapter 15.** The hero is ebbed and cannot call (Yeva: a month); abilities are what he knows, not what he can do that day.
 - **`known_to_*` and `dragon` values** are labels written for this file; the sources give the events, not the labels. Dragon: running, late (ch3), slow (ch4 to 5), stalled (ch6), heart-taken (ch16 on).
 - **Restore and the hero.** In chapter 17 the healers of the Hush and six thousand healers Restore, while the hero sits shut out of the sea; the growth table gives him no Restore. `power.restore` is not in any chapter's `hero_abilities`. Whether he ever learns it is for the owner.
+
+## game needs
+
+- **Prices and scrip.** No source gives the price of anything, a wage, or what scrip is worth against a mariner's goods. Shops, rewards and the Meridian service price (twenty years) need figures. Only the bible's "a bluewood table costs more than a house" is stated.
+- **Travel on foot and by water for the player's party.** The bible gives swimmer, hold, needle, Dragon, ship and packet speeds (`world.distances`), but not the speed of a mariner party carrying a hero on land, nor how far an agravar walks a day.
+- **Healing and ebb numbers.** How long a given use of the gift leaves a caller ebbed is given only as "hours for small work and days for great work", apart from three days (chapter 2) and a month (chapter 15). No figures for reach 1 to 3.
+- **Shops and teachers.** The sources do not say who sells what or where; only Maelis, Okonta, Hesper, Yeva, Jef and Hanne are tied to what they teach.
+- **Named holds and speakers.** Only Low Anthem, Fallow, Kelder, Deep Chorus, Rime, Nine Spires, Pearl Stair and Sounding are named. The holds of the Bright Shelves and the "four more holds dark" of chapter 6, and the three holds north that took the refuge, have no names.
+- **Enemy kinds.** The fouled are given as slick eels and bloat crabs only. Refuge-ship crews, Halcyon and Meridian soldiers, wreckers and the grey needles have no stated kit or numbers.
+- **Maker devices.** No source says what the hand tool does, how a seam is found, what a token looks like, or how the Dragon's token and the Meridian brass tag work in detail.
+- **Sizes of places.** Floor areas, tier counts of Deep Chorus (a hundred tiers is implied by "sixtieth" and "forty below") and the layout of dungeons such as the Lantern, the Slick, the Tangle and the drowned city are not given.
+- **Chapter 18 afterwards.** The sources do not say what the risen city is called.
