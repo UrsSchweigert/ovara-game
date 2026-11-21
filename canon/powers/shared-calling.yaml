@@ -1,0 +1,24 @@
+id: power.shared-calling
+name: Shared calling
+type: power
+kind: way
+summary: >
+  Many callers' strength passing through a single will. Sung of and never
+  achieved until the hero holds it at the Great Moot in chapter 12.
+facts:
+  - Many callers' strength passes through a single will.
+  - Spoken of in songs; never achieved before the campaign.
+  - Everyone who tried to carry other people's strength has gone into the undertow, and some took the others with them.
+  - The songs say the one at the centre must take nothing and ask for nothing, only give what passes through a direction.
+links:
+  powers: [power.chorus, power.undertow, power.reach-unheard-of]
+  places: [place.tidehall]
+changes:
+  ch12: The hero holds a shared calling, the Moot's test, at Tidehall; nobody is lost. The first ever.
+  ch14: He takes the twelve wills of Hesper's chorus one at a time into a shared calling, and the wave lies down.
+  ch17: He is the way through for the Moot's callers and many more; the healers keep the callers from giving more than they have.
+sources:
+  - world-bible.md#6
+  - campaign.md#chapter-12
+  - campaign.md#chapter-14
+  - campaign.md#chapter-17

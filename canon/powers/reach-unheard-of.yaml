@@ -1,0 +1,20 @@
+id: power.reach-unheard-of
+name: Unheard of
+type: power
+kind: reach
+summary: >
+  Reach 5: a sea's worth of water. Nobody has had it, yet; the hero is the first.
+facts:
+  - Reach 5 of 5.
+  - Can work a sea's worth of water.
+  - The world bible gives no one at this reach ("nobody, yet").
+  - The hero's reach is 5, which nobody has had before; nobody knows why.
+  - Mariners will come to say the sea chose someone who belonged to both peoples.
+links:
+  powers: [power.reach-chorus, power.shared-calling]
+changes:
+  ch17: He is the mightiest mariner who ever lived, and visibly a power made of other people.
+sources:
+  - world-bible.md#6
+  - campaign.md#what-the-game-master-knows-from-the-start
+  - campaign.md#chapter-17

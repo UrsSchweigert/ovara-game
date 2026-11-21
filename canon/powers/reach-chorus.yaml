@@ -1,0 +1,16 @@
+id: power.reach-chorus
+name: A chorus (reach)
+type: power
+kind: reach
+summary: >
+  Reach 4: a city's worth of water, reached only by several Mighty working side
+  by side, and built slowly over days.
+facts:
+  - Reach 4 of 5.
+  - Reached only by several Mighty working side by side in a chorus.
+  - Can work a city's worth of water, but only built slowly over days.
+  - How a chorus works and fails is in power.chorus.
+links:
+  powers: [power.reach-mighty, power.chorus, power.reach-unheard-of]
+sources:
+  - world-bible.md#6

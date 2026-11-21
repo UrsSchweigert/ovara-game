@@ -1,0 +1,22 @@
+id: power.chorus
+name: Chorus
+type: power
+kind: way
+summary: >
+  Several callers each holding one part of a shared work. It adds their
+  strength but fails entirely if one lets go.
+facts:
+  - Each caller holds one part of a shared work.
+  - It adds their strength.
+  - It is fragile; if one lets go, the whole falls.
+  - Several Mighty in chorus reach a city's worth of water, built slowly over days.
+  - A chorus is not a shared calling; no strength passes through one will.
+links:
+  powers: [power.reach-chorus, power.shared-calling]
+  factions: [faction.breakers]
+changes:
+  ch14: Hesper's chorus of twelve builds a wave two hundred metres high in six days; nobody can let go.
+sources:
+  - world-bible.md#6
+  - world-bible.md#13
+  - campaign.md#chapter-14

@@ -1,0 +1,34 @@
+id: power.undertow
+name: The undertow
+type: power
+kind: cost
+summary: >
+  What pulls under a caller who overreaches or lets go of everything. The sea
+  takes something and keeps it; only the rays can give it back.
+facts:
+  - A caller who reaches beyond their strength, or lets go of everything in terror, is pulled under.
+  - Reaching one step beyond one's reach is possible once, and invites the undertow.
+  - The sea takes something and keeps it, such as a memory, a sense or a year of life.
+  - The rays keep whatever the undertow takes.
+  - What the undertow takes can sometimes be given back, but only by the rays.
+  - An emptied caller, as after ordering, is what the undertow looks for; if someone holds the caller back, it may take from them instead.
+  - Everyone who has tried to carry other people's strength has gone into the undertow, and some took others with them.
+links:
+  powers: [power.ebb, power.ordering, power.shared-calling]
+  factions: [faction.great-rays]
+first_appears: ch01
+changes:
+  ch01: Before the campaign the undertow took the hero's memory as he sank.
+  ch05: It takes the tending song and the name of Sefa's hound from the hero; they are not given back.
+  ch07: The rays give the hero back his memory.
+  ch11: Sefa holds the emptied hero and it takes her gift instead.
+  ch16: The rays return Sefa's gift.
+sources:
+  - world-bible.md#6
+  - world-bible.md#9
+  - world-bible.md#14
+  - campaign.md#what-the-game-master-knows-from-the-start
+  - campaign.md#chapter-5
+  - campaign.md#chapter-7
+  - campaign.md#chapter-11
+  - campaign.md#chapter-16

@@ -1,0 +1,17 @@
+id: power.clean-sea
+name: Clean, living sea
+type: power
+kind: water-condition
+summary: >
+  Clean water joined to the living sea. The gift answers at full strength.
+facts:
+  - The gift answers at full strength.
+  - The power is in the living sea, not in the person; the caller asks for it.
+  - The caller must be touching water that is joined to the sea.
+  - The caller needs one clear intention held without wavering; a divided mind gets nothing.
+  - The sea answers those who live in it and tend it.
+links:
+  powers: [power.fouled-water, power.deaf-water, power.orphan-water, power.storm-water, power.wells-water]
+first_appears: ch01
+sources:
+  - world-bible.md#6

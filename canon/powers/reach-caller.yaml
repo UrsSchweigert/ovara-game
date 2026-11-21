@@ -1,0 +1,19 @@
+id: power.reach-caller
+name: Caller or healer
+type: power
+kind: reach
+summary: >
+  Reach 2: a boat's worth of water. About one mariner in a hundred.
+facts:
+  - Reach 2 of 5.
+  - About one mariner in a hundred has this reach.
+  - Called a caller when calling, a healer when intending.
+  - Can work a boat's worth of water, such as stopping a skiff, walling off a net or curing a fever.
+  - Sefa's reach is 2, in intending.
+links:
+  powers: [power.reach-touched, power.reach-mighty]
+  factions: [faction.mariners]
+first_appears: ch01
+sources:
+  - world-bible.md#6
+  - campaign.md#companions

@@ -1,0 +1,28 @@
+id: power.deaf-water
+name: Deaf water
+type: power
+kind: water-condition
+summary: >
+  Dead water in which the gift gives no answer at all. Dead zones, the worst
+  harbours, and any water that has been ordered.
+facts:
+  - The gift gives no answer at all.
+  - Dead zones, the worst harbours and any water that has been ordered are deaf.
+  - There are two kinds of deaf, by filth and by order.
+  - Water deafened by filth can be purged, by a healer strong enough who wants nothing for themselves.
+  - Water deafened by an order has nothing in it to take out; it can only be restored, slowly and by many.
+  - The Slick and the harbour of Port Halcyon are deaf water.
+links:
+  powers: [power.fouled-water, power.ordering]
+  places: [place.the-slick, place.port-halcyon]
+changes:
+  ch11: Ten kilometres of the Anthem Waters around the valley near Fallow go deaf by order.
+  ch14: The hero purges a harbour at Port Halcyon.
+  ch17: Healers restore a road of living water a kilometre wide through forty kilometres of dead sea at Site Nine.
+sources:
+  - world-bible.md#6
+  - world-bible.md#11
+  - world-bible.md#15
+  - campaign.md#chapter-11
+  - campaign.md#chapter-14
+  - campaign.md#chapter-17

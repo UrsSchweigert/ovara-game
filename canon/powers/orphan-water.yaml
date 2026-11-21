@@ -1,0 +1,21 @@
+id: power.orphan-water
+name: Orphan water
+type: power
+kind: water-condition
+summary: >
+  Water cut off from the sea: tanks, pipes, bottles. The gift answers one reach
+  weaker, and it fades fast.
+facts:
+  - Tanks, pipes, bottles and anything cut off from the sea hold orphan water.
+  - The gift is one reach weaker, and fades fast.
+  - This is why mariners are weak on land.
+  - The water in Meridian's tank-towns is orphan water.
+links:
+  powers: [power.clean-sea]
+  factions: [faction.meridian, faction.mariners]
+changes:
+  ch13: High in a glass tower in Concord there is only orphan water.
+sources:
+  - world-bible.md#4
+  - world-bible.md#6
+  - campaign.md#chapter-13
