@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Dialogue by person: topics are canon ids with chapter or flag conditions. A panel holds at most three short lines.",
+  "type": "object",
+  "required": [
+    "id",
+    "person",
+    "topics"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "person": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "topics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "topic",
+          "panels"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "topic": {
+            "$ref": "content-defs.schema.json#/$defs/canon_id"
+          },
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          },
+          "panels": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "speaker",
+                "lines"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "speaker": {
+                  "$ref": "content-defs.schema.json#/$defs/canon_id"
+                },
+                "portrait": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "lines": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
