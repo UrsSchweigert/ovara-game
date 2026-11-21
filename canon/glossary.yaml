@@ -113,3 +113,63 @@
 - term: scrip
   meaning: Corporate currency of the islands.
   banned: [credits, gold, dollars, coins]
+
+- term: Shallowborn
+  meaning: A child of a mariner and an agravar. Some breathe water, some cannot, some only for a while.
+  banned: [half-breed, halfbreed, hybrid, half-blood, mixed-blood]
+
+- term: Driftfolk
+  meaning: Agravars with no corporation, who live on raft-towns that follow the Eyes through the Belt Storms.
+  banned: [nomads, sea gypsies, pirates, rafters]
+
+- term: Wrecker
+  meaning: A salvager who dives on drowned Maker ruins for technology to sell to Kessler-Vane.
+  banned: [looter, tomb raider, treasure hunter]
+
+- term: the Clean Hands
+  meaning: The agravar underground that sabotages dumping and smuggles information to the holds. It has no leader.
+  banned: [hacktivists, saboteurs]
+
+- term: the great rays
+  meaning: A third people of the deep, older than the Makers. Their gift is memory; they keep what the undertow takes.
+  banned: [sea angels, ray-gods]
+
+- term: the Moot
+  meaning: A gathering of the speakers of the holds in the same waters. It does not vote; it talks until nobody is left who will not go along.
+  banned: [senate, congress, summit]
+
+- term: the long-call
+  meaning: News sung from hold to hold, a few short phrases that carry a fact and nothing else.
+  banned: [sea telegraph, song-mail]
+
+- term: the Tips
+  meaning: The two ends of the world, north and south, each with a Well.
+  banned: [north pole, south pole]
+
+- term: the Wells
+  meaning: The two vast trenches, one at each Tip, with a great hospital at the bottom of each. The gift is one reach stronger there.
+  banned: [abyss, the deeps]
+
+- term: the Eyes
+  meaning: Calm windows that drift through the Belt Storms on a known pattern.
+  banned: [storm windows, calm zones]
+
+- term: Lockkeeper
+  meaning: One of the keepers of the great iron lock-gates of Saltgate, who take the same toll from everyone and a side for no one.
+  banned: [gatekeeper, toll-keeper, harbour guard]
+
+- term: sea-door
+  meaning: The round pool in a hold's floor with sea on one side of its surface and air on the other.
+  banned: [airlock, moon pool, water-lock]
+
+- term: calling stone
+  meaning: A six-sided Maker pillar on the seabed that sings one low note when the Dragon is within a day.
+  banned: [waystone, obelisk, monolith]
+
+- term: air-heart
+  meaning: A Maker shell that draws the foulness out of seawater and breathes clean air into a hold's dry halls.
+  banned: [oxygen generator, life support, air plant]
+
+- term: needle
+  meaning: A Maker vehicle, a sliver of pale metal ridden lying along it, with room for one passenger.
+  banned: [jet-ski, hoverbike, speeder]
