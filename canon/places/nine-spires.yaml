@@ -1,0 +1,23 @@
+id: place.nine-spires
+name: Nine Spires
+type: place
+kind: hold
+region: place.bright-shelves
+summary: >
+  The largest hold in the world, fifty thousand people in nine white Maker
+  towers that rise through the surface of the Bright Shelves.
+facts:
+  - The largest hold in the world, fifty thousand people.
+  - Nine fluted white Maker towers rise from the seabed through the surface and thirty metres into the air.
+  - Stone aprons at the tide line where Driftfolk rafts tie up.
+  - Mariners here trade openly with Driftfolk at the tide line.
+  - They are the worldliest of their people; northern holds think them half agravar.
+  - Tidehall is a day's swim beyond.
+position:
+  km_from_north_tip: 8500
+look: Nine fluted white towers standing out of the sea.
+links:
+  places: [place.tidehall]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

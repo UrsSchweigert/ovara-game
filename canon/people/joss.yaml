@@ -1,0 +1,14 @@
+id: person.joss
+name: Joss
+type: person
+kind: supporting
+summary: >
+  One of Rook's grey Threaded riders, called by name by Corin.
+facts:
+  - Rides a needle for Rook.
+  - Corin asks him where Rook put his mother.
+links:
+  people: [person.corin, person.anselm-rook]
+  factions: [faction.threaded]
+sources:
+  - novel-the-man-the-tide-brought-in.md

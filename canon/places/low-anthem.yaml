@@ -1,0 +1,26 @@
+id: place.low-anthem
+name: Low Anthem
+type: place
+kind: hold
+region: place.anthem-waters
+summary: >
+  A small, poor farming hold of four hundred in the Anthem Waters, under
+  one of Halcyon's dumping routes.
+facts:
+  - A small farming hold of four hundred.
+  - One dome with half its lamps dark and lampweed strung on the dark side.
+  - Stone-walled kelp terraces all round.
+  - A meeting hall at the centre with a dead Maker lamp that people touch for luck.
+  - Poor, close-knit, mostly Tenders.
+  - It sits under one of Halcyon's dumping routes.
+  - About 1,750 km from the islands.
+  - Fallow, a day away, is the first link in its long-call.
+position:
+  km_from_north_tip: 4200
+look: Half-dark dome, lampweed on the dark side, stone-walled kelp terraces.
+danger: Dumping from above; the Slick some 250 km south-east.
+links:
+  places: [place.fallow, place.the-slick]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

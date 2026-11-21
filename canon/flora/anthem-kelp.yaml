@@ -1,0 +1,12 @@
+id: flora.anthem-kelp
+name: Anthem kelp
+type: flora
+kind: kelp
+summary: Golden kelp up to sixty metres tall that hums in a current; the staple crop of the north.
+facts:
+  - Grows in the Anthem Waters.
+  - Hums in a current.
+links:
+  places: [place.anthem-waters]
+sources:
+  - world-bible.md#12

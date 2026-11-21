@@ -1,0 +1,20 @@
+id: machine.the-thread
+name: The Thread
+type: machine
+kind: implant
+summary: An implant of a filament finer than a hair, laid along the nerves from temple to skull base, that lets a person steer Maker vehicles as an extension of the body.
+facts:
+  - Made only by Jef, in a night's work; it leaves pale scars down the neck and aches for a week.
+  - Lets the Threaded hear through a hull for about eighty kilometres and feel working Maker things as a faint hum.
+  - Any willing body can take it, agravar included.
+  - It is not the gift; being ebbed does not touch it.
+  - Jef had laid none for six years before the campaign opens.
+links:
+  factions: [faction.threaded]
+  powers: [power.ebb]
+changes:
+  ch04: Jef lays his final Thread on the hero.
+sources:
+  - world-bible.md#7
+  - world-bible.md#8
+  - campaign.md#chapter-4

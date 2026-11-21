@@ -1,0 +1,16 @@
+chapter: 1
+title: Wrack
+region: place.anthem-waters
+hero_name: Wrack
+hero_knows_past: false
+hero_abilities: []
+hero_craft: none
+alive: {person.davin: true, person.elder-oro: true, person.jef: true, person.linnea-marsh: true, person.anselm-rook: true, person.nerys-voss: false, person.tomas-voss: false}
+corporations_fallen: []
+dragon: running
+known_to_mariners: []
+known_to_agravars: []
+companions_available: [person.sefa]
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance
+  - campaign-the-man-the-tide-brought-in.md#chapter-1

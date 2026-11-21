@@ -1,0 +1,18 @@
+id: person.garran
+name: Garran
+type: person
+kind: supporting
+region: place.the-sluice
+summary: >
+  Dock porter of the Sluice, father of Pim; one of the clinic's first patients.
+facts:
+  - Dock porter of the Sluice.
+  - Father of Pim.
+  - One of the clinic's first patients.
+  - Asks the question the hero cannot answer.
+links:
+  people: [person.pim]
+  places: [place.the-sluice]
+first_appears: ch08
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

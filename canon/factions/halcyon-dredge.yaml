@@ -1,0 +1,21 @@
+id: faction.halcyon-dredge
+name: Halcyon Dredge & Mineral
+type: faction
+kind: corporation
+summary: >
+  Seabed mining and fuel corporation of Port Halcyon; the worst polluter, already drilling near mariner waters.
+facts:
+  - Business - seabed mining and fuel.
+  - Home - Port Halcyon, on the Crown.
+  - The worst polluter of the five corporations; already drilling near mariner waters.
+  - Chief Surveyor Ilan Voss (lost at sea); security chief Adler Crane.
+  - Industrial waste is carried north and south by barge and dropped at night in deep water.
+  - Has found the drowned city under Site Nine and a Maker engine in it.
+links:
+  places: [place.port-halcyon, place.the-crown, place.site-nine]
+changes:
+  ch14: Falls; its fleet is beached, its crimes broadcast and its lance dead.
+sources:
+  - world-bible.md#4
+  - world-bible.md#13
+  - campaign.md#chapter-14

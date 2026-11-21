@@ -1,0 +1,15 @@
+id: person.odo
+name: Odo
+type: person
+kind: supporting
+region: place.lashing
+summary: >
+  Fat harbourmaster of Lashing in a striped jersey, with a brass trumpet.
+facts:
+  - Harbourmaster of Lashing.
+  - Fat; wears a striped jersey and carries a brass trumpet.
+links:
+  places: [place.lashing]
+first_appears: ch09
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

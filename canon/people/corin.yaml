@@ -1,0 +1,20 @@
+id: person.corin
+name: Corin
+type: person
+kind: supporting
+region: place.kelder
+summary: >
+  Threaded of fifty-eight, Okonta's flying partner of twenty years, who works for Rook until chapter 14.
+facts:
+  - Threaded, fifty-eight.
+  - Okonta's flying partner of twenty years.
+  - His hold, Kelder, went into a Meridian refuge with his sister in it.
+  - Works for Rook until chapter 14.
+  - Says the rule again to Okonta in chapter 16.
+links:
+  people: [person.okonta, person.anselm-rook, person.tam]
+  factions: [faction.threaded]
+  places: [place.kelder]
+first_appears: ch06
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A teacher: a canon person in a place, teaching one skill up to a step from a chapter, by a trial.",
+  "type": "object",
+  "required": [
+    "id",
+    "person",
+    "place",
+    "skill",
+    "max_step",
+    "chapter",
+    "trial"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "person": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "place": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "skill": {
+      "$ref": "content-defs.schema.json#/$defs/skill_id"
+    },
+    "max_step": {
+      "$ref": "content-defs.schema.json#/$defs/step"
+    },
+    "chapter": {
+      "$ref": "content-defs.schema.json#/$defs/chapter"
+    },
+    "trial": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

@@ -1,0 +1,18 @@
+id: faction.orrin-signal
+name: Orrin Signal
+type: faction
+kind: corporation
+summary: >
+  Corporation of Concord that runs media, networks and surveillance and decides what agravars believe about the sea.
+facts:
+  - Business - media, networks, surveillance.
+  - Home - Concord, in the Sovereigns.
+  - Decides what agravars believe about the sea.
+  - Its chairman, Caspar Venn, has a beautiful voice and no opinion the Exchange has not approved.
+links:
+  places: [place.concord, place.the-sovereigns, place.orrin-spire]
+changes:
+  ch13: Falls; every screen shows its chairman reaching for the censor's booth.
+sources:
+  - world-bible.md#4
+  - campaign.md#chapter-13

@@ -1,0 +1,19 @@
+id: power.intending
+name: Intending
+type: power
+kind: way
+summary: >
+  The way of the gift that asks the sea to care. Those who practise it are
+  healers; its forms are Mend, Purge, Ease and Restore. The result is intended water.
+facts:
+  - Intending asks the sea to care; calling asks it to move. They are the same act done differently. (world-bible.md#6)
+  - Almost nobody is strong in both calling and intending. (world-bible.md#6)
+  - Those who intend are healers. (world-bible.md#6)
+  - 'The gift needs three things: contact with water that is joined to the sea; intention, one clear purpose held without wavering; and standing, since the sea answers those who live in it and tend it. (world-bible.md#6)'
+  - The first rule taught to every child with the gift is "ask, do not order". (world-bible.md#6)
+  - Intended water cannot raise the dead or cure old age. (world-bible.md#6)
+  - Intended water fades within days once the healer's attention leaves it, so it cannot be bottled and sold. (world-bible.md#6)
+links:
+  powers: [power.calling, power.mend, power.purge, power.ease, power.restore]
+sources:
+  - world-bible.md#6

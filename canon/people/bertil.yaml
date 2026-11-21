@@ -1,0 +1,16 @@
+id: person.bertil
+name: Bertil
+type: person
+kind: supporting
+region: place.orrin-spire
+summary: >
+  Floor manager of Studio One, Shallowborn in secret.
+facts:
+  - Floor manager of Studio One.
+  - Shallowborn in secret.
+links:
+  factions: [faction.orrin-signal, faction.shallowborn]
+  places: [place.orrin-spire]
+first_appears: ch13
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

@@ -1,0 +1,21 @@
+id: person.hesper
+name: Hesper
+type: person
+kind: companion
+region: place.low-anthem
+summary: >
+  The Mighty of Low Anthem; becomes a Breaker, learns ordering from watching the hero, and comes back from it.
+facts:
+  - The Mighty of Low Anthem.
+  - Calling, reach 3.
+  - Husband of nineteen years: Davin.
+  - Becomes a Breaker and learns ordering from watching the hero, and comes back from it.
+links:
+  people: [person.davin]
+  factions: [faction.breakers]
+  places: [place.low-anthem]
+first_appears: ch02
+sources:
+  - campaign-the-man-the-tide-brought-in.md#companions
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance

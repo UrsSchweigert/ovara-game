@@ -1,0 +1,19 @@
+id: place.saltgate
+name: Saltgate
+type: place
+kind: city
+region: place.the-girdle
+summary: >
+  Great free port built on a hundred sea-stacks, ruled only by the Lockkeepers.
+facts:
+  - The great free port.
+  - Built on a hundred sea-stacks and the stilts and cables strung between them, in the gap between corporate waters.
+  - Its only law is the Lockkeepers, who own the great iron lock-gates, take the same toll from everyone and a side for no one.
+  - Canals and locks let mariners swim into the heart of the city, to the Wet Market.
+  - Neon, smoke, every language, every spy.
+position:
+  km_east_of_concord: "about 1,700"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

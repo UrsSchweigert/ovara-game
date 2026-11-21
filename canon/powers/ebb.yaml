@@ -1,0 +1,25 @@
+id: power.ebb
+name: The ebb
+type: power
+kind: cost
+summary: >
+  After real effort with the gift a caller is ebbed: cold, shaking, parched and
+  unable to call, for hours after small work and days after great work.
+facts:
+  - Using the gift with real effort leaves the caller ebbed.
+  - Ebbed means cold, shaking, parched and unable to call.
+  - It lasts hours for small work and days for great work.
+  - Ordering costs no effort; its cost is the undertow, not the ebb.
+  - The Thread is not the gift; being ebbed does not touch it.
+links:
+  powers: [power.undertow, power.ordering]
+  factions: [faction.threaded]
+changes:
+  ch14: The hero ends the chapter ebbed to the bone.
+  ch17: The hero steps onto the mud of the city ebbed.
+sources:
+  - world-bible.md#6
+  - world-bible.md#8
+  - world-bible.md#14
+  - campaign.md#chapter-14
+  - campaign.md#chapter-17

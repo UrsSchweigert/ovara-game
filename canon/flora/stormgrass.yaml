@@ -1,0 +1,12 @@
+id: flora.stormgrass
+name: Stormgrass
+type: flora
+kind: grass
+summary: Floating mats tough enough to build on; the Driftfolk's foundations.
+facts:
+  - Found in the Girdle.
+links:
+  places: [place.the-girdle]
+  factions: [faction.driftfolk]
+sources:
+  - world-bible.md#12

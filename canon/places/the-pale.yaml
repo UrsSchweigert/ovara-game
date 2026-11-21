@@ -1,0 +1,22 @@
+id: place.the-pale
+name: The Pale
+type: place
+kind: region
+summary: >
+  The north Tip of Ovara: cold, mirror-still water under a twilight sky,
+  where everything glows.
+facts:
+  - The band of the north Tip.
+  - Character - cold, still, luminous.
+  - Its places are Kettle House, the Lantern and Rime, over the North Well.
+  - The edge of the ice lies about 80 km from the north Tip; the shelf reaches further in winter.
+  - The Tips see half a year of twilight and half a year of low, sideways sun.
+  - Rime is the only hold of the Pale.
+position: not given
+look: Mirror-still water under a twilight sky; everything glows.
+danger: The cold and the depth.
+links:
+  places: [place.kettle-house, place.the-lantern, place.north-well, place.rime]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

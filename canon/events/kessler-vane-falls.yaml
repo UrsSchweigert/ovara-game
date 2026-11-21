@@ -1,0 +1,14 @@
+id: event.kessler-vane-falls
+name: Kessler-Vane falls
+type: event
+kind: turning-point
+chapter: ch09
+summary: Kessler-Vane is emptied, not destroyed, when 311 engineers follow the hero; the hull launches unfinished.
+facts:
+  - They are the first people in six centuries to be taught the craft.
+  - A purple flimsy reaches every hold accusing the hero of choosing where to dump.
+links:
+  places: [place.kessler-banks]
+  factions: [faction.kessler-vane]
+sources:
+  - campaign.md#chapter-9

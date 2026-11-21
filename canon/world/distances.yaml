@@ -1,0 +1,71 @@
+id: world.distances
+name: Distances and travel times
+type: world
+summary: >
+  The fixed distances and travel times of Ovara: positions north to south
+  and along the Girdle, how fast travellers go in a day, and some journeys.
+facts:
+  - These figures are fixed; anything set in Ovara should agree with them.
+  - A day is the 18-hour day.
+  - About 12,000 km from Tip to Tip along the Dragon's line.
+  - About 24,000 km round the Girdle; the islands lie along some 3,500 km of it.
+  - North-south positions are kilometres from the north Tip.
+  - Along-Girdle positions are kilometres east of Concord.
+  - Lashing has no place along the Girdle - it moves with its Eye.
+# Tables copied from world-bible.md#2 "Distances and travel times".
+# Figures and notes are verbatim. `places` lists IDs for entries that exist.
+north_south_km:
+  - {place: "Kettle House, the North Well", places: [place.kettle-house, place.north-well, place.the-lantern], km: "0", notes: "The Lantern is nine hours straight down"}
+  - {place: "Rime; the edge of the ice", places: [place.rime], km: "10; about 80", notes: "The shelf reaches further in winter"}
+  - {place: "Kelp begins", places: [place.anthem-waters], km: "about 3,000", notes: "The north edge of the Anthem Waters"}
+  - {place: "Kelder", places: [place.kelder], km: "about 4,000"}
+  - {place: "Low Anthem", places: [place.low-anthem], km: "4,200", notes: "About 1,750 km from the islands"}
+  - {place: "Fallow", places: [place.fallow], km: "4,250", notes: "A day's swim from Low Anthem"}
+  - {place: "Deep Chorus", places: [place.deep-chorus], km: "4,400", notes: "Five days' swim from Fallow with children"}
+  - {place: "The Tangle and Sounding", places: [place.the-tangle, place.sounding], km: "4,250 to 4,450", notes: "East of the holds"}
+  - {place: "The Slick", places: [place.the-slick], km: "about 4,450", notes: "South-east of Low Anthem, some 250 km"}
+  - {place: "Greywatch Stone", places: [place.greywatch-stone], km: "4,700"}
+  - {place: "Kelp ends", places: [place.anthem-waters], km: "about 5,300"}
+  - {place: "The Belt Storms", places: [place.belt-storms], km: "5,850 to 6,150", notes: "300 km of weather; every island is in it"}
+  - {place: "Site Nine", places: [place.site-nine], km: "about 5,950"}
+  - {place: "The Bright Shelves", places: [place.bright-shelves], km: "7,200 to 9,700"}
+  - {place: "Nine Spires", places: [place.nine-spires, place.tidehall], km: "8,500", notes: "Tidehall is a day's swim beyond"}
+  - {place: "Pearl Stair", places: [place.pearl-stair], km: "about 9,000"}
+  - {place: "The Smokers and the Wheel", places: [place.the-smokers, place.the-wheel], km: "10,500 to 11,800"}
+  - {place: "Ember House, the South Well", places: [place.ember-house], km: "12,000"}
+along_girdle_km:
+  - {place: "The Stubborns, Old Tolla among them", places: [place.the-stubborns, place.old-tolla], km: "west of Concord, the nearest a day's sail off"}
+  - {place: "Concord", places: [place.concord], km: "0"}
+  - {place: "Clearwell", places: [place.clearwell], km: "about 500"}
+  - {place: "Keelhaven", places: [place.keelhaven], km: "about 1,100"}
+  - {place: "Saltgate", places: [place.saltgate], km: "about 1,700"}
+  - {place: "Site Nine", places: [place.site-nine], km: "about 2,600"}
+  - {place: "Port Halcyon", places: [place.port-halcyon], km: "3,000"}
+speeds_per_day:
+  - {traveller: "A swimmer alone", distance: "about 60 km"}
+  - {traveller: "A hold on the move, with sleds and children", distance: "about 30 km"}
+  - {traveller: "A needle, new rider", distance: "about 700 km"}
+  - {traveller: "A needle, travelling", distance: "about 1,100 km", notes: "Sleeping aboard"}
+  - {traveller: "A needle, flat out", distance: "about 2,000 km", notes: "Not for more than two days; less with a passenger"}
+  - {traveller: "The Dragon, in Jef's last years", distance: "about 2,500 km", notes: "Nearly five days Tip to Tip"}
+  - {traveller: "The Dragon, failing (campaign chapter 3)", distance: "about 1,500 km"}
+  - {traveller: "The Dragon on two wheels (from chapter 6)", distance: "about 1,900 km", notes: "More than six days Tip to Tip"}
+  - {traveller: "The Dragon, driven through the Thread", distance: "up to twice its old pace", notes: "Once, for a day (chapter 14)"}
+  - {traveller: "A waste barge or gunboat in open water", distance: "400 to 500 km", notes: "The Crown to Low Anthem takes four days", places: [place.the-crown, place.low-anthem]}
+  - {traveller: "A Driftfolk boat or tug crossing the Belt by the Eyes", distance: "150 to 350 km", places: [place.belt-storms, place.the-eyes]}
+  - {traveller: "A fast packet along the Girdle", distance: "up to 1,000 km", places: [place.the-girdle]}
+  - {traveller: "An ocean ship in open water", distance: "about 300 km, weather allowing", notes: "Girdle to Tip takes six weeks to three months"}
+  - {traveller: "A long-call", distance: "about 800 km", notes: "Relayed hold to hold"}
+journeys:
+  - {journey: "Deep Chorus to the south Tip", places: [place.deep-chorus], by: "The Dragon", time: "Three days before chapter 6; four after"}
+  - {journey: "Greywatch Stone to the north Tip", places: [place.greywatch-stone], by: "The Dragon", time: "Two days; three when it was failing"}
+  - {journey: "North Tip to Deep Chorus", places: [place.deep-chorus], by: "Needle, new rider", time: "Six days"}
+  - {journey: "The Belt to Fallow", places: [place.belt-storms, place.fallow], by: "Needle, flat out", time: "Most of a day"}
+  - {journey: "North Tip to Concord", places: [place.concord], by: "Needle", time: "About a week"}
+  - {journey: "Concord to Port Halcyon", places: [place.concord, place.port-halcyon], by: "Needle; the Dragon driven", time: "Two days; sunrise to sunset"}
+  - {journey: "Saltgate to Keelhaven", places: [place.saltgate, place.keelhaven], by: "Driftfolk boat", time: "Three days"}
+  - {journey: "Lashing to the edge of the Bright Shelves", places: [place.lashing, place.bright-shelves], by: "Tug", time: "Six days"}
+links:
+  places: [place.the-girdle, place.the-pale, place.anthem-waters, place.bright-shelves, place.the-quiet]
+sources:
+  - world-bible.md#2

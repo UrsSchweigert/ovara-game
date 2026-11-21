@@ -1,0 +1,18 @@
+id: place.the-stubborns
+name: The Stubborns
+type: place
+kind: island-group
+region: place.the-girdle
+summary: >
+  Forty or fifty small, steep islands off the western end of the Girdle's shelf that never signed a charter.
+facts:
+  - Forty or fifty small, steep islands off the western end of the Girdle's shelf.
+  - They never signed a charter.
+  - Fishing villages, terraced plots, old shrines to the sea.
+  - Poor, free and suspicious of everyone.
+position:
+  km_east_of_concord: "west of Concord, the nearest a day's sail off"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

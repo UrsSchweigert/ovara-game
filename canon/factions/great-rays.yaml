@@ -1,0 +1,24 @@
+id: faction.great-rays
+name: The great rays
+type: faction
+kind: people
+summary: >
+  A third people, huge, long-lived and older than the Makers, who keep what the sea remembers.
+facts:
+  - A grown ray is the size of a ship.
+  - Use no words or tools and build nothing.
+  - Their gift is memory; they can put a memory into a person and send a picture to someone far away.
+  - They keep whatever the undertow takes.
+  - Their home is the Wheel, in the Quiet, though they range the whole deep.
+  - Their aims are their own and they have not said what they think of the present.
+  - Their venom kills in seconds and is the base of Maelis's potions.
+  - Have never entered the Girdle.
+  - Queen Maelis is the one person they speak through.
+links:
+  places: [place.the-wheel, place.the-quiet, place.the-hush]
+changes:
+  ch07: The rays agree to carry word for the hero.
+sources:
+  - world-bible.md#9
+  - world-bible.md#15
+  - campaign.md#chapter-7

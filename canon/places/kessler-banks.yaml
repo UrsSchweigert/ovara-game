@@ -1,0 +1,17 @@
+id: place.kessler-banks
+name: The Kessler Banks
+type: place
+kind: island-group
+region: place.the-girdle
+parent: place.keelhaven
+summary: >
+  Low sand islands, built over edge to edge, that carry Keelhaven.
+facts:
+  - Low sand islands built over edge to edge.
+  - Keelhaven stands on them.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

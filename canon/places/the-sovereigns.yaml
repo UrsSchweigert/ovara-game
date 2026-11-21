@@ -1,0 +1,17 @@
+id: place.the-sovereigns
+name: The Sovereigns
+type: place
+kind: island-group
+region: place.the-girdle
+parent: place.concord
+summary: >
+  Three small islands joined by bridges that carry Concord.
+facts:
+  - Three small islands joined by bridges.
+  - Concord stands on them.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

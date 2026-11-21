@@ -1,0 +1,18 @@
+id: place.wet-market
+name: The Wet Market
+type: place
+kind: market
+region: place.the-girdle
+parent: place.saltgate
+summary: >
+  Roofed basin in the heart of Saltgate where six canals meet.
+facts:
+  - A roofed basin where six canals meet.
+  - Three tiers of stalls: one dry, one awash at high tide and one a metre under water.
+  - Mariners swim in by the canals and locks.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

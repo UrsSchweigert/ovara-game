@@ -1,0 +1,14 @@
+id: power.raise
+name: Raise
+type: power
+kind: form
+way: power.calling
+summary: >
+  The form of calling that lifts water against its nature.
+facts:
+  - 'Lift water against its nature: columns, waves, a ship carried on a pillar. (world-bible.md#6)'
+  - Most callers never reach Raise. (world-bible.md#6)
+links:
+  powers: [power.calling]
+sources:
+  - world-bible.md#6

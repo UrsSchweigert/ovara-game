@@ -1,0 +1,13 @@
+id: power.move
+name: Move
+type: power
+kind: form
+way: power.calling
+summary: >
+  The form of calling that pushes and pulls water.
+facts:
+  - 'Push and pull: currents, speed for a swimmer or boat, turning a net aside. (world-bible.md#6)'
+links:
+  powers: [power.calling]
+sources:
+  - world-bible.md#6

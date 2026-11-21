@@ -1,0 +1,19 @@
+id: creature.the-fouled
+name: The fouled
+type: creature
+kind: warped
+summary: Creatures warped by dumping, found in the Slick and other dead zones; they are spreading.
+facts:
+  - Slick eels hunt by taste in black water.
+  - Bloat crabs burst into poison.
+  - Found in the Slick and other dead zones.
+links:
+  places: [place.the-slick]
+  powers: [power.fouled-water]
+changes:
+  ch03: Slick eels hunt the hero's party at the edge of the Slick.
+  ch06: Slick eels take Tam from the net.
+sources:
+  - world-bible.md#12
+  - campaign.md#chapter-3
+  - campaign.md#chapter-6

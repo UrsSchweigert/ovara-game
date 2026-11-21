@@ -1,0 +1,14 @@
+id: machine.calling-stone
+name: Calling stone
+type: machine
+kind: marker
+summary: One of about forty six-sided pillars on the seabed, strung along the lines the Dragon runs.
+facts:
+  - Sings one low note when the Dragon is within a day.
+  - Mariners gather at calling stones when the Dragon is due.
+  - There is no calling stone between the two Shoulders.
+links:
+  machines: [machine.the-dragon]
+sources:
+  - world-bible.md#7
+  - world-bible.md#8

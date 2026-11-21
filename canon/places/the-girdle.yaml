@@ -1,0 +1,23 @@
+id: place.the-girdle
+name: The Girdle
+type: place
+kind: region
+summary: >
+  The equator of Ovara: hot, stormy and crowded, the band where all the
+  land and the corporate islands lie.
+facts:
+  - The band of the equator.
+  - Character - hot, stormy, crowded.
+  - Its places include the corporate islands and Saltgate.
+  - About 24,000 km round.
+  - All the land lies on one shallow shelf along about 3,500 km of the Girdle; the rest is open storm.
+  - The Belt Storms lie 5,850 to 6,150 km from the north Tip, 300 km of weather; every island is in it.
+  - The Eyes are calm windows that drift through the Belt Storms on a known pattern.
+position: not given
+look: Heat, rain, wind and crowds; warm, murky sea; the sky rarely clear.
+danger: The storms and the people.
+links:
+  places: [place.port-halcyon, place.keelhaven, place.clearwell, place.concord, place.saltgate, place.site-nine, place.lashing, place.the-stubborns, place.old-tolla, place.the-crown, place.kessler-banks, place.green-terraces, place.the-sovereigns, place.waterline, place.stacks, place.rim, place.orrin-spire, place.meridian-exchange, place.wet-market, place.the-sluice, place.belt-storms, place.the-eyes]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

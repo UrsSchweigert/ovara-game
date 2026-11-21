@@ -1,0 +1,14 @@
+id: flora.glass-coral
+name: Glass coral
+type: flora
+kind: coral
+summary: Clear, branching coral, sharp as a blade; reefs of it chime in a swell.
+facts:
+  - Found in the Bright Shelves.
+links:
+  places: [place.bright-shelves]
+changes:
+  ch12: Every reef for a hundred kilometres rings at once as a swell rolls from Tidehall.
+sources:
+  - world-bible.md#12
+  - campaign.md#chapter-12

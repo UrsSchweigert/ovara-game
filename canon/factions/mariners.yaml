@@ -1,0 +1,21 @@
+id: faction.mariners
+name: Mariners
+type: faction
+kind: people
+summary: >
+  The water-breathing people of the holds, slow, communal and oral, with no nation, king or army.
+facts:
+  - Breathe water as easily as air, a trait the Makers bred into their ancestors.
+  - Can go from the surface to the floor of a Well and back in a day.
+  - On land they dry out and tire within a day.
+  - Live in holds, each led by its elders; holds in the same waters send speakers to a regional Moot.
+  - A Moot does not vote; if the speakers cannot agree, nothing is done.
+  - There has never been a Moot of all the waters.
+  - News travels by long-call, relayed from hold to hold.
+  - Every hold spends a growing share of its labour on agravar waste; the split between Tenders and Breakers runs through every hold.
+  - About one mariner in ten is touched by the gift.
+links:
+  places: [place.nine-spires]
+sources:
+  - world-bible.md#5
+  - world-bible.md#15

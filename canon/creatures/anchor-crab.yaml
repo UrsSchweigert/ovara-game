@@ -1,0 +1,11 @@
+id: creature.anchor-crab
+name: Anchor crab
+type: creature
+kind: crab
+summary: Crab the size of a car that mistakes hulls for rivals.
+facts:
+  - Lives in the Girdle shallows.
+links:
+  places: [place.the-girdle]
+sources:
+  - world-bible.md#12

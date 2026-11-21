@@ -1,0 +1,22 @@
+id: place.the-quiet
+name: The Quiet
+type: place
+kind: region
+summary: >
+  The south Tip of Ovara: dark, warm water above volcanic vents, silent in
+  a way that feels watched.
+facts:
+  - The band of the south Tip.
+  - Character - dark, warm, volcanic.
+  - Its places include the Hush, the rays' Wheel and Ember House.
+  - The surface steams.
+  - The Tips see half a year of twilight and half a year of low, sideways sun.
+position: not given
+look: Dark, warm water above volcanic vents; the surface steams.
+sound: Silent in a way that feels watched.
+danger: Heat, poison gas, and the rays' judgement.
+links:
+  places: [place.ember-house, place.the-smokers, place.the-wheel, place.the-hush]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

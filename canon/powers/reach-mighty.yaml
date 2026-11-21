@@ -1,0 +1,24 @@
+id: power.reach-mighty
+name: The Mighty
+type: power
+kind: reach
+summary: >
+  Reach 3: a ship's worth of water. About one per hold.
+facts:
+  - Reach 3 of 5.
+  - About one Mighty per hold.
+  - Can work a ship's worth of water, such as stopping a vessel, raising a wave over a deck or saving the dying.
+  - Most callers never reach Raise.
+  - Hesper is the Mighty of Low Anthem, reach 3 in calling.
+links:
+  powers: [power.reach-caller, power.reach-chorus]
+  factions: [faction.mariners]
+  places: [place.low-anthem]
+first_appears: ch02
+changes:
+  ch12: Hesper and eleven other Mighty leave the Moot in the night for Port Halcyon.
+sources:
+  - world-bible.md#6
+  - world-bible.md#15
+  - campaign.md#companions
+  - campaign.md#chapter-12

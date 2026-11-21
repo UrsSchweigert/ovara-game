@@ -1,0 +1,16 @@
+id: event.fallow
+name: The order at Fallow
+type: event
+kind: turning-point
+chapter: ch11
+summary: The hero orders the clean sea against twelve Meridian hulls; the kelp falls silent for ten kilometres.
+facts:
+  - The second of the hero's three failures.
+  - 161 sailors drown and 130 are pulled out alive by Fallow's people.
+  - The undertow takes Sefa's gift instead of his.
+  - Ordered water stays deaf.
+links:
+  places: [place.fallow]
+  powers: [power.ordering, power.deaf-water, power.undertow]
+sources:
+  - campaign.md#chapter-11

@@ -1,0 +1,22 @@
+id: place.the-smokers
+name: The Smokers
+type: place
+kind: vent-field
+region: place.the-quiet
+summary: >
+  Fields of volcanic chimneys pouring black, mineral-rich water, grown
+  thick with red tube-gardens.
+facts:
+  - Fields of volcanic chimneys pouring black, mineral-rich water.
+  - Red tube-gardens grow as thick as forest.
+  - The vent growths in Maelis's potions come from here.
+position:
+  km_from_north_tip: "10,500 to 11,800"
+  note: "Shared row in the s.2 table: 'The Smokers and the Wheel'."
+look: Black water pouring from chimneys; red tube-gardens thick as forest.
+danger: Heat and poison gas.
+links:
+  places: [place.the-wheel]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

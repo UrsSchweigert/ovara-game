@@ -1,0 +1,22 @@
+id: place.fallow
+name: Fallow
+type: place
+kind: hold
+region: place.anthem-waters
+summary: >
+  The next hold to Low Anthem, a day away and the first link in its
+  long-call; nine hundred people and nearly no lamps.
+facts:
+  - The next hold to Low Anthem, a day's swim away.
+  - The first link in Low Anthem's long-call.
+  - Nine hundred people.
+  - An old Mighty.
+  - Its lamps are nearly all gone.
+  - Five days' swim from Deep Chorus with children.
+position:
+  km_from_north_tip: 4250
+links:
+  places: [place.low-anthem, place.deep-chorus]
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

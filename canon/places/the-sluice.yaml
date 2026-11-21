@@ -1,0 +1,16 @@
+id: place.the-sluice
+name: The Sluice
+type: place
+kind: district
+region: place.the-girdle
+parent: place.saltgate
+summary: >
+  A poor back canal of leaning tenements in Saltgate.
+facts:
+  - A poor back canal of leaning tenements.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

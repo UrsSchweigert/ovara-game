@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ovara.invalid/schemas/content-defs.schema.json",
+  "description": "Shared definitions for content schemas. A map is a list of text rows plus a legend: every glyph used in a row must be a key of the legend, and all rows have the same length.",
+  "$defs": {
+    "canon_id": {
+      "type": "string",
+      "pattern": "^[a-z]+\\.[a-z0-9-]+$"
+    },
+    "chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 18
+    },
+    "flag": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)*$"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "legend": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "chapter_min": {
+          "$ref": "content-defs.schema.json#/$defs/chapter"
+        },
+        "chapter_max": {
+          "$ref": "content-defs.schema.json#/$defs/chapter"
+        },
+        "flag": {
+          "$ref": "content-defs.schema.json#/$defs/flag"
+        },
+        "not_flag": {
+          "$ref": "content-defs.schema.json#/$defs/flag"
+        }
+      }
+    },
+    "skill_id": {
+      "enum": [
+        "listen",
+        "move",
+        "shape",
+        "hold",
+        "raise",
+        "mend",
+        "purge",
+        "ease",
+        "restore",
+        "craft",
+        "riding",
+        "blades",
+        "spears",
+        "nets",
+        "bargaining",
+        "island-manner",
+        "reading-people"
+      ]
+    },
+    "attribute": {
+      "type": "integer",
+      "minimum": 8,
+      "maximum": 14
+    },
+    "reach": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "step": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "attributes": {
+      "type": "object",
+      "required": [
+        "body",
+        "hands",
+        "mind",
+        "standing"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/attribute"
+        },
+        "hands": {
+          "$ref": "#/$defs/attribute"
+        },
+        "mind": {
+          "$ref": "#/$defs/attribute"
+        },
+        "standing": {
+          "$ref": "#/$defs/attribute"
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/skill_id"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/step"
+      }
+    },
+    "trait_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^trait\\.[a-z0-9]+(-[a-z0-9]+)*$"
+      }
+    },
+    "content_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+id: person.bother
+name: Bother
+type: person
+kind: animal
+region: place.low-anthem
+summary: >
+  Sefa's tide hound.
+facts:
+  - A tide hound.
+  - Sefa's; with her throughout the campaign.
+links:
+  people: [person.sefa]
+first_appears: ch01
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast

@@ -1,0 +1,18 @@
+id: place.kelder
+name: Kelder
+type: place
+kind: hold
+region: place.anthem-waters
+summary: >
+  A hold of eleven hundred north of the canyon, already dark, whose speaker
+  has marked Meridian's paper.
+facts:
+  - A hold of eleven hundred.
+  - North of the canyon.
+  - Already dark.
+  - Its speaker has marked Meridian's paper.
+position:
+  km_from_north_tip: "about 4,000"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

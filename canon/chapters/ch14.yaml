@@ -1,0 +1,17 @@
+chapter: 14
+title: The wave
+region: place.port-halcyon
+hero_name: Ilan Voss
+hero_knows_past: true
+hero_abilities: [power.calling, power.listen, power.move, power.shape, power.hold, power.raise, machine.the-thread, power.intending, power.mend, power.purge, power.ease, power.ordering, power.shared-calling]
+hero_craft: mend
+alive: {person.davin: false, person.elder-oro: false, person.jef: false, person.linnea-marsh: false, person.anselm-rook: true, person.nerys-voss: false, person.tomas-voss: false}
+corporations_fallen: [faction.brightwater, faction.kessler-vane, faction.orrin-signal, faction.halcyon-dredge]
+dragon: running
+without_gift: [person.sefa]
+known_to_mariners: [low-anthem-bombed, the-barge-rose, jef-is-dead, meridian-refuge-offer, hero-chose-the-dumping-routes, hero-ordered-the-sea-at-fallow, hero-bound-to-mend-the-holds]
+known_to_agravars: [low-anthem-attack-on-shipping-claimed, sea-terrorists-sinking-ships, free-clinics-broke-brightwater, the-sea-folk-are-real, the-engine-and-rook-named-on-air]
+companions_available: [person.okonta, person.sefa]
+sources:
+  - campaign-the-man-the-tide-brought-in.md#the-hero-s-growth-at-a-glance
+  - campaign-the-man-the-tide-brought-in.md#chapter-14

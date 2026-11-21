@@ -1,0 +1,16 @@
+id: faction.shallowborn
+name: Shallowborn
+type: faction
+kind: people
+summary: >
+  Children of mariner and agravar parents, who belong fully to neither world.
+facts:
+  - Some breathe water, some cannot, some only for a while.
+  - Tolerate land far better than mariners do.
+  - Many hide what they are.
+  - Usually inherit the mariner body's tolerance of depth.
+  - Rarely inherit the gift, and usually weakly.
+sources:
+  - world-bible.md#10
+  - world-bible.md#5
+  - world-bible.md#6

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canon entry",
+  "type": "object",
+  "required": ["id", "name", "type", "summary", "facts", "sources"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^(place|person|trait|faction|power|machine|creature|flora|event|world)\\.[a-z0-9]+(-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "type": {"enum": ["place", "person", "trait", "faction", "power", "machine", "creature", "flora", "event", "world"]},
+    "kind": {"type": "string", "minLength": 1},
+    "summary": {"type": "string", "minLength": 1},
+    "facts": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "status": {"enum": ["active", "retired"]},
+    "retired_reason": {"type": "string", "minLength": 1},
+    "region": {"type": "string"},
+    "parent": {"type": "string"},
+    "chapter": {"type": "string", "pattern": "^ch(0[1-9]|1[0-8])$"},
+    "when": {"type": "string", "minLength": 1},
+    "links": {
+      "type": "object",
+      "propertyNames": {"enum": ["places", "people", "factions", "powers", "machines", "creatures", "flora", "events"]},
+      "additionalProperties": {"type": "array", "items": {"type": "string"}}
+    },
+    "sources": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"type": {"not": {"const": "world"}}}}, "then": {"required": ["kind"]}},
+    {"if": {"properties": {"type": {"const": "event"}}}, "then": {"anyOf": [{"required": ["chapter"]}, {"required": ["when"]}]}},
+    {"if": {"required": ["status"], "properties": {"status": {"const": "retired"}}}, "then": {"required": ["retired_reason"]}}
+  ]
+}

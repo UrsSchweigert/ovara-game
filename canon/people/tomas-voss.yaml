@@ -1,0 +1,18 @@
+id: person.tomas-voss
+name: Tomas Voss
+type: person
+kind: supporting
+region: place.saltgate
+summary: >
+  Ilan's agravar father, a dock engineer in Saltgate, who is dead.
+facts:
+  - An agravar dock engineer in Saltgate.
+  - Dead before the campaign starts; his funeral was a week before Ilan won the scholarship.
+links:
+  people: [person.ilan-voss, person.nerys-voss]
+  factions: [faction.agravars]
+  places: [place.saltgate]
+first_appears: ch07
+sources:
+  - campaign-the-man-the-tide-brought-in.md#supporting-cast
+  - campaign-the-man-the-tide-brought-in.md#what-the-game-master-knows-from-the-start

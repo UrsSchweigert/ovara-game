@@ -1,0 +1,17 @@
+id: power.listen
+name: Listen
+type: power
+kind: form
+way: power.calling
+summary: >
+  The first form of calling: feeling what the water touches, at a
+  distance.
+facts:
+  - 'Feel what the water touches: shapes, movement, life, at a distance. (world-bible.md#6)'
+  - Everyone with the gift starts here. (world-bible.md#6)
+  - Children are taught the forms in order, beginning with Listen. (world-bible.md#6)
+  - Callers who fight carry a held skin of water about them, already listening. (world-bible.md#6)
+links:
+  powers: [power.calling]
+sources:
+  - world-bible.md#6

@@ -1,0 +1,13 @@
+id: flora.lampweed
+name: Lampweed
+type: flora
+kind: weed
+summary: Glowing weed used for light where Maker lamps have failed.
+facts:
+  - Grows in the Pale and is farmed in holds.
+  - A hold hung with lampweed is a hold in trouble.
+links:
+  places: [place.the-pale]
+  machines: [machine.lamp]
+sources:
+  - world-bible.md#12

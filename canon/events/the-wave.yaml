@@ -1,0 +1,17 @@
+id: event.the-wave
+name: The wave and the Dragon off its course
+type: event
+kind: turning-point
+chapter: ch14
+summary: The hero steers the Dragon across the Girdle for the first time in three thousand years and stops Hesper's two-hundred-metre wave.
+facts:
+  - The wave was built in six days by Hesper's chorus of twelve, who cannot let go.
+  - He takes the twelve wills one by one.
+  - He Purges Port Halcyon's harbour so it can hear, then raises it as a shield.
+  - The hero ends the chapter ebbed to the bone.
+links:
+  places: [place.port-halcyon]
+  machines: [machine.the-dragon]
+  powers: [power.chorus, power.purge, power.ebb]
+sources:
+  - campaign.md#chapter-14

@@ -1,0 +1,21 @@
+id: faction.kessler-vane
+name: Kessler-Vane Shipworks
+type: faction
+kind: corporation
+summary: >
+  Shipbuilding corporation of Keelhaven that builds everyone's navies and wants Maker vehicle technology above all.
+facts:
+  - Business - ships, weapons, engines.
+  - Home - Keelhaven, on the Kessler Banks.
+  - Builds everyone's navies.
+  - Wants Maker vehicle technology above all.
+  - Chief designer Teodora Raske.
+  - Is building a hull to carry the lance of the Maker engine.
+links:
+  places: [place.keelhaven, place.kessler-banks]
+changes:
+  ch09: Falls; emptied rather than destroyed, and the hull launches unfinished.
+sources:
+  - world-bible.md#4
+  - world-bible.md#13
+  - campaign.md#chapter-9

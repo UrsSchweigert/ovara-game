@@ -1,0 +1,19 @@
+id: place.greywatch-stone
+name: Greywatch Stone
+type: place
+kind: calling-stone
+region: place.anthem-waters
+summary: >
+  A calling stone on a bare rise above the kelp forest, scratched with
+  centuries of names.
+facts:
+  - A calling stone on a bare rise above the forest.
+  - A ring of worn benches and a pillar.
+  - Centuries of names scratched by people who waited.
+  - Two days to the north Tip by the Dragon; three when it was failing.
+position:
+  km_from_north_tip: 4700
+look: A ring of worn benches, a pillar, names scratched over centuries.
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

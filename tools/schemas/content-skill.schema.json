@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A skill with five steps.",
+  "type": "object",
+  "required": [
+    "id",
+    "skill",
+    "attribute"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "skill": {
+      "$ref": "content-defs.schema.json#/$defs/skill_id"
+    },
+    "attribute": {
+      "enum": [
+        "body",
+        "hands",
+        "mind",
+        "standing"
+      ]
+    },
+    "max_step": {
+      "type": "integer",
+      "const": 5
+    }
+  }
+}

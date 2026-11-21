@@ -1,0 +1,18 @@
+id: place.keelhaven
+name: Keelhaven
+type: place
+kind: city
+region: place.the-girdle
+summary: >
+  Shipyard and city of three hundred thousand on the Kessler Banks.
+facts:
+  - A shipyard that is also a city of three hundred thousand.
+  - Hundreds of slipways and cranes; an orange sky of welding light all night.
+  - Six shift sirens a day instead of clocks.
+  - Its fifty thousand engineers are the best-educated agravars alive and privately obsessed with Maker salvage.
+position:
+  km_east_of_concord: "about 1,100"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

@@ -1,0 +1,19 @@
+id: place.lashing
+name: Lashing
+type: place
+kind: raft-town
+region: place.the-girdle
+summary: >
+  Largest Driftfolk raft-town, six thousand hulls on a stormgrass mat, living in an Eye.
+facts:
+  - The largest Driftfolk raft-town.
+  - Six thousand hulls, barges and platforms roped together on a mat of stormgrass a kilometre wide.
+  - Streets of planking, rope bridges, gardens in tubs, a market in a gutted frigate and a soup barge at its centre.
+  - Its one law is that nobody who reaches it is ever handed back; the law is asked for in set words, I've reached you, and I ask not to be handed back.
+  - It is never in the same place twice and has never been taken.
+position:
+  km_east_of_concord: "moves with its Eye"
+  km_from_north_tip: "moves with its Eye"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

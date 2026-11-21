@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "A dungeon: one or more levels, each at most 32 by 32 cells (PLAN.md section 2). Per level, rows holds one legend glyph per cell; a legend entry has flooded (true: swum, the gift works; false: dry). walls has the same shape as rows, one hex digit per cell, a bitmask of the walls on that cell's edges: 1 north, 2 east, 4 south, 8 west (a shared edge is written on both cells). doors lists openings on a cell edge: cell is [column,row], edge is N, E, S or W, kind is door or seam (a seam only a mender can open); a door edge should also be set in walls.",
+  "type": "object",
+  "required": ["id", "canon", "levels"],
+  "additionalProperties": true,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "canon": {"$ref": "content-defs.schema.json#/$defs/canon_id"},
+    "chapter": {"$ref": "content-defs.schema.json#/$defs/chapter"},
+    "levels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["legend", "rows", "walls"],
+        "additionalProperties": true,
+        "properties": {
+          "legend": {
+            "allOf": [{"$ref": "content-defs.schema.json#/$defs/legend"}],
+            "additionalProperties": {
+              "type": "object",
+              "required": ["flooded"],
+              "properties": {"flooded": {"type": "boolean"}}
+            }
+          },
+          "rows": {"$ref": "content-defs.schema.json#/$defs/rows"},
+          "walls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "pattern": "^[0-9a-f]+$"}
+          },
+          "doors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["cell", "edge", "kind"],
+              "additionalProperties": true,
+              "properties": {
+                "id": {"type": "string"},
+                "cell": {"type": "array", "items": {"type": "integer", "minimum": 0}, "minItems": 2, "maxItems": 2},
+                "edge": {"enum": ["N", "E", "S", "W"]},
+                "kind": {"enum": ["door", "seam"]}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+id: event.the-dragon-stops
+name: The Dragon stops for the hero
+type: event
+kind: turning-point
+chapter: ch03
+summary: At Greywatch Stone the Dragon stops for the hero, which it has never done for anyone, and he mends it enough to run.
+facts:
+  - Through his palm he feels what is wrong with it.
+  - With the gift driving water through its ribs and his hands in its workings, he mends it to run at well under its proper pace.
+  - Gift and craft are used together for the first time.
+  - The hunters' officer calls him "sir" before she remembers her orders.
+links:
+  places: [place.greywatch-stone, place.the-tangle, place.the-slick]
+  machines: [machine.the-dragon, machine.the-thread, machine.needle]
+  powers: [power.mend, power.deaf-water]
+sources:
+  - campaign.md#chapter-3

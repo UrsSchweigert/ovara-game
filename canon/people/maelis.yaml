@@ -1,0 +1,22 @@
+id: person.maelis
+name: Maelis
+type: person
+kind: queen
+region: place.the-quiet
+summary: >
+  Queen of the Stingrays, Jef's wife of fifty-one years, the one person the great rays speak through.
+facts:
+  - In her seventies; born in the Quiet and trained as a healer at the Hush.
+  - Shared the Hush for a year at seventeen with a shipwrecked island boy, three years younger, who taught her a game played with stones.
+  - The great rays chose her as the one person they speak through; she calls herself their mouth.
+  - Makes potions from ray venom, southern-vent growths and intended water; unlike ordinary healing water, they keep.
+  - Gives potions rarely and always asks what the person will do with the life they get back.
+  - Lives with Jef at Kettle House and Ember House.
+links:
+  people: [person.jef, person.anselm-rook]
+  factions: [faction.great-rays]
+  places: [place.the-hush, place.kettle-house, place.ember-house]
+first_appears: ch04
+sources:
+  - world-bible.md#8
+  - world-bible.md#9
