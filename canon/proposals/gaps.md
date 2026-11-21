@@ -18,3 +18,16 @@ Things the sources do not say. Each needs the owner before it becomes a fact.
 - **Bother.** The cast table lists Sefa's tide hound among the supporting cast. It is entered as `person.bother` with `kind: animal`; the owner may prefer a creature entry.
 - **Home places.** The sources do not say where Tam lives, so `person.tam` has no region. Regions of Ilan, Nerys and Tomas Voss (Saltgate), Rook (Meridian Exchange) and Maelis (the Quiet) are the places the sources tie them to, not stated homes.
 - **Ages and looks.** Sefa, Okonta, Hesper, Ione and others have no stated looks or ages beyond those entered.
+
+## chapters
+
+- **Reading of `chapters/chNN.yaml`.** Per the canon README a file is the state when the chapter begins, with two exceptions the campaign forces: `corporations_fallen` lists a company from the chapter in which it falls (Brightwater 8, Kessler-Vane 9, Orrin 13, Halcyon 14, Meridian 18), to match the fall order and each faction's `changes`.
+- **`alive` lists only people whose state changes** (Davin, Elder Oro, Jef, Marsh, Rook, Nerys and Tomas Voss). Everyone else in `canon/people/` is alive in every chapter unless a later entry says otherwise.
+- **Linnea Marsh.** Rook reports her death in chapter 10 as past ("on Tuesday"); the sources do not say whether she was alive when the chapter began. Entered as dead from chapter 10.
+- **Sefa's gift.** Lost at the end of chapter 11, returned in chapter 16. `without_gift: [person.sefa]` is set for chapters 12 to 15; whether she has it at the start of chapter 16 is not stated. Entered as returned.
+- **Sefa in chapter 5.** The companion table says she travels with the hero from chapter 6, but chapter 5 needs her ("Sefa's moment"). She is listed from chapter 5 and absent in chapters 3 and 4.
+- **Companions.** Hesper is listed only where she is with the hero (chapters 2, 16 to 18), not while she leads the Breakers. Okonta is not listed in chapters 8 and 9 on land, nor Dace after chapter 10; Marit Coyle in chapters 13 and 17. The sources do not say where else they appear.
+- **Hero's craft.** There is no `power.*` entry for the craft, so `hero_craft` (`none`, `mend`) records it. The Make stage comes during chapter 18, so it is not yet in the file.
+- **Chapter 15.** The hero is ebbed and cannot call (Yeva: a month); abilities are what he knows, not what he can do that day.
+- **`known_to_*` and `dragon` values** are labels written for this file; the sources give the events, not the labels. Dragon: running, late (ch3), slow (ch4 to 5), stalled (ch6), heart-taken (ch16 on).
+- **Restore and the hero.** In chapter 17 the healers of the Hush and six thousand healers Restore, while the hero sits shut out of the sea; the growth table gives him no Restore. `power.restore` is not in any chapter's `hero_abilities`. Whether he ever learns it is for the owner.
