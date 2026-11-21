@@ -15,6 +15,7 @@ Nothing playable exists yet: this repository holds the world, the plan, the rule
 | The look | [docs/style/art-direction.md](docs/style/art-direction.md) |
 | Decisions already made | [docs/decisions/](docs/decisions/) |
 | The harness that builds the game | [docs/harness/README.md](docs/harness/README.md) |
+| Where you are and what comes next | [docs/milestones.md](docs/milestones.md) |
 | What each milestone must deliver | [requirements/](requirements/) |
 
 ## Commands
@@ -47,3 +48,7 @@ python3 -m venv .venv
 ```
 
 See [docs/harness/README.md](docs/harness/README.md) for what the harness needs first and what it will ask you.
+
+## Licence
+
+All rights reserved. This repository is public so that it can be read; it is not open source, and nothing in it may be copied, changed, reused or built on without written permission. See [LICENSE](LICENSE). The harness in `tools/harness/` has its own licence there.
