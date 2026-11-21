@@ -3,8 +3,8 @@
 
 Usage: python tools/checks.py <canon|glossary|references|art|index>
 
-canon, references and index are real. glossary and art are placeholders until
-their tasks implement them; a placeholder passes and says so.
+canon, glossary, references and index are real. art is a placeholder until
+its task implements it; a placeholder passes and says so.
 `canon` also runs the Python tests in tools/tests.
 Keep this file free of third-party imports at module level, so that it runs
 before the virtual environment exists.
@@ -17,7 +17,6 @@ TOOLS = Path(__file__).resolve().parent
 CANON = TOOLS.parent / "canon"
 
 PLACEHOLDERS = {
-    "glossary": "glossary check: nothing to check yet (task M0-03)",
     "art": "art check (palette, sizes, manifest): nothing to check yet (task M0-05)",
 }
 
@@ -42,8 +41,14 @@ def main(argv):
         from ovcheck.canon import check_canon
         return report("canon", *check_canon(CANON)) | run_tests()
     if len(argv) == 2 and argv[1] == "references":
+        from ovcheck.chapters import check_chapters
         from ovcheck.references import check_references
-        return report("references", *check_references(CANON))
+        errors, warnings = check_references(CANON)
+        more_errors, more_warnings = check_chapters(CANON.parent)
+        return report("references", errors + more_errors, warnings + more_warnings)
+    if len(argv) == 2 and argv[1] == "glossary":
+        from ovcheck.glossary import check_glossary
+        return report("glossary", *check_glossary(CANON.parent))
     if len(argv) == 2 and argv[1] == "index":
         from ovcheck.index import build_index
         text, errors = build_index(CANON)
