@@ -65,3 +65,7 @@ or
 ```
 
 `guidance` is given to the worker as it stands, so write it to the worker. `reason` is written to the steward's log for the owner. Never put a secret, a token or a personal detail in either.
+
+## Between milestones
+
+The same script also audits a finished milestone, merges the harness's own promotion of it when it is sound, drafts a follow-up plan for gaps and the plan for the next milestone, and starts a run once the owner has approved its plan. Those steps are in `tools/steward_milestone.py`, with their own rules for the audit. You are not asked about them here.

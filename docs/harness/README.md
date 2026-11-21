@@ -73,11 +73,26 @@ Every five minutes it looks at the open tasks.
 
 When it refers something to you it leaves the task open, says so in its log, and writes its diagnosis, with what it would choose, to `steward-notes/<task>.md` in the harness's state folder.
 
+**Between milestones**
+
+When a plan has finished, the harness opens one pull request from its run branch into `main` and waits. The steward takes it from there:
+
+1. **Audit.** It checks out that pull request, runs `bash ov check`, and has Claude compare the work with the milestone's requirements file: what is met, what is a gap, what only you can judge, and whether anything is broken. The report goes to `steward-notes/<plan>-audit.md`.
+2. **Promote.** If the check passes and nothing is broken, it merges that pull request. This is the only pull request it ever merges. If the work is not sound, it leaves it for you.
+3. **Gaps.** If the audit found gaps, it writes a follow-up requirements file under `requirements/gaps/` and drafts a plan for it. Two follow-ups per milestone at most.
+4. **Your gate.** If the milestone has things only you can judge (the palette, a build on a phone), it stops and says what to look at. When you have, record it: `python3 tools/steward.py --sign-off <plan-id>`.
+5. **Next.** It drafts the plan for the next file in `requirements/`.
+6. **Your approval.** It stops and tells you. You type `./ov harness approve <plan-id>`. The steward never approves a plan.
+7. **Start.** Once the plan is approved, it imports the issues and starts the run, with the output in `steward-run-<plan>.log` in the state folder.
+
+`python3 tools/steward.py --audit <plan-id>` runs the audit at any time and changes nothing.
+
 **Know this before you rely on it**
 
 - Its answers are recorded by the harness as yours, because it runs as you. `steward.log` in the state folder is the record of what it answered and why. Read it.
 - Each decision is a Claude call on your subscription, and each retry it grants is more worker time. The caps bound this per issue, not per plan.
 - It judges whether work is converging. It does not judge whether the game is good.
+- The steps between milestones have only been tried in part: the audit has been run against a live run branch, but promoting, drafting a follow-up and starting the next run have not yet happened for real. Watch the first handover.
 
 Options: `--dry-run` decides and shows without answering; `--no-ai` applies checked splits only; `--once` does one round; `--try FILE` shows what it would decide for a task text. `tools/auto_split.py` is the same thing limited to splits, with no AI at all.
 
