@@ -47,7 +47,8 @@ class PlaceholderTests(unittest.TestCase):
         entries = json.loads((mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]
         _, cells = mp.contact_sheet(self.root)
         self.assertEqual(len(cells), len(entries))
-        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.THINGS))
+        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.THINGS)
+                         + len(mp.EXPLORE_TILES) + len(mp.MAKER_PARTS))
 
     def palette_hexes(self):
         _, data = mp.load_palette(self.root)
@@ -136,6 +137,46 @@ class PlaceholderTests(unittest.TestCase):
         mp.build(self.root)
         second = {p.relative_to(assets): p.read_bytes() for p in assets.rglob("*") if p.is_file()}
         self.assertEqual(first, second)
+
+    def test_exploring_tiles_are_32_square_in_anthem_subset(self):
+        mp.build(self.root)
+        allowed = self.allowed_hexes("anthem")
+        entries = {e["path"]: e for e in json.loads(
+            (mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]}
+        for name in mp.EXPLORE_TILES:
+            path = f"tiles/explore-{name}.png"
+            self.assertEqual(entries[path]["kind"], "exploring-tile")
+            img = Image.open(mp.assets_dir(self.root) / path).convert("RGBA")
+            self.assertEqual(img.size, (32, 32))
+            used = {p[:3] for p in img.getdata() if p[3] == 255}
+            self.assertTrue(used <= allowed, f"{path} uses colours outside the Anthem subset")
+        self.assertEqual(entries["tiles/explore-water-well.png"]["canon"], "place.anthem-waters")
+        self.assertNotIn("canon", entries["tiles/explore-floor.png"])
+
+    def test_exploring_water_states_differ_by_pattern(self):
+        mp.build(self.root)
+        images = [tuple(Image.open(mp.assets_dir(self.root) / f"tiles/explore-water-{s}.png").convert("RGBA").getdata())
+                  for s in mp.STATES]
+        self.assertEqual(len(set(images)), len(mp.STATES))
+
+    def test_maker_textures_are_32_square_and_tile_without_a_seam(self):
+        mp.build(self.root)
+        palette = self.palette_hexes()
+        entries = {e["path"]: e for e in json.loads(
+            (mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]}
+        for part in mp.MAKER_PARTS:
+            path = f"tiles/maker-{part}.png"
+            self.assertEqual(entries[path]["kind"], "dungeon-texture")
+            self.assertEqual(entries[path]["canon"], "event.the-makers")
+            img = Image.open(mp.assets_dir(self.root) / path).convert("RGBA")
+            self.assertEqual(img.size, (32, 32))
+            used = {p[:3] for p in img.getdata() if p[3] == 255}
+            self.assertTrue(used <= palette, f"{path} uses off-palette colours")
+            if part in ("wall", "floor", "ceiling"):
+                # arcs centred on the corners mirror across the seam, so the texture joins with itself
+                for x in range(1, 32):
+                    for y in range(32):
+                        self.assertEqual(img.getpixel((x, y)), img.getpixel((32 - x, y)), path)
 
     def test_manifest_upsert_keeps_other_entries(self):
         assets = mp.assets_dir(self.root)

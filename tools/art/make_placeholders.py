@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Writes placeholder art for Ovara: the water tiles of each region, eight faction
-figures, four generic things, their briefs, their manifest entries and a contact
-sheet for the owner to look at.
+figures, four generic things, the exploring tiles (floor, wall, Anthem water), the
+Maker dungeon textures (wall, floor, ceiling, door), their briefs, their manifest
+entries and a contact sheet for the owner to look at.
 
 Usage: python3 tools/art/make_placeholders.py
 
@@ -11,7 +12,7 @@ placeholders, not final art.
 """
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from PIL import Image
 
@@ -26,6 +27,8 @@ TILE_W, TILE_H = 64, 48  # battle hex, pointy-top
 SCALE, COLS, PAD = 2, 8, 8  # contact sheet: twice size, eight to a row
 FIG_W, FIG_H = 32, 48  # figures stand on the hex, feet on the bottom row at x 16
 THING_SIZE = 24
+EXPLORE_SIZE = 32  # exploring tiles are square, one per cell
+DUNGEON_SIZE = 32  # dungeon textures tile without a seam, so arcs wrap at this size
 LABEL_X, LABEL_Y = 12, 21  # two-letter label at chest height
 NEIGHBOURS = ((1, 0), (-1, 0), (0, 1), (0, -1))
 
@@ -88,6 +91,11 @@ THINGS = {
             "shapes": [("ring", ("ring", 6, 11, 2, 4)), ("shaft", ("box", 10, 10, 20, 12)),
                        ("tooth", ("box", 17, 13, 18, 15)), ("tooth", ("box", 20, 13, 21, 14))]},
 }
+# Exploring tiles use the Anthem Waters subset (art.md). Water states come from the region tables.
+EXPLORE_TILES = ["floor", "wall"] + [f"water-{state}" for state in STATES]
+# Maker materials (art.md, Frames and interface materials): stone-7 white metal with deep-6 arcs.
+# Dungeon textures are drawn by maker_name(), with arcs round the corners so they tile.
+MAKER_PARTS = ["wall", "floor", "ceiling", "door"]
 # 3 by 5 pixel letters for the figure labels
 GLYPHS = {
     "A": [" # ", "# #", "###", "# #", "# #"], "E": ["###", "#  ", "###", "#  ", "###"],
@@ -122,10 +130,15 @@ def on_edge(x: int, y: int) -> bool:
     return any(not inside_hex(x + dx, y + dy) for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)))
 
 
-def pattern_hit(state: str, x: int, y: int) -> bool:
-    """The pixels that carry a water state's pattern (art.md, water states)."""
+def square_edge(x: int, y: int) -> bool:
+    return x in (0, EXPLORE_SIZE - 1) or y in (0, EXPLORE_SIZE - 1)
+
+
+def pattern_hit(state: str, x: int, y: int, w: int = TILE_W, h: int = TILE_H,
+                edge: Optional[Callable[[int, int], bool]] = None) -> bool:
+    """The pixels that carry a water state's pattern (art.md, water states). Hex tiles by default."""
     if state == "well":  # concentric rings
-        band = 5 * (((x + 0.5 - TILE_W / 2) / (TILE_W / 2)) ** 2 + ((y + 0.5 - TILE_H / 2) / (TILE_H / 2)) ** 2) ** 0.5
+        band = 5 * (((x + 0.5 - w / 2) / (w / 2)) ** 2 + ((y + 0.5 - h / 2) / (h / 2)) ** 2) ** 0.5
         return 0 < round(band) < 5 and abs(band - round(band)) < 0.12
     if state == "storm":  # streaks along the wind
         return (x + 2 * y) % 9 == 0
@@ -134,7 +147,7 @@ def pattern_hit(state: str, x: int, y: int) -> bool:
     if state == "clean":  # sparse light flecks
         return (x * 5 + y * 11) % 23 == 0
     if state == "deaf":  # no pattern, only a dotted edge
-        return on_edge(x, y) and (x + y) % 2 == 0
+        return (edge or on_edge)(x, y) and (x + y) % 2 == 0
     if state == "orphan":  # fine square grid, a line every 4
         return x % 4 == 0 or y % 4 == 0
     raise ValueError(f"unknown water state: {state}")
@@ -151,6 +164,41 @@ def tile_image(root: Path, region: str, state: str) -> Image.Image:
             if inside_hex(x, y):
                 px[x, y] = pattern + (255,) if pattern_hit(state, x, y) else base + (255,)
     return img
+
+
+def explore_name(data: dict, name: str, x: int, y: int) -> str:
+    """The palette colour of one pixel of an exploring tile: floor, wall, or water-<state> in Anthem Waters."""
+    if name.startswith("water-"):
+        state = name[len("water-"):]
+        hit = pattern_hit(state, x, y, EXPLORE_SIZE, EXPLORE_SIZE, square_edge)
+        return data["region_pattern"]["anthem"][state] if hit else data["region_water"]["anthem"][state]
+    if name == "floor":  # flat brass with sparse specks
+        return "brass-1" if (7 * x + 3 * y) % 13 == 0 else "brass-3"
+    if name == "wall":  # stone block, light on the top and left edges
+        return "stone-6" if x == 0 or y == 0 else "stone-1"
+    raise ValueError(f"unknown exploring tile: {name}")
+
+
+def arc_hit(x: int, y: int, r0: int, r1: int) -> bool:
+    """Quarter arcs of a ring from r0 to r1 round each corner. Distances wrap at DUNGEON_SIZE, so tiles join."""
+    dx = min(x, DUNGEON_SIZE - x)
+    dy = min(y, DUNGEON_SIZE - y)
+    return r0 * r0 <= dx * dx + dy * dy <= r1 * r1
+
+
+def maker_name(part: str, x: int, y: int) -> str:
+    """The palette colour of one pixel of a Maker dungeon texture (art.md, Maker frame; nothing straight)."""
+    if part == "wall":
+        return "deep-6" if arc_hit(x, y, 9, 10) else "stone-7"
+    if part == "floor":
+        return "stone-4" if arc_hit(x, y, 4, 5) else "stone-6"
+    if part == "ceiling":
+        return "stone-3" if arc_hit(x, y, 14, 15) else "stone-2"
+    if part == "door":  # an arch of pale glass in a dark opening, outlined in deep-6
+        if hit(("ellipse", 16, 20, 8, 11), x, y):
+            return "deep-1"
+        return "deep-6" if hit(("ellipse", 16, 20, 10, 13), x, y) else "stone-6"
+    raise ValueError(f"unknown Maker texture: {part}")
 
 
 def hit(shape: tuple, x: int, y: int) -> bool:
@@ -201,6 +249,54 @@ def sprite_image(root: Path, size: tuple[int, int], spec: dict) -> Image.Image:
                     if ch == "#":
                         px[LABEL_X + 4 * i + c, LABEL_Y + r] = rgb[spec["ink"]] + (255,)
     return img
+
+
+def explore_image(root: Path, name: str) -> Image.Image:
+    rgb, data = load_palette(root)
+    img = Image.new("RGBA", (EXPLORE_SIZE, EXPLORE_SIZE))
+    px = img.load()
+    for y in range(EXPLORE_SIZE):
+        for x in range(EXPLORE_SIZE):
+            px[x, y] = rgb[explore_name(data, name, x, y)] + (255,)
+    return img
+
+
+def maker_image(root: Path, part: str) -> Image.Image:
+    rgb, _ = load_palette(root)
+    img = Image.new("RGBA", (DUNGEON_SIZE, DUNGEON_SIZE))
+    px = img.load()
+    for y in range(DUNGEON_SIZE):
+        for x in range(DUNGEON_SIZE):
+            px[x, y] = rgb[maker_name(part, x, y)] + (255,)
+    return img
+
+
+def explore_entry(name: str) -> dict:
+    entry = {"path": f"tiles/explore-{name}.png", "kind": "exploring-tile", "brief": f"briefs/explore-{name}.md"}
+    if name.startswith("water-"):
+        entry["canon"] = REGIONS["anthem"]
+    return entry
+
+
+def maker_entry(part: str) -> dict:
+    return {"path": f"tiles/maker-{part}.png", "kind": "dungeon-texture", "canon": "event.the-makers",
+            "brief": f"briefs/maker-{part}.md"}
+
+
+def explore_brief(root: Path, name: str) -> str:
+    if name.startswith("water-"):
+        state = name[len("water-"):]
+        _, data = load_palette(root)
+        water = data["water"][state]
+        text = f"Anthem {state} water, exploring tile 32 by 32: {water['pattern']}; movement {water['movement']}.\n"
+    else:
+        text = f"Anthem {name}, exploring tile 32 by 32: flat, readable from above, Anthem subset only.\n"
+    return text + "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n"
+
+
+def maker_brief(part: str) -> str:
+    return (f"Maker {part}, dungeon texture 32 by 32: stone-7 with deep-6 arcs, seamless, nothing straight.\n"
+            "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
 
 
 def figure_entry(key: str) -> dict:
@@ -279,6 +375,16 @@ def build(root: Path) -> list[dict]:
         sprite_image(root, (THING_SIZE, THING_SIZE), THINGS[key]).save(assets / entry["path"])
         (assets / entry["brief"]).write_text(thing_brief(key), encoding="utf-8")
         entries.append(entry)
+    for name in EXPLORE_TILES:
+        entry = explore_entry(name)
+        explore_image(root, name).save(assets / entry["path"])
+        (assets / entry["brief"]).write_text(explore_brief(root, name), encoding="utf-8")
+        entries.append(entry)
+    for part in MAKER_PARTS:
+        entry = maker_entry(part)
+        maker_image(root, part).save(assets / entry["path"])
+        (assets / entry["brief"]).write_text(maker_brief(part), encoding="utf-8")
+        entries.append(entry)
     upsert_manifest(root, entries)
     return entries
 
@@ -314,6 +420,7 @@ def main() -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out)
     print(f"wrote {len(REGIONS) * len(STATES)} tiles, {len(FIGURES)} figures, {len(THINGS)} things, "
+          f"{len(EXPLORE_TILES)} exploring tiles, {len(MAKER_PARTS)} Maker textures, "
           f"briefs and manifest entries; sheet {out} with {len(cells)} cells")
 
 
