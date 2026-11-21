@@ -1,0 +1,17 @@
+id: place.waterline
+name: The Waterline
+type: place
+kind: district
+region: place.the-girdle
+parent: place.port-halcyon
+summary: >
+  The lowest band of Port Halcyon: refineries, quays, tank farms and barracks.
+facts:
+  - Refineries, quays, tank farms and workers' barracks under a brown haze.
+  - The lowest of the city's three bands.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

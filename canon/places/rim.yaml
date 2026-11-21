@@ -1,0 +1,17 @@
+id: place.rim
+name: The Rim
+type: place
+kind: district
+region: place.the-girdle
+parent: place.port-halcyon
+summary: >
+  The top band of Port Halcyon: gardens, white houses and clean air.
+facts:
+  - Gardens, white houses and clean air.
+  - Men are paid to sweep the ash.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

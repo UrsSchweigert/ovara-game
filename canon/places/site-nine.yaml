@@ -1,0 +1,17 @@
+id: place.site-nine
+name: Site Nine
+type: place
+kind: platform
+region: place.the-girdle
+summary: >
+  Guarded, unlisted Halcyon drilling platform over a drowned Maker city and the Makers' engine.
+facts:
+  - A Halcyon drilling platform over a deep sill in the open Girdle, guarded and unlisted.
+  - Beneath it, under silt, lies an entire drowned Maker city, intact, with dry halls for a million and wet halls for a million more.
+  - In its lowest vault, behind three doors, is the Makers' engine: a ring forty metres across set flush in the floor, and a lance that can be pointed.
+position:
+  km_east_of_concord: "about 2,600"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11
