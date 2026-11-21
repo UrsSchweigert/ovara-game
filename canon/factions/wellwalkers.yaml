@@ -1,0 +1,17 @@
+id: faction.wellwalkers
+name: The Wellwalkers
+type: faction
+kind: order
+summary: >
+  Healers of the two great hospitals who take turns travelling the world as wandering doctors.
+facts:
+  - Treat whoever they meet, mariner or agravar, and ask nothing.
+  - Travel alone, carry nothing and never stay.
+  - Never more than a few dozen are on the road.
+  - Corporations pay bounties for one alive.
+changes:
+  ch08: Brightwater holds one in a clinic tower in Saltgate; she teaches the hero intending.
+sources:
+  - world-bible.md#5
+  - world-bible.md#13
+  - campaign.md#chapter-8

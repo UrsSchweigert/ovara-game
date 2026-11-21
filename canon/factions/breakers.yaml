@@ -1,0 +1,21 @@
+id: faction.breakers
+name: Breakers
+type: faction
+kind: faction
+summary: >
+  Mariners who want to strike back at the agravars; they wear a knotted cord at the wrist.
+facts:
+  - Want to strike back.
+  - Wear a knotted cord at the wrist.
+  - Set against the Tenders inside every hold.
+  - Hide in the Tangle.
+  - Are learning to work in chorus, with a city in mind.
+links:
+  places: [place.the-tangle]
+changes:
+  ch12: Hesper and eleven other Mighty leave in the night for Port Halcyon.
+sources:
+  - world-bible.md#5
+  - world-bible.md#13
+  - world-bible.md#11
+  - campaign.md#chapter-12

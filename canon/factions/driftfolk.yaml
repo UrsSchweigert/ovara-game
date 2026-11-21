@@ -1,0 +1,19 @@
+id: faction.driftfolk
+name: Driftfolk
+type: faction
+kind: people
+summary: >
+  Agravars with no corporation, living on raft-towns that follow the Eyes through the Belt Storms.
+facts:
+  - Know the pattern of the Eyes by heart.
+  - Read the weather from the gale skates.
+  - Carry what the corporations will not.
+  - Print their notices in cheap purple ink.
+  - Trade with both sides and are trusted by neither.
+  - Lashing is the largest Driftfolk raft-town.
+  - Tie up at the stone aprons of Nine Spires.
+links:
+  places: [place.lashing, place.the-eyes, place.belt-storms, place.nine-spires]
+sources:
+  - world-bible.md#10
+  - world-bible.md#11

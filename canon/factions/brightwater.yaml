@@ -1,0 +1,20 @@
+id: faction.brightwater
+name: Brightwater Provisions
+type: faction
+kind: corporation
+summary: >
+  Corporation of Clearwell that sells food, drinking water and medicine, with a smiling public face.
+facts:
+  - Business - food, drinking water, medicine.
+  - Home - Clearwell, on the Green Terraces.
+  - Smiling public face; secretly pays for stolen healing water.
+  - Led by Dr Linnea Marsh, a physician who began in a dockside dispensary.
+  - Holds a captured Wellwalker in a clinic tower in Saltgate, trying to make intended water last.
+links:
+  places: [place.clearwell, place.green-terraces, place.saltgate]
+changes:
+  ch08: Falls; its medicine monopoly is gone within a month of the free clinic opening.
+sources:
+  - world-bible.md#4
+  - world-bible.md#13
+  - campaign.md#chapter-8

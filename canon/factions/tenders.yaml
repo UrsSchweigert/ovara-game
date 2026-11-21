@@ -1,0 +1,17 @@
+id: faction.tenders
+name: Tenders
+type: faction
+kind: faction
+summary: >
+  Mariners who clean and endure the agravar waste rather than strike back.
+facts:
+  - Net the fall and seal it in bladders of cured hide for the carrying crews.
+  - Plant bitterwrack to drink what they missed.
+  - Set against the Breakers inside every hold.
+  - Low Anthem is mostly Tenders.
+links:
+  places: [place.low-anthem]
+sources:
+  - world-bible.md#5
+  - world-bible.md#13
+  - world-bible.md#11

@@ -1,0 +1,23 @@
+id: faction.threaded
+name: The Threaded
+type: faction
+kind: order
+summary: >
+  Jef's warrior monks, sworn to keep agravar intrusion out of mariner waters; they answer only to Jef.
+facts:
+  - About a hundred today, where there were two hundred a generation ago.
+  - Alone or in twos and threes.
+  - The rule: Keep the water. Own nothing you cannot carry. Come when you are called.
+  - A candidate first serves a year at the Lantern.
+  - Turn back survey boats, cut trawl lines, pull people from wrecks on both sides and carry the sick to the Dragon.
+  - Jef expects them to sink no hull with its crew aboard.
+  - Not an army; most are mariners and a very few are agravars.
+  - The Thread is not the gift; being ebbed does not touch it.
+  - Jef has laid no Thread for six years.
+links:
+  places: [place.the-lantern]
+changes:
+  ch06: Forty-one gather in the only house they have; Rook is among them and fighting breaks out between them.
+sources:
+  - world-bible.md#8
+  - campaign.md#chapter-6
