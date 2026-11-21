@@ -8,4 +8,4 @@
 
 **Why it matters.** Shops in holds need a price. If this is refused, hold shops trade goods for goods only.
 
-**Status:** waiting for the owner.
+**Status:** waiting for the owner. Not answered. A pending draft entry is in `P-001-draft-entry.md`; it is not canon.
