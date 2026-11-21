@@ -15,8 +15,10 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 # region key -> canon place id; the key names the files and matches the palette's region_water
-REGIONS = {"pale": "place.the-pale", "anthem": "place.anthem-waters", "girdle": "place.the-girdle"}
-REGION_NAMES = {"pale": "Pale", "anthem": "Anthem", "girdle": "Girdle"}  # short names for briefs
+REGIONS = {"pale": "place.the-pale", "anthem": "place.anthem-waters", "girdle": "place.the-girdle",
+           "shelves": "place.bright-shelves", "quiet": "place.the-quiet"}
+REGION_NAMES = {"pale": "Pale", "anthem": "Anthem", "girdle": "Girdle",
+                "shelves": "Shelves", "quiet": "Quiet"}  # short names for briefs
 STATES = ["well", "storm", "fouled", "clean", "deaf", "orphan"]  # dark to light, art.md
 TILE_W, TILE_H = 64, 48  # battle hex, pointy-top
 SCALE, COLS, PAD = 2, 8, 8  # contact sheet: twice size, eight to a row
