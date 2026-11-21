@@ -1,0 +1,26 @@
+# Godot
+game/.godot/
+game/android/build/
+*.translation
+/build/
+/export/
+
+# Python tools
+.venv/
+__pycache__/
+*.pyc
+
+# Screenshots taken while checking work
+/shots/
+
+*.log
+.DS_Store
+.env
+.env.*
+
+# Signing material must never be committed
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+game/.godot/export_credentials.cfg

@@ -1,0 +1,4 @@
+# Installed into .venv by the bootstrap. Pin exact versions when you install them.
+pyyaml
+jsonschema
+pillow

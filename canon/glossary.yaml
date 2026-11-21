@@ -1,0 +1,103 @@
+# Canon terms. `term` is the only accepted form in content and in-game text.
+# `banned` words fail `./ov check` when found in game/content/ or in player-facing text under game/.
+# The canon keeper extends this during ingestion (task M0-01).
+
+- term: agravar
+  meaning: A land-dweller of Ovara.
+  banned: [lander, landwalker, surface-dweller, drylander]
+
+- term: mariner
+  meaning: A water-breathing person of the undersea holds.
+  banned: [merfolk, merman, mermaid, sea-person, atlantean]
+
+- term: hold
+  meaning: A mariner settlement in a Maker structure.
+  banned: [dome-city, undersea city, colony]
+
+- term: Maker
+  meaning: The lost civilisation that built the holds, the Dragon and the Wells' buildings.
+  banned: [Ancient, Precursor, Old One, Builder]
+
+- term: the gift
+  meaning: The magic by which the sea answers a mariner.
+  banned: [mana, sorcery, spell, spellcasting, water magic]
+
+- term: tidecalling
+  meaning: Using the gift to move water. A person who does is a Tidecaller.
+  banned: [water-bending, waterbending, hydromancy, hydrokinesis]
+
+- term: intending
+  meaning: Using the gift to heal. The result is intended water.
+  banned: [healing magic, holy water, healing potion]
+
+- term: reach
+  meaning: The scale of the gift a person can use safely, 1 to 5.
+  banned: [level, power level, tier, rank]
+
+- term: ebbed
+  meaning: Exhausted by using the gift and unable to call.
+  banned: [out of mana, drained, depleted]
+
+- term: the undertow
+  meaning: What takes something permanently from a caller who overreaches.
+  banned: [backlash, burnout, corruption]
+
+- term: fouled water
+  meaning: Polluted water in which the gift is one reach weaker.
+  banned: [tainted water, corrupted water, toxic water]
+
+- term: deaf water
+  meaning: Dead water in which the gift does not answer at all.
+  banned: [dead zone water, null water, anti-magic]
+
+- term: orphan water
+  meaning: Water cut off from the sea.
+  banned: [stagnant water, tank water]
+
+- term: chorus
+  meaning: Several callers each holding one part of a shared work; fails if one drops.
+  banned: [ritual, circle, combo]
+
+- term: shared calling
+  meaning: Many callers' strength passing through one will. First achieved in chapter 12.
+  banned: [link, merge, fusion, unison]
+
+- term: ordering
+  meaning: Commanding the sea instead of asking it. It obeys at once and the water goes deaf. Callers have no name for it; this is the game's term.
+  banned: [compel, dominate, dark calling, blood magic]
+
+- term: restore
+  meaning: The fourth form of intending. Regrows what is lost; done by many healers together, it can bring ordered water back to hearing.
+  banned: [resurrect, revive, cleanse]
+
+- term: the craft
+  meaning: Maker technology and the skill of tending, mending and making it.
+  banned: [artifice, techno-magic, ancient tech]
+
+- term: the Thread
+  meaning: Jef's implant for steering Maker vehicles. Those who carry it are the Threaded.
+  banned: [neural link, cyberware, augment]
+
+- term: the Dragon
+  meaning: The Maker transit machine circling Ovara from Tip to Tip.
+  banned: [sea serpent, water dragon train, leviathan]
+
+- term: Wellwalker
+  meaning: A travelling healer from one of the two great hospitals.
+  banned: [cleric, medic, wandering doctor]
+
+- term: Tender
+  meaning: A mariner who cleans up and endures.
+  banned: [pacifist, loyalist]
+
+- term: Breaker
+  meaning: A mariner who wants to strike back at the agravars.
+  banned: [rebel, terrorist, extremist]
+
+- term: the fouled
+  meaning: Creatures warped by dumping.
+  banned: [mutants, monsters, corrupted]
+
+- term: scrip
+  meaning: Corporate currency of the islands.
+  banned: [credits, gold, dollars, coins]

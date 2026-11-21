@@ -1,0 +1,99 @@
+"""Failure classification by code, retry budgets, and backoff. The agent's own account of a failure is never evidence."""
+from __future__ import annotations
+
+import random
+import hashlib
+import json
+from typing import Any, Callable, Dict, List, Optional
+
+TRANSIENT, DETERMINISTIC, POLICY, SYSTEMIC = "transient", "deterministic", "policy", "systemic"
+# The subscription's session or weekly limit is reached. Nothing is wrong with the work and no attempt can succeed
+# before the window resets, so the issue waits for the reset and spends no retry budget at all.
+QUOTA = "quota"
+QUOTA_DEFAULT_WAIT_S = 30 * 60
+REPORTED = "reported"  # the worker says it cannot finish: a request for direction, not evidence of anything
+
+# Evidence kinds observed by trusted code mapped to a failure class.
+KIND_CLASS = {
+    "infra": TRANSIENT, "network": TRANSIENT, "rate_limit": TRANSIENT, "runtime_crash": TRANSIENT, "lease_lost": TRANSIENT,
+    "no_result": TRANSIENT,  # a clean exit with no result file is a provider or CLI fault, not a schema violation
+    "checks_failed": DETERMINISTIC, "required_checks_failed": DETERMINISTIC, "check_configuration": "configuration", "review_findings": DETERMINISTIC, "schema_invalid": DETERMINISTIC, "plan_out_of_scope": DETERMINISTIC,
+    "merge_conflict": DETERMINISTIC, "push_rejected": DETERMINISTIC, "patch_changed": DETERMINISTIC, "integrated_checks_failed": DETERMINISTIC,
+    "scope_violation": POLICY, "escalation_path": POLICY, "approval": POLICY, "permission": POLICY,
+    "protected_branch": POLICY, "diff_too_large": POLICY,
+    "isolation": SYSTEMIC, "credentials": SYSTEMIC, "budget": SYSTEMIC,
+    "usage_limit": QUOTA,
+    "worker_blocked": REPORTED,
+}
+CONFIGURATION = "configuration"
+
+
+def signature(kind: str, evidence: Any) -> str:
+    """Stable identity for a trusted failure, including the exact command and observed result."""
+    if isinstance(evidence, dict) and isinstance(evidence.get("results"), list):
+        evidence = dict(evidence)
+        evidence["results"] = [
+            {"command": r.get("command", ""), "exit_code": r.get("exit_code"),
+             "output": " ".join(str(r.get("output", "")).casefold().split())}
+            for r in evidence["results"] if isinstance(r, dict)
+        ]
+    payload = json.dumps({"kind": kind, "evidence": evidence}, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def classify(kind: str, prior_timeout_same_packet: bool = False) -> str:
+    """A first timeout for a packet is transient. A repeated timeout for the same packet is deterministic. Unknown is deterministic."""
+    if kind in ("timeout", "inactivity"):
+        return DETERMINISTIC if prior_timeout_same_packet else TRANSIENT
+    return KIND_CLASS.get(kind, DETERMINISTIC)
+
+
+def backoff_delay(failures: int, base: float = 5.0, cap: float = 600.0, rng: Callable[[], float] = random.random) -> float:
+    """Exponential backoff with jitter for the Nth transient failure (1-based)."""
+    return min(cap, base * (2 ** max(0, failures - 1))) * (0.5 + rng() / 2)
+
+
+def decide(failure_class: str, issue: Dict[str, Any], budgets: Dict[str, Any], now: float,
+           rng: Callable[[], float] = random.random, retry_at: Optional[float] = None) -> Dict[str, Any]:
+    """Update the issue's counters and return the next action: retry, consult, block, or pause.
+
+    Transient failures use their own budget. Deterministic failures use the repair budget and must change an
+    input before retrying (enforced at dispatch). Policy failures block at once. Systemic failures pause the project.
+    A reported failure spends no repair budget: it consults the delegating agent while its own budget lasts, then blocks.
+    """
+    if failure_class == SYSTEMIC:
+        return {"action": "pause"}
+    if failure_class == QUOTA:
+        resume = retry_at if isinstance(retry_at, (int, float)) and retry_at > now else now + QUOTA_DEFAULT_WAIT_S
+        issue["not_before"] = max(issue.get("not_before", 0.0), resume)
+        return {"action": "retry", "delay": issue["not_before"] - now, "wait": "usage_limit"}
+    if failure_class == REPORTED:
+        if issue.get("consults", 0) >= budgets.get("delegator_consults_per_issue", 0):
+            return {"action": "block", "reason": "the worker reported it cannot solve the task"}
+        issue["consults"] = issue.get("consults", 0) + 1
+        issue["consult_pending"] = True
+        return {"action": "consult"}
+    if failure_class == POLICY:
+        return {"action": "block", "reason": "policy failure"}
+    if failure_class == CONFIGURATION:
+        return {"action": "block", "reason": "validation configuration failure"}
+    if failure_class == TRANSIENT:
+        issue["transient_failures"] = issue.get("transient_failures", 0) + 1
+        if issue["transient_failures"] > budgets["transient_retries"] + issue.get("transient_budget_override", 0):
+            return {"action": "block", "reason": "transient retry budget exhausted"}
+        delay = backoff_delay(issue["transient_failures"], rng=rng)
+        issue["not_before"] = now + delay
+        return {"action": "retry", "delay": delay}
+    issue["repair_failures"] = issue.get("repair_failures", 0) + 1
+    if issue["repair_failures"] > budgets["repair_attempts"] + issue.get("repair_budget_override", 0):
+        return {"action": "block", "reason": "repair budget exhausted"}
+    return {"action": "retry", "delay": 0.0, "must_change_input": True}
+
+
+def duplicate_of_failed(attempts: List[Dict[str, Any]], packet_digest: str, tier: str) -> Optional[str]:
+    """A replacement for a deterministically failed attempt must differ in packet digest or tier."""
+    for a in attempts:
+        if a.get("outcome") in ("Failed", "TimedOut", "Fenced") and a.get("failure_class") == DETERMINISTIC \
+                and a.get("packet_digest") == packet_digest and a.get("tier") == tier:
+            return a["attempt_id"]
+    return None

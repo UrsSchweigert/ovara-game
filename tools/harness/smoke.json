@@ -1,0 +1,67 @@
+{
+  "rules": [
+    {
+      "name": "Ovara Godot project loads headless",
+      "paths": [
+        "game/"
+      ],
+      "command": "sh /opt/harness/smoke/godot_project.sh /work game"
+    },
+    {
+      "name": "Ovara full check",
+      "paths": [
+        "game/",
+        "canon/",
+        "tools/checks.py",
+        "tools/schemas/"
+      ],
+      "command": "bash /work/ov check"
+    },
+    {
+      "name": "lesen page in a real browser",
+      "paths": [
+        "sites/lesen/static/"
+      ],
+      "command": "node /opt/harness/smoke/lesen.mjs /work"
+    },
+    {
+      "name": "lesen iOS shell stays offline and reviewable",
+      "paths": [
+        "sites/lesen/ios/",
+        "sites/lesen/capacitor.config.json",
+        "sites/lesen/static/",
+        "sites/lesen/scripts/"
+      ],
+      "command": "sh /opt/harness/smoke/ios_shell.sh /work sites/lesen"
+    },
+    {
+      "name": "lesen unit tests",
+      "paths": [
+        "sites/lesen/"
+      ],
+      "command": "node --test /work/sites/lesen/tests/*.test.mjs"
+    },
+    {
+      "name": "arithmo slayer web game unit tests",
+      "paths": [
+        "sites/ffm/static/"
+      ],
+      "command": "node --test /work/sites/ffm/static/game/*.test.js"
+    },
+    {
+      "name": "arithmo slayer mobile shell tests",
+      "paths": [
+        "sites/ffm/mobile/",
+        "sites/ffm/static/"
+      ],
+      "command": "node --test /work/sites/ffm/mobile/tests/*.test.mjs"
+    },
+    {
+      "name": "arithmoslayer Godot project loads headless",
+      "paths": [
+        "apps/arithmoslayer/"
+      ],
+      "command": "sh /opt/harness/smoke/godot_project.sh /work apps/arithmoslayer"
+    }
+  ]
+}

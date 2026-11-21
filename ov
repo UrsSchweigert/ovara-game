@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Ovara project commands. Every agent uses these; do not call godot directly for checks.
+#   ./ov check                 run every check; must pass before a task is done
+#   ./ov test                  unit tests only
+#   ./ov map <id>              print an area, dungeon or battle map as text
+#   ./ov play <id>             auto-play one battle or quest (or --all)
+#   ./ov harness <command>     the development harness (see docs/harness/README.md)
+#   ./ov shot <scene> <png> [w h]   render a scene to a PNG (opens a window briefly)
+#   ./ov index                 regenerate canon/index.md
+#   ./ov run                   start the game in a window
+#   ./ov edit                  open the Godot editor
+set -uo pipefail
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+GODOT="${GODOT:-godot}"
+PY="$ROOT/.venv/bin/python"
+[ -x "$PY" ] || PY="python3"
+
+if ! command -v "$GODOT" >/dev/null 2>&1; then
+  echo "Godot not found. Install Godot 4 or set GODOT=/path/to/godot." >&2
+  exit 127
+fi
+
+# Runs Godot headless and fails on a non-zero exit code or on any engine or script error in the output.
+godot_headless() {
+  local out code
+  out="$("$GODOT" --headless --path "$ROOT/game" "$@" 2>&1)"
+  code=$?
+  printf '%s\n' "$out" | grep -v -E '^(Godot Engine v|\s*$)' || true
+  if [ $code -ne 0 ]; then return $code; fi
+  if printf '%s\n' "$out" | grep -q -E 'SCRIPT ERROR|Parse Error|^ERROR:|^   ERROR:'; then return 1; fi
+  return 0
+}
+
+step() { # step <label> <command...>
+  local label="$1"; shift
+  echo "── $label"
+  if "$@"; then echo "   ok"; else echo "   FAILED: $label"; return 1; fi
+}
+
+cmd="${1:-}"; [ $# -gt 0 ] && shift
+case "$cmd" in
+  harness) shift 0; PYTHONPATH="$ROOT/tools" python3 -m harness "$@" ;;
+  check)
+    fail=0
+    step "1/7 import project"        godot_headless --import --quiet || fail=1
+    step "2/7 unit tests"            godot_headless -s res://tests/run_tests.gd || fail=1
+    step "3/7 canon validation"      "$PY" "$ROOT/tools/checks.py" canon || fail=1
+    step "4/7 glossary"              "$PY" "$ROOT/tools/checks.py" glossary || fail=1
+    step "5/7 references, chapters"  "$PY" "$ROOT/tools/checks.py" references || fail=1
+    step "6/7 art"                   "$PY" "$ROOT/tools/checks.py" art || fail=1
+    step "7/7 auto-player"           godot_headless -s res://tools/autoplay.gd -- --all || fail=1
+    if [ $fail -eq 0 ]; then echo "CHECK PASSED"; else echo "CHECK FAILED"; fi
+    exit $fail ;;
+  test)  godot_headless -s res://tests/run_tests.gd ;;
+  map)   godot_headless -s res://tools/print_map.gd -- "$@" ;;
+  play)  godot_headless -s res://tools/autoplay.gd -- "$@" ;;
+  shot)  "$GODOT" --path "$ROOT/game" -s res://tools/shot.gd -- "$@" ;;
+  index) "$PY" "$ROOT/tools/checks.py" index ;;
+  run)   "$GODOT" --path "$ROOT/game" ;;
+  edit)  "$GODOT" --path "$ROOT/game" --editor ;;
+  *)     sed -n '2,11p' "$0"; exit 2 ;;
+esac
