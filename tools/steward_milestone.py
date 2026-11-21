@@ -285,6 +285,7 @@ def milestone_round(root, args, status, book, harness, claude_json):
                 print("  would draft a follow-up plan for %d gap(s) in %s" % (len(result["gaps"]), plan_id), flush=True)
                 continue
             path = write_gap_file(root, plan_id, source, result["gaps"])
+            record["gap_path"] = path
             book.log("gaps    %s: wrote %s" % (plan_id, os.path.relpath(path, root)))
             drafted = draft_plan(root, harness, path, book)
             if drafted:
@@ -293,9 +294,28 @@ def milestone_round(root, args, status, book, harness, claude_json):
             continue
         if record.get("awaiting_approval"):
             continue  # the follow-up is with the owner; the next milestone waits behind it
-        follow_up = record.get("gap_plan")
-        if follow_up and not book.data["milestones"].get(follow_up, {}).get("promoted"):
-            continue  # the follow-up is running; the next milestone waits until it is merged
+
+        # A milestone does not advance past its follow-up. The follow-up may have been drafted here, or later by the
+        # owner after answering the investigator's questions: either way it is the plan made from the gap file.
+        if record.get("gap_path") and not record.get("gaps_waived"):
+            follow_up = plan_id_for(record["gap_path"])
+            if follow_up in plans:
+                record["gap_plan"] = follow_up
+                if plans[follow_up]["state"] in ("Draft", "Proposed") and not record.get("approval_asked_gap"):
+                    record.update(awaiting_approval=follow_up, awaiting_path=record["gap_path"], approval_asked=False,
+                                  approval_asked_gap=True)
+                    book.save()
+                    continue
+            merged = follow_up in plans and ((plans[follow_up].get("promotion") or {}).get("merged")
+                                             or book.data["milestones"].get(follow_up, {}).get("promoted"))
+            if not merged:
+                if not record.get("hold_said"):
+                    book.log("HOLD    %s has %d gap(s) and its follow-up (%s) is not merged yet, so the next milestone waits. "
+                             "To go on without it:  python3 tools/steward.py --skip-gaps %s" % (
+                                 plan_id, len(result["gaps"]), os.path.relpath(record["gap_path"], root), plan_id))
+                    record["hold_said"] = True
+                    book.save()
+                continue
 
         # 4. GATE: things only a person can judge.
         if result["needs_person"] and plan_id not in book.data["signed"]:

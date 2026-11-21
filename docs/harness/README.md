@@ -79,7 +79,7 @@ When a plan has finished, the harness opens one pull request from its run branch
 
 1. **Audit.** It checks out that pull request, runs `bash ov check`, and has Claude compare the work with the milestone's requirements file: what is met, what is a gap, what only you can judge, and whether anything is broken. The report goes to `steward-notes/<plan>-audit.md`.
 2. **Promote.** If the check passes and nothing is broken, it merges that pull request. This is the only pull request it ever merges. If the work is not sound, it leaves it for you.
-3. **Gaps.** If the audit found gaps, it writes a follow-up requirements file under `requirements/gaps/` and drafts a plan for it. Two follow-ups per milestone at most.
+3. **Gaps.** If the audit found gaps, it writes a follow-up requirements file under `requirements/gaps/` and drafts a plan for it. Two follow-ups per milestone at most. The next milestone does not start until the follow-up is merged, even if the investigator had questions and you finished the draft yourself. To go on without it: `python3 tools/steward.py --skip-gaps <plan-id>`.
 4. **Your gate.** If the milestone has things only you can judge (the palette, a build on a phone), it stops and says what to look at. When you have, record it: `python3 tools/steward.py --sign-off <plan-id>`.
 5. **Next.** It drafts the plan for the next file in `requirements/`.
 6. **Your approval.** It stops and tells you. You type `./ov harness approve <plan-id>`. The steward never approves a plan.

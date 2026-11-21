@@ -296,6 +296,7 @@ def main():
     ap.add_argument("--for-task", metavar="TASK_ID", help="the blocked task that --adopt-fix will unblock")
     ap.add_argument("--audit", metavar="PLAN_ID", help="check and audit that plan's run branch now and print the report; changes nothing")
     ap.add_argument("--sign-off", metavar="PLAN_ID", help="record that you have looked at what that milestone needs from you")
+    ap.add_argument("--skip-gaps", metavar="PLAN_ID", help="let the next milestone start although that milestone's follow-up is not merged")
     args = ap.parse_args()
     if args.try_path:
         try_file(args.try_path, args.model)
@@ -307,13 +308,19 @@ def main():
         status = read_status()
         steward_fixes.adopt(Book(status.get("store", "")), status, args.adopt_fix, args.for_task)
         return 0
-    if args.audit or args.sign_off:
+    if args.audit or args.sign_off or args.skip_gaps:
         status = read_status()
         plans = {p["plan_id"]: p for p in status.get("plans", [])}
-        plan_id = args.audit or args.sign_off
+        plan_id = args.audit or args.sign_off or args.skip_gaps
         if plan_id not in plans:
             print("no such plan: %s (known: %s)" % (plan_id, ", ".join(plans) or "none"))
             return 2
+        if args.skip_gaps:
+            book = Book(status.get("store", ""))
+            book.data["milestones"].setdefault(plan_id, {})["gaps_waived"] = True
+            book.save()
+            book.log("waived  %s: the owner lets the next milestone start without its follow-up" % plan_id)
+            return 0
         if args.sign_off:
             book = Book(status.get("store", ""))
             book.data["signed"][plan_id] = datetime.datetime.now().isoformat(timespec="seconds")
