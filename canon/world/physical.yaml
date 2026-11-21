@@ -1,0 +1,31 @@
+id: world.physical
+name: Shape, sky and sea
+type: world
+summary: >
+  Ovara as a body: a dense ocean globe about 7,600 km across, with an
+  18-hour day, two Tips, the Girdle at the equator and islands on one shelf.
+facts:
+  - A globe about 7,600 km across, a good deal smaller than Earth. (world-bible.md#2)
+  - Dense and rich in iron; things weigh about two-thirds of what they would on Earth. (world-bible.md#2)
+  - About 12,000 km from Tip to Tip along the Dragon's line. (world-bible.md#2)
+  - About 24,000 km round the Girdle. (world-bible.md#2)
+  - All the land lies on one shallow shelf along about 3,500 km of the Girdle; the rest of the Girdle is open storm. (world-bible.md#2)
+  - Nearly all of the surface is water; land exists only as islands, strung along one stretch of the equator. (world-bible.md#1)
+  - The poles are called the Tips and the equator the Girdle; the regions run in bands from north to south. (world-bible.md#2)
+  - Days last about 18 hours. (world-bible.md#2)
+  - The fast spin drives the Belt Storms, permanent bands of wind and rain around the Girdle. (world-bible.md#2)
+  - The Tips see half a year of twilight and half a year of low, sideways sun. (world-bible.md#2)
+  - The Wells are two vast trenches, one at each Tip, the deepest water in the world. (world-bible.md#2)
+  - Mariners were bred by the Makers for the deep - a mariner can go from the surface to the floor of a Well and back in a day and take no harm from the weight of the water. (world-bible.md#5)
+  - Shallowborn usually inherit this. (world-bible.md#5)
+  - Islanders do not, and cannot go much deeper than the kelp grows without a hard suit, which keeps the pressure of the surface inside it. (world-bible.md#5)
+  - The air in a hold's dry hall is a mixture a mariner can breathe safely at that hold's depth. (world-bible.md#5)
+  - The descent of the North Well is through water too cold and heavy for most. (world-bible.md#11)
+  - On land mariners dry out and tire within a day. (world-bible.md#5)
+links:
+  places: [place.the-girdle, place.the-pale, place.the-quiet, place.belt-storms, place.the-eyes, place.north-well, place.ember-house]
+sources:
+  - world-bible.md#1
+  - world-bible.md#2
+  - world-bible.md#5
+  - world-bible.md#11
