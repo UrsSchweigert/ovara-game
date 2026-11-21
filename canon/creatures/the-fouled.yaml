@@ -2,8 +2,7 @@ id: creature.the-fouled
 name: The fouled
 type: creature
 kind: warped
-summary: >
-  Creatures warped by dumping, found in the Slick and other dead zones; they are spreading.
+summary: Creatures warped by dumping, found in the Slick and other dead zones; they are spreading.
 facts:
   - Slick eels hunt by taste in black water.
   - Bloat crabs burst into poison.

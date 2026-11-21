@@ -2,8 +2,7 @@ id: machine.archive-wall
 name: Archive wall
 type: machine
 kind: record
-summary: >
-  A surface of light that holds records and shows, in moving pictures, how each Maker thing was built.
+summary: A surface of light that holds records and shows, in moving pictures, how each Maker thing was built.
 facts:
   - Almost all are dark or unreadable.
   - The last in the Lantern went out about six hundred years ago; Jef never learned to mend them.

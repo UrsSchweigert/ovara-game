@@ -2,8 +2,7 @@ id: flora.seagrass
 name: Seagrass
 type: flora
 kind: grass
-summary: >
-  Meadows that feed the herds.
+summary: Meadows that feed the herds.
 facts:
   - Found in the Bright Shelves.
 links:

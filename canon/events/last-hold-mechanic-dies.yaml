@@ -3,8 +3,7 @@ name: The last hold mechanic dies
 type: event
 kind: history
 when: about 600 years ago
-summary: >
-  The last hold mechanic other than Jef dies; from then only Jef can repair Maker work.
+summary: The last hold mechanic other than Jef dies; from then only Jef can repair Maker work.
 facts:
   - The last archive wall in the Lantern went out about the same time.
 links:

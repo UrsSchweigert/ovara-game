@@ -2,8 +2,7 @@ id: machine.needle
 name: Needle
 type: machine
 kind: vehicle
-summary: >
-  A sliver of pale metal three times a man's length, ridden lying along it, very fast, with room for one passenger.
+summary: A sliver of pale metal three times a man's length, ridden lying along it, very fast, with room for one passenger.
 facts:
   - Steered by the Threaded.
   - Two hundred cradles in the Dragon's belly hold the Threaded's vehicles, each with its rider's name.

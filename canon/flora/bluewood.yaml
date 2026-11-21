@@ -2,8 +2,7 @@ id: flora.bluewood
 name: Bluewood
 type: flora
 kind: tree
-summary: >
-  The last true forest tree; a bluewood table costs more than a house.
+summary: The last true forest tree; a bluewood table costs more than a house.
 facts:
   - Grows only in the Green Terraces.
 links:

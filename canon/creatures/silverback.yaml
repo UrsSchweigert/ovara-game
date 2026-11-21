@@ -2,8 +2,7 @@ id: creature.silverback
 name: Silverback
 type: creature
 kind: fish
-summary: >
-  Herded fish, the mariners' cattle.
+summary: Herded fish, the mariners' cattle.
 facts:
   - Found in all holds.
 links:

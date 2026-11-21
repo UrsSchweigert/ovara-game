@@ -2,8 +2,7 @@ id: machine.warm-stone
 name: Warm-stone
 type: machine
 kind: building-part
-summary: >
-  A dark ovoid the size of a loaf that heats a room; the simplest thing the Makers built.
+summary: A dark ovoid the size of a loaf that heats a room; the simplest thing the Makers built.
 facts:
   - Gives the heat of a hold.
 links:

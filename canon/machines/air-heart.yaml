@@ -2,8 +2,7 @@ id: machine.air-heart
 name: Air-heart
 type: machine
 kind: building-part
-summary: >
-  A pale ribbed shell that opens and closes a few times an hour, drawing foulness out of seawater and breathing clean air into dry halls.
+summary: A pale ribbed shell that opens and closes a few times an hour, drawing foulness out of seawater and breathing clean air into dry halls.
 facts:
   - Small ones serve a room; the great ones, the size of a house, serve a whole hold.
   - About two thousand exist in the world, all the same age.

@@ -2,8 +2,7 @@ id: creature.belt-shark
 name: Belt shark
 type: creature
 kind: shark
-summary: >
-  Shark of the Girdle that follows ships for scraps and dumping; bold and numerous.
+summary: Shark of the Girdle that follows ships for scraps and dumping; bold and numerous.
 facts:
   - Lives in the Girdle.
 links:

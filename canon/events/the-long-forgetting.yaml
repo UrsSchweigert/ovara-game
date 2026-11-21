@@ -3,8 +3,7 @@ name: The Long Forgetting
 type: event
 kind: history
 when: the centuries after the Sinking
-summary: >
-  Below, knowledge of the machines faded into ritual; above, the survivors lost everything and rebuilt from nothing.
+summary: Below, knowledge of the machines faded into ritual; above, the survivors lost everything and rebuilt from nothing.
 facts:
   - The gift appeared among the mariners at some point in these centuries.
 links:

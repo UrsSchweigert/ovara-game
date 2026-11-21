@@ -2,8 +2,7 @@ id: creature.gale-skate
 name: Gale skate
 type: creature
 kind: fish
-summary: >
-  Winged fish that glide on storm winds in flocks of thousands.
+summary: Winged fish that glide on storm winds in flocks of thousands.
 facts:
   - Lives in the Girdle.
   - Driftfolk read the weather from them.

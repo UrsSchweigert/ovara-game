@@ -1,0 +1,18 @@
+id: event.the-long-way-round
+name: The long way round
+type: event
+kind: turning-point
+chapter: ch16
+summary: The hero asks instead of doing; each people he asks can refuse, and forty thousand gather at Lashing at the edge of the deaf water.
+facts:
+  - He uses only the Thread; everything else is done by other people.
+  - Eleven thousand mariners leave the tanks at Port Halcyon.
+  - Saltgate's Lockkeeper sounds the horns and sends every gate barge.
+  - The forty choirs of Deep Chorus answer him.
+  - The rays return Sefa's gift.
+  - He stops being indispensable.
+links:
+  places: [place.port-halcyon, place.saltgate, place.deep-chorus, place.lashing]
+  machines: [machine.the-thread]
+sources:
+  - campaign.md#chapter-16

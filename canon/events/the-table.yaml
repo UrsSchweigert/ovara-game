@@ -3,8 +3,7 @@ name: The table
 type: event
 kind: turning-point
 chapter: ch10
-summary: >
-  Rook dines with the hero, admits his deeds and offers a chart; the hero refuses and learns how ordering is done.
+summary: Rook dines with the hero, admits his deeds and offers a chart; the hero refuses and learns how ordering is done.
 facts:
   - Rook admits the order to Crane and the dart.
   - The hero refuses because Rook's chart has nobody on it.

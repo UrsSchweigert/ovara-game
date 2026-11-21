@@ -2,8 +2,7 @@ id: machine.lamp
 name: Maker lamp
 type: machine
 kind: building-part
-summary: >
-  The Makers' light, one of three things (with air-hearts and warm-stones) that keep every hold alive.
+summary: The Makers' light, one of three things (with air-hearts and warm-stones) that keep every hold alive.
 facts:
   - Gives the light of every hold.
   - When a lamp fails it is silted up, seated wrong or worn through; mending is clearing, seating or replacing.
