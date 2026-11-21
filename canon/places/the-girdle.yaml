@@ -16,6 +16,8 @@ facts:
 position: not given
 look: Heat, rain, wind and crowds; warm, murky sea; the sky rarely clear.
 danger: The storms and the people.
+links:
+  places: [place.port-halcyon, place.keelhaven, place.clearwell, place.concord, place.saltgate, place.site-nine, place.lashing, place.the-stubborns, place.old-tolla, place.the-crown, place.kessler-banks, place.green-terraces, place.the-sovereigns, place.waterline, place.stacks, place.rim, place.orrin-spire, place.meridian-exchange, place.wet-market, place.the-sluice, place.belt-storms, place.the-eyes]
 sources:
   - world-bible.md#2
   - world-bible.md#11

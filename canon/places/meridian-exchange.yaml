@@ -1,0 +1,18 @@
+id: place.meridian-exchange
+name: The Meridian Exchange
+type: place
+kind: building
+region: place.the-girdle
+parent: place.concord
+summary: >
+  Block-filling building at the foot of the Orrin Spire, with one door and no windows.
+facts:
+  - Fills a block at the foot of the Orrin Spire.
+  - Has one door and no windows.
+  - Under it is a flooded dock that only the chairman uses.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

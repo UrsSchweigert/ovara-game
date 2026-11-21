@@ -1,0 +1,17 @@
+id: place.the-crown
+name: The Crown
+type: place
+kind: island-group
+region: place.the-girdle
+parent: place.port-halcyon
+summary: >
+  Black volcanic islands, rich in ore, that carry Port Halcyon.
+facts:
+  - Black volcanic islands, rich in ore.
+  - Port Halcyon stands on them.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

@@ -1,0 +1,17 @@
+id: place.the-eyes
+name: The Eyes
+type: place
+kind: weather
+region: place.the-girdle
+summary: >
+  Calm windows that drift through the Belt Storms on a known pattern.
+facts:
+  - Calm windows that drift through the Belt Storms on a known pattern.
+  - Surface ships cross the Girdle by hopping from Eye to Eye.
+  - Missing one can cost a week or the ship.
+  - Lashing lives in an Eye and moves with it.
+position:
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

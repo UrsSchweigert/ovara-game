@@ -1,0 +1,17 @@
+id: place.green-terraces
+name: The Green Terraces
+type: place
+kind: island-group
+region: place.the-girdle
+parent: place.clearwell
+summary: >
+  High, wet, fertile islands that carry Clearwell.
+facts:
+  - High, wet, fertile islands.
+  - Clearwell stands on them.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

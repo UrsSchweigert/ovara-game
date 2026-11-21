@@ -1,0 +1,17 @@
+id: place.belt-storms
+name: The Belt Storms
+type: place
+kind: weather
+region: place.the-girdle
+summary: >
+  Permanent bands of wind and rain around the Girdle, driven by the fast spin.
+facts:
+  - Permanent bands of wind and rain around the Girdle.
+  - Driven by the fast spin.
+  - Lie 5,850 to 6,150 km from the north Tip, 300 km of weather.
+  - Every island is in it.
+position:
+  km_from_north_tip: "5,850 to 6,150"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

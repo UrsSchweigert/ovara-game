@@ -1,0 +1,17 @@
+id: place.orrin-spire
+name: The Orrin Spire
+type: place
+kind: tower
+region: place.the-girdle
+parent: place.concord
+summary: >
+  Two hundred and twelve floors of blue glass, the tallest thing on Ovara.
+facts:
+  - Two hundred and twelve floors of blue glass.
+  - The tallest thing on Ovara.
+position:
+  km_east_of_concord: "not given"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11

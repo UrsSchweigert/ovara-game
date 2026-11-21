@@ -1,0 +1,18 @@
+id: place.clearwell
+name: Clearwell
+type: place
+kind: city
+region: place.the-girdle
+summary: >
+  Brightwater's showpiece city on the Green Terraces: pleasant and watched.
+facts:
+  - Brightwater's showpiece.
+  - White terraces, hanging farms, fountains, clean streets.
+  - Everything is pleasant and everything is watched.
+  - The workers' towns on the leeward side are not on the postcards.
+position:
+  km_east_of_concord: "about 500"
+  km_from_north_tip: "not given"
+sources:
+  - world-bible.md#2
+  - world-bible.md#11
