@@ -78,11 +78,11 @@
   "ember": ["ember-0", "ember-1", "ember-2", "ember-3", "ember-4", "ember-5", "ember-6", "ember-7"]
  },
  "subsets": {
-  "pale": ["deep-0", "deep-1", "deep-2", "deep-3", "deep-4", "deep-5", "deep-6", "deep-7", "stone-0", "stone-2", "stone-4", "stone-7", "kelp-1", "kelp-3", "brass-5", "sand-7"],
-  "anthem": ["kelp-0", "kelp-1", "kelp-2", "kelp-3", "kelp-4", "kelp-5", "kelp-6", "kelp-7", "brass-1", "brass-3", "brass-4", "brass-5", "brass-6", "deep-2", "deep-4", "sand-5"],
-  "girdle": ["deep-1", "deep-2", "deep-3", "deep-4", "stone-0", "stone-1", "stone-2", "stone-3", "stone-5", "rust-1", "rust-3", "rust-5", "neon-3", "neon-4", "neon-5", "neon-6"],
-  "shelves": ["sand-3", "sand-4", "sand-5", "sand-6", "sand-7", "deep-3", "deep-4", "deep-5", "deep-6", "deep-7", "kelp-5", "kelp-6", "brass-5", "stone-2", "stone-5", "neon-6"],
-  "quiet": ["ember-0", "ember-1", "ember-2", "ember-3", "ember-4", "ember-5", "ember-6", "ember-7", "stone-0", "stone-1", "stone-2", "stone-4", "stone-6", "sand-6", "deep-0", "deep-2"]
+  "pale": ["deep-0", "deep-1", "deep-2", "deep-3", "deep-4", "deep-5", "deep-6", "deep-7", "stone-0", "stone-2", "stone-4", "stone-5", "stone-7", "kelp-1", "kelp-3", "brass-5", "sand-1", "sand-7"],
+  "anthem": ["kelp-0", "kelp-1", "kelp-2", "kelp-3", "kelp-4", "kelp-5", "kelp-6", "kelp-7", "brass-1", "brass-3", "brass-4", "brass-5", "brass-6", "deep-0", "deep-4", "sand-5", "stone-1", "stone-6"],
+  "girdle": ["deep-1", "deep-2", "deep-3", "deep-4", "stone-0", "stone-1", "stone-2", "stone-3", "stone-5", "rust-1", "rust-3", "rust-5", "neon-3", "neon-4", "neon-5", "neon-6", "sand-1", "kelp-6"],
+  "shelves": ["sand-3", "sand-4", "sand-5", "sand-6", "sand-7", "deep-3", "deep-4", "deep-5", "deep-6", "deep-7", "kelp-5", "kelp-6", "brass-5", "stone-2", "stone-5", "neon-6", "deep-0", "sand-1"],
+  "quiet": ["ember-0", "ember-1", "ember-2", "ember-3", "ember-4", "ember-5", "ember-6", "ember-7", "stone-0", "stone-1", "stone-2", "stone-4", "stone-6", "sand-6", "deep-0", "deep-4", "deep-7", "brass-2"]
  },
  "water": {
   "clean": {"colour": "deep-4", "pattern": "sparse light flecks", "movement": "flecks drift slowly", "hex": "#2f8588", "luma": 108},
@@ -91,5 +91,19 @@
   "orphan": {"colour": "kelp-7", "pattern": "fine square grid", "movement": "slow slosh at the edges", "hex": "#e4eaa0", "luma": 224},
   "storm": {"colour": "stone-1", "pattern": "streaks along the wind", "movement": "fast", "hex": "#2a2733", "luma": 41},
   "well": {"colour": "deep-0", "pattern": "concentric rings", "movement": "rings widen slowly", "hex": "#0a1018", "luma": 15}
+ },
+ "region_water": {
+  "pale": {"well": "deep-0", "storm": "stone-2", "fouled": "sand-1", "clean": "deep-4", "deaf": "stone-5", "orphan": "deep-7"},
+  "anthem": {"well": "deep-0", "storm": "stone-1", "fouled": "brass-3", "clean": "kelp-5", "deaf": "stone-6", "orphan": "kelp-7"},
+  "girdle": {"well": "deep-1", "storm": "stone-2", "fouled": "sand-1", "clean": "deep-4", "deaf": "stone-5", "orphan": "kelp-6"},
+  "shelves": {"well": "deep-0", "storm": "stone-2", "fouled": "sand-1", "clean": "deep-4", "deaf": "stone-5", "orphan": "kelp-6"},
+  "quiet": {"well": "deep-0", "storm": "stone-1", "fouled": "brass-2", "clean": "deep-4", "deaf": "stone-6", "orphan": "deep-7"}
+ },
+ "region_pattern": {
+  "pale": {"clean": "deep-6", "fouled": "stone-0", "deaf": "stone-7", "orphan": "deep-5", "storm": "stone-7", "well": "brass-5"},
+  "anthem": {"clean": "kelp-7", "fouled": "brass-1", "deaf": "stone-1", "orphan": "kelp-5", "storm": "stone-6", "well": "brass-5"},
+  "girdle": {"clean": "kelp-6", "fouled": "stone-0", "deaf": "stone-3", "orphan": "deep-4", "storm": "stone-5", "well": "rust-5"},
+  "shelves": {"clean": "deep-6", "fouled": "stone-2", "deaf": "stone-2", "orphan": "kelp-5", "storm": "sand-7", "well": "brass-5"},
+  "quiet": {"clean": "deep-7", "fouled": "ember-0", "deaf": "stone-2", "orphan": "deep-4", "storm": "stone-6", "well": "ember-6"}
  }
 }

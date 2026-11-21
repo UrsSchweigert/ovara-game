@@ -29,15 +29,20 @@ RAMPS: dict[str, list[str]] = {
 # Region subsets: ramp:index lists, about 16 each (PLAN.md section 8).
 SUBSETS: dict[str, list[str]] = {
     "pale": ["deep:0", "deep:1", "deep:2", "deep:3", "deep:4", "deep:5", "deep:6", "deep:7",
-             "stone:0", "stone:2", "stone:4", "stone:7", "kelp:1", "kelp:3", "brass:5", "sand:7"],
+             "stone:0", "stone:2", "stone:4", "stone:5", "stone:7", "kelp:1", "kelp:3", "brass:5",
+             "sand:1", "sand:7"],
     "anthem": ["kelp:0", "kelp:1", "kelp:2", "kelp:3", "kelp:4", "kelp:5", "kelp:6", "kelp:7",
-               "brass:1", "brass:3", "brass:4", "brass:5", "brass:6", "deep:2", "deep:4", "sand:5"],
+               "brass:1", "brass:3", "brass:4", "brass:5", "brass:6", "deep:0", "deep:4", "sand:5",
+               "stone:1", "stone:6"],
     "girdle": ["deep:1", "deep:2", "deep:3", "deep:4", "stone:0", "stone:1", "stone:2", "stone:3",
-               "stone:5", "rust:1", "rust:3", "rust:5", "neon:3", "neon:4", "neon:5", "neon:6"],
+               "stone:5", "rust:1", "rust:3", "rust:5", "neon:3", "neon:4", "neon:5", "neon:6",
+               "sand:1", "kelp:6"],
     "shelves": ["sand:3", "sand:4", "sand:5", "sand:6", "sand:7", "deep:3", "deep:4", "deep:5",
-                "deep:6", "deep:7", "kelp:5", "kelp:6", "brass:5", "stone:2", "stone:5", "neon:6"],
+                "deep:6", "deep:7", "kelp:5", "kelp:6", "brass:5", "stone:2", "stone:5", "neon:6",
+                "deep:0", "sand:1"],
     "quiet": ["ember:0", "ember:1", "ember:2", "ember:3", "ember:4", "ember:5", "ember:6", "ember:7",
-              "stone:0", "stone:1", "stone:2", "stone:4", "stone:6", "sand:6", "deep:0", "deep:2"],
+              "stone:0", "stone:1", "stone:2", "stone:4", "stone:6", "sand:6", "deep:0", "deep:4",
+              "deep:7", "brass:2"],
 }
 
 # Water states (art-direction.md): colour plus the pattern/movement that
@@ -50,6 +55,35 @@ WATER: dict[str, dict[str, str]] = {
     "storm": {"colour": "stone:1", "pattern": "streaks along the wind", "movement": "fast"},
     "well": {"colour": "deep:0", "pattern": "concentric rings", "movement": "rings widen slowly"},
 }
+# Each region draws its six water states from its own subset, in this order
+# from dark to light: well, storm, fouled, clean, deaf, orphan.
+REGION_WATER: dict[str, dict[str, str]] = {
+    "pale": {"well": "deep:0", "storm": "stone:2", "fouled": "sand:1",
+             "clean": "deep:4", "deaf": "stone:5", "orphan": "deep:7"},
+    "anthem": {"well": "deep:0", "storm": "stone:1", "fouled": "brass:3",
+               "clean": "kelp:5", "deaf": "stone:6", "orphan": "kelp:7"},
+    "girdle": {"well": "deep:1", "storm": "stone:2", "fouled": "sand:1",
+               "clean": "deep:4", "deaf": "stone:5", "orphan": "kelp:6"},
+    "shelves": {"well": "deep:0", "storm": "stone:2", "fouled": "sand:1",
+                "clean": "deep:4", "deaf": "stone:5", "orphan": "kelp:6"},
+    "quiet": {"well": "deep:0", "storm": "stone:1", "fouled": "brass:2",
+              "clean": "deep:4", "deaf": "stone:6", "orphan": "deep:7"},
+}
+# Pattern pixels per region, also from its subset: clean flecks, fouled motes,
+# deaf dotted edge, orphan grid lines, storm streaks, well rings.
+REGION_PATTERN: dict[str, dict[str, str]] = {
+    "pale": {"clean": "deep:6", "fouled": "stone:0", "deaf": "stone:7",
+             "orphan": "deep:5", "storm": "stone:7", "well": "brass:5"},
+    "anthem": {"clean": "kelp:7", "fouled": "brass:1", "deaf": "stone:1",
+               "orphan": "kelp:5", "storm": "stone:6", "well": "brass:5"},
+    "girdle": {"clean": "kelp:6", "fouled": "stone:0", "deaf": "stone:3",
+               "orphan": "deep:4", "storm": "stone:5", "well": "rust:5"},
+    "shelves": {"clean": "deep:6", "fouled": "stone:2", "deaf": "stone:2",
+                "orphan": "kelp:5", "storm": "sand:7", "well": "brass:5"},
+    "quiet": {"clean": "deep:7", "fouled": "ember:0", "deaf": "stone:2",
+              "orphan": "deep:4", "storm": "stone:6", "well": "ember:6"},
+}
+WATER_ORDER = ["well", "storm", "fouled", "clean", "deaf", "orphan"]
 MIN_LUMA_GAP = 20  # of 255, Rec.601
 
 
@@ -78,9 +112,21 @@ def check() -> None:
         assert len(set(refs)) == len(refs) and 14 <= len(refs) <= 18, name
         for ref in refs:
             lookup(ref)
-    ls = sorted((luma(lookup(w["colour"])), k) for k, w in WATER.items())
-    for (a, ka), (b, kb) in zip(ls, ls[1:]):
-        assert b - a >= MIN_LUMA_GAP, f"water {ka}/{kb} too close in greyscale: {a} vs {b}"
+    sets = {"reference": {k: w["colour"] for k, w in WATER.items()}, **REGION_WATER}
+    for region, states in sets.items():
+        assert sorted(states) == sorted(WATER_ORDER), region
+        if region in SUBSETS:
+            for k, ref in states.items():
+                assert ref in SUBSETS[region], f"{region} water {k}: {ref} not in subset"
+        if region in REGION_PATTERN:
+            assert sorted(REGION_PATTERN[region]) == sorted(WATER_ORDER), region
+            for k, ref in REGION_PATTERN[region].items():
+                assert ref in SUBSETS[region] and ref != states[k], f"{region} {k} pattern: {ref}"
+        if region != "reference":
+            assert states["deaf"].startswith("stone:"), f"{region} deaf water must be grey"
+        ls = [luma(lookup(states[k])) for k in WATER_ORDER]
+        for ka, kb, a, b in zip(WATER_ORDER, WATER_ORDER[1:], ls, ls[1:]):
+            assert b - a >= MIN_LUMA_GAP, f"{region} water {ka}/{kb} too close in greyscale: {a} vs {b}"
 
 
 def compact(data: dict) -> str:
@@ -112,29 +158,35 @@ def write_json() -> None:
         "water": {k: {**w, "colour": w["colour"].replace(":", "-"),
                       "hex": "#" + lookup(w["colour"]), "luma": luma(lookup(w["colour"]))}
                   for k, w in WATER.items()},
+        "region_water": {r: {k: v.replace(":", "-") for k, v in st.items()}
+                         for r, st in REGION_WATER.items()},
+        "region_pattern": {r: {k: v.replace(":", "-") for k, v in st.items()}
+                           for r, st in REGION_PATTERN.items()},
     }
     (OUT / "ovara.json").write_text(compact(data))
 
 
 def write_swatch() -> None:
-    s = 24
-    w, h = 8 * s + 16, 8 * s + 5 * (s // 2 + 2) + 2 * s + 40
+    s, r = 24, 14  # ramp cell, strip row height
+    w, h = 8 * s + 16, 8 * s + 5 * r + 5 * r + 32
     img = Image.new("RGB", (w, h), rgb("15121c"))
     d = ImageDraw.Draw(img)
     for y, cols in enumerate(RAMPS.values()):
         for x, c in enumerate(cols):
             d.rectangle([8 + x * s, 8 + y * s, 8 + x * s + s - 1, 8 + y * s + s - 1], fill=rgb(c))
     y0 = 8 + 8 * s + 8
-    for refs in SUBSETS.values():
+    for refs in SUBSETS.values():  # one strip per region subset
         for x, ref in enumerate(refs):
-            d.rectangle([8 + x * 12, y0, 8 + x * 12 + 11, y0 + s // 2 - 1], fill=rgb(lookup(ref)))
-        y0 += s // 2 + 2
+            d.rectangle([8 + x * 11, y0, 8 + x * 11 + 10, y0 + r - 3], fill=rgb(lookup(ref)))
+        y0 += r
     y0 += 8
-    for x, wt in enumerate(WATER.values()):  # colour row, then greyscale row
-        c = lookup(wt["colour"])
-        d.rectangle([8 + x * 30, y0, 8 + x * 30 + 29, y0 + s - 1], fill=rgb(c))
-        g = luma(c)
-        d.rectangle([8 + x * 30, y0 + s, 8 + x * 30 + 29, y0 + 2 * s - 1], fill=(g, g, g))
+    for states in REGION_WATER.values():  # per region: water colours, then their greys
+        for x, k in enumerate(WATER_ORDER):
+            c = lookup(states[k])
+            g = luma(c)
+            d.rectangle([8 + x * 16, y0, 8 + x * 16 + 15, y0 + r - 3], fill=rgb(c))
+            d.rectangle([104 + x * 16, y0, 104 + x * 16 + 15, y0 + r - 3], fill=(g, g, g))
+        y0 += r
     img.save(OUT / "ovara-swatch.png")
 
 

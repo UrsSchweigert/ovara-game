@@ -33,32 +33,52 @@ Hue shifts: under water, shadows lean blue-green (deep, kelp 0 to 2); on land th
 
 ## Region subsets
 
-About 16 colours each, listed in `ovara.json` under `subsets`. A region's image uses only its subset, plus the shared figure colours below.
+16 to 18 colours each, listed in `ovara.json` under `subsets`. A region's image uses only its subset, plus the shared figure colours below.
 
 | Region | Subset | Look |
 |---|---|---|
-| The Pale | deep 0 to 7, stone 0 2 4 7, kelp 1 3, brass 5, sand 7 | Black water, cyan and white glow |
-| Anthem Waters | kelp 0 to 7, brass 1 3 4 5 6, deep 2 4, sand 5 | Green and gold |
-| The Girdle | deep 1 to 4, stone 0 1 2 3 5, rust 1 3 5, neon 3 to 6 | Murky teal, neon magenta and orange |
-| Bright Shelves | sand 3 to 7, deep 3 to 7, kelp 5 6, brass 5, stone 2 5, neon 6 | White sand, turquoise, clear light |
-| The Quiet | ember 0 to 7, stone 0 1 2 4 6, sand 6, deep 0 2 | Black with ember red |
+| The Pale | deep 0 to 7, stone 0 2 4 5 7, kelp 1 3, brass 5, sand 1 7 | Black water, cyan and white glow |
+| Anthem Waters | kelp 0 to 7, brass 1 3 4 5 6, deep 0 4, sand 5, stone 1 6 | Green and gold |
+| The Girdle | deep 1 to 4, stone 0 1 2 3 5, rust 1 3 5, neon 3 to 6, sand 1, kelp 6 | Murky teal, neon magenta and orange |
+| Bright Shelves | sand 1 3 to 7, deep 0 3 to 7, kelp 5 6, brass 5, stone 2 5, neon 6 | White sand, turquoise, clear light |
+| The Quiet | ember 0 to 7, stone 0 1 2 4 6, sand 6, deep 0 4 7, brass 2 | Black with ember red |
 
-Figures that cross regions (the hero, the party) may use sand 2 to 6 for skin and cloth and brass 3 to 5 for metal, whatever the region.
+Figures that cross regions (the hero, the party) may use sand 2 to 6 for skin and cloth and brass 3 to 5 for metal, whatever the region. Any figure may use its faction's outline colours below. The interface frames are not part of a region's image and use their own colours.
 
 ## Water states
 
-Each state differs in pattern and movement first. Colour is the region's; the base colour below is the reference. Greyscale value (Rec.601, 0 to 255) is checked by the script: neighbours must be at least 20 apart.
+Each state differs in pattern and movement first. Every region draws all six states from its own subset; the script checks that each colour is in the subset, that deaf water is a stone grey, and that in every region the six base colours run from dark to light in the order below, each at least 20 apart in greyscale (Rec.601, 0 to 255).
 
-| State | Base colour | Grey | Pattern | Movement |
-|---|---|---|---|---|
-| Clean | deep-4 | 108 | Sparse light flecks (the ramp's step 5 or 6) | Flecks drift slowly |
-| Fouled | brass-2 | 80 | Diagonal dither bands, dark motes | Motes sink |
-| Deaf | stone-5 | 159 | None; a dotted edge where it meets other water | None at all. Never animated |
-| Orphan | kelp-7 | 224 | Fine square grid, one pixel lines every 4 | Slow slosh at the edges only |
-| Storm | stone-1 | 41 | Streaks along the wind, white (stone-7) | Fast |
-| Well | deep-0 | 15 | Concentric rings in brass-5 | Rings widen slowly |
+| State | Pattern | Movement |
+|---|---|---|
+| Well | Concentric rings | Rings widen slowly |
+| Storm | Streaks along the wind | Fast |
+| Fouled | Diagonal dither bands, dark motes | Motes sink |
+| Clean | Sparse light flecks | Flecks drift slowly |
+| Deaf | None; a dotted edge where it meets other water | None at all. Never animated |
+| Orphan | Fine square grid, one pixel lines every 4 | Slow slosh at the edges only |
 
-Order by grey: well, storm, fouled, clean, deaf, orphan. In a region the clean colour shifts to that region's water ramp step, but keeps its place in this order.
+Base colour and grey per region (`region_water` in `ovara.json`):
+
+| Region | Well | Storm | Fouled | Clean | Deaf | Orphan |
+|---|---|---|---|---|---|---|
+| The Pale | deep-0 15 | stone-2 64 | sand-1 87 | deep-4 108 | stone-5 159 | deep-7 240 |
+| Anthem Waters | deep-0 15 | stone-1 41 | brass-3 114 | kelp-5 147 | stone-6 196 | kelp-7 224 |
+| The Girdle | deep-1 29 | stone-2 64 | sand-1 87 | deep-4 108 | stone-5 159 | kelp-6 187 |
+| Bright Shelves | deep-0 15 | stone-2 64 | sand-1 87 | deep-4 108 | stone-5 159 | kelp-6 187 |
+| The Quiet | deep-0 15 | stone-1 41 | brass-2 80 | deep-4 108 | stone-6 196 | deep-7 240 |
+
+Pattern colour per region (`region_pattern`): the rings, streaks, motes, flecks, dotted edge and grid lines.
+
+| Region | Rings | Streaks | Motes | Flecks | Dotted edge | Grid |
+|---|---|---|---|---|---|---|
+| The Pale | brass-5 | stone-7 | stone-0 | deep-6 | stone-7 | deep-5 |
+| Anthem Waters | brass-5 | stone-6 | brass-1 | kelp-7 | stone-1 | kelp-5 |
+| The Girdle | rust-5 | stone-5 | stone-0 | kelp-6 | stone-3 | deep-4 |
+| Bright Shelves | brass-5 | sand-7 | stone-2 | deep-6 | stone-2 | kelp-5 |
+| The Quiet | ember-6 | stone-6 | ember-0 | deep-7 | stone-2 | deep-4 |
+
+The `water` block in `ovara.json` keeps one reference colour per state for tools that need a single value; region maps use the tables above.
 
 ## Outlines by faction
 
@@ -100,4 +120,4 @@ Base 640 by 360. Exploring tiles 32 by 32. Battle hexes 64 by 48. Figures 32 by 
 
 ## Review
 
-The swatch image `game/assets/palettes/ovara-swatch.png` shows the 64 colours, the five subsets and the water states in colour and greyscale. **A person must look at it and approve the palette** before any art is made from it. No agent has looked at it.
+The swatch image `game/assets/palettes/ovara-swatch.png` shows the 64 colours, the five subsets, and each region's six water colours (well to orphan) beside their greys. **A person must look at it and approve the palette** before any art is made from it. No agent has looked at it.
