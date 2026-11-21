@@ -16,5 +16,17 @@
   {"path": "tiles/pale-fouled.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-fouled.md"},
   {"path": "tiles/pale-orphan.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-orphan.md"},
   {"path": "tiles/pale-storm.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-storm.md"},
-  {"path": "tiles/pale-well.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-well.md"}
+  {"path": "tiles/pale-well.png", "kind": "tile", "canon": "place.the-pale", "brief": "briefs/pale-well.md"},
+  {"path": "tiles/quiet-clean.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-clean.md"},
+  {"path": "tiles/quiet-deaf.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-deaf.md"},
+  {"path": "tiles/quiet-fouled.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-fouled.md"},
+  {"path": "tiles/quiet-orphan.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-orphan.md"},
+  {"path": "tiles/quiet-storm.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-storm.md"},
+  {"path": "tiles/quiet-well.png", "kind": "tile", "canon": "place.the-quiet", "brief": "briefs/quiet-well.md"},
+  {"path": "tiles/shelves-clean.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-clean.md"},
+  {"path": "tiles/shelves-deaf.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-deaf.md"},
+  {"path": "tiles/shelves-fouled.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-fouled.md"},
+  {"path": "tiles/shelves-orphan.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-orphan.md"},
+  {"path": "tiles/shelves-storm.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-storm.md"},
+  {"path": "tiles/shelves-well.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-well.md"}
 ]}
