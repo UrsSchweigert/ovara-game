@@ -1,0 +1,44 @@
+{
+  "id": "night_crew_hammock",
+  "person": "person.davin",
+  "topics": [
+    {
+      "topic": "person.jef",
+      "panels": [
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "Jef. A clever uncle, my mother said.",
+            "She never met him."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Some here make a small sign at his name.",
+            "I do not. Mostly."
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "machine.the-dragon",
+      "panels": [
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "The Dragon turns the world, they say.",
+            "Most take it for a beast."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "I have never seen it.",
+            "Nobody here has, I think."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "ione_examination",
+  "person": "person.ione",
+  "topics": [
+    {
+      "topic": "power.ebb",
+      "panels": [
+        {
+          "speaker": "person.ione",
+          "lines": [
+            "Look at me. Follow the lamp.",
+            "Good. Your body is whole."
+          ]
+        },
+        {
+          "speaker": "person.ione",
+          "lines": [
+            "Your memory is not. It was taken.",
+            "Whole, like a net pulled from the water."
+          ]
+        }
+      ],
+      "next": [
+        "power.undertow"
+      ]
+    },
+    {
+      "topic": "power.undertow",
+      "panels": [
+        {
+          "speaker": "person.ione",
+          "lines": [
+            "We call it the undertow.",
+            "It takes something and keeps it."
+          ]
+        },
+        {
+          "speaker": "person.ione",
+          "lines": [
+            "Only the rays can give it back.",
+            "I cannot. I am sorry, Wrack."
+          ]
+        }
+      ]
+    }
+  ]
+}

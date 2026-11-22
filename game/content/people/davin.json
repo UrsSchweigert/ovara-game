@@ -1,0 +1,39 @@
+{
+  "id": "davin",
+  "canon": "person.davin",
+  "attributes": {
+    "body": 11,
+    "hands": 12,
+    "mind": 10,
+    "standing": 10
+  },
+  "reach": 0,
+  "skills": {
+    "nets": 2
+  },
+  "traits": [],
+  "join_chapter": 1,
+  "topics": [
+    {
+      "topic": "creature.silverback",
+      "dialogue": "davin_nursery",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "person.jef",
+      "dialogue": "night_crew_hammock",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "machine.the-dragon",
+      "dialogue": "night_crew_hammock",
+      "when": {
+        "chapter_max": 1
+      }
+    }
+  ]
+}
