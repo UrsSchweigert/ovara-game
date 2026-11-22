@@ -126,30 +126,43 @@ static func _do_things(quest: Dictionary, world: RefCounted, areas: Dictionary) 
 				errors.append("%s: cannot use %s: %s" % [where, str(thing), failed])
 		var held: Dictionary = cond.get("holds", {})
 		for item: Variant in held:
-			var found: Array = _thing_giving(areas, str(item))
-			if found.is_empty():
+			var givers: Array = _things_giving(areas, str(item), str(step.get("area", "")))
+			if givers.is_empty():
 				continue
+			if (world.get("party") as Array).is_empty():
+				(world.get("party") as Array).append(STAND_IN_KEY)
 			var need: int = int(held[item])
-			var spent: int = 0
-			while _pack_total(world, str(item)) < need and spent < 100:
-				var failed: String = _use_times(world, areas, str((found[1] as Dictionary)["id"]), int(world.call("uses_of", str((found[1] as Dictionary)["id"]))) + 1, str(found[0]))
-				if failed != "":
-					errors.append("%s: cannot use %s for %s: %s" % [where, str((found[1] as Dictionary)["id"]), str(item), failed])
-					break
-				spent += 1
-			if errors.is_empty() and _pack_total(world, str(item)) < need:
-				errors.append("%s: using %s never gives enough %s" % [where, str((found[1] as Dictionary)["id"]), str(item)])
+			var failed_use: bool = false
+			for found: Variant in givers:
+				var thing_id: String = str(((found as Array)[1] as Dictionary)["id"])
+				var cap: int = int((((found as Array)[1] as Dictionary)["use"] as Dictionary).get("max", 100))
+				while not failed_use and _pack_total(world, str(item)) < need and int(world.call("uses_of", thing_id)) < cap:
+					var failed: String = _use_times(world, areas, thing_id, int(world.call("uses_of", thing_id)) + 1, str((found as Array)[0]))
+					if failed != "":
+						errors.append("%s: cannot use %s for %s: %s" % [where, thing_id, str(item), failed])
+						failed_use = true
+			if not failed_use and _pack_total(world, str(item)) < need:
+				var ids: Array[String] = []
+				for found: Variant in givers:
+					ids.append(str(((found as Array)[1] as Dictionary)["id"]))
+				errors.append("%s: using %s never gives enough %s" % [where, ", ".join(ids), str(item)])
 	return errors
 
 
-## [area id, thing] of the first thing whose use gives `item`, or an empty array.
-static func _thing_giving(areas: Dictionary, item: String) -> Array:
-	for area_id: Variant in areas:
+## [area id, thing] of every thing whose use gives `item`: those in area `prefer` first, then
+## the other areas in order.
+static func _things_giving(areas: Dictionary, item: String, prefer: String) -> Array:
+	var ids: Array = areas.keys()
+	if areas.has(prefer):
+		ids.erase(prefer)
+		ids.push_front(prefer)
+	var found: Array = []
+	for area_id: Variant in ids:
 		for t: Variant in (areas[area_id].data as Dictionary).get("things", []):
 			var gives: Dictionary = ((t as Dictionary).get("use", {}) as Dictionary).get("gives", {})
 			if not gives.is_empty() and str(gives.get("item", "")) == item:
-				return [str(area_id), t]
-	return []
+				found.append([str(area_id), t])
+	return found
 
 
 static func _pack_total(world: RefCounted, item: String) -> int:
