@@ -14,9 +14,9 @@ func _sample() -> RefCounted:
 	s.standing = 14
 	s.reach = 5
 	s.skills = {"Listen": 2, "Move": 1}
-	s.traits = ["kelp-born"]
+	s.traits.append("kelp-born")
 	w.sheets["wrack"] = s
-	w.party = ["wrack"]
+	w.party.append("wrack")
 	w.base = {"id": "base.test", "level": 1}
 	w.packs = {"wrack": {"flask": 2}}
 	w.supplies = {"food": 6}
@@ -26,11 +26,11 @@ func _sample() -> RefCounted:
 	w.set_flag("a.text", "x")
 	w.chapter = 3
 	w.advance_watch(4)
-	w.journal = ["first entry"]
+	w.journal.append("first entry")
 	w.position = {"area": "a1", "x": 3, "y": 4}
 	w.mode = "dungeon"
 	w.dice_seed = 99
-	w.dice = [3, 5, 2]
+	w.dice.append_array([3, 5, 2])
 	return w
 
 
