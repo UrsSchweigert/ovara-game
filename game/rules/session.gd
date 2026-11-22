@@ -10,6 +10,7 @@ const SaveStore: GDScript = preload("res://rules/save_store.gd")
 const People: GDScript = preload("res://rules/people.gd")
 const Views: GDScript = preload("res://rules/views.gd")
 const Cutscene: GDScript = preload("res://rules/cutscene.gd")
+const Shop: GDScript = preload("res://rules/shop.gd")
 
 ## Person the party holds when no start block names one.
 const HERO_ID: String = "hero"
@@ -22,6 +23,9 @@ var store: RefCounted = null
 ## Person id -> person JSON, and dialogue id -> dialogue JSON.
 var people: Dictionary = {}
 var dialogues: Dictionary = {}
+## Item id -> item JSON, and shop id -> shop JSON.
+var items: Dictionary = {}
+var shops: Dictionary = {}
 ## Cut scene id -> cut scene JSON.
 var cutscenes: Dictionary = {}
 ## The cut scene running now, or null.
@@ -64,6 +68,8 @@ func _load_content(content: Dictionary, save_store: RefCounted) -> void:
 	people = (content.get("people", {}) as Dictionary).duplicate()
 	dialogues = (content.get("dialogues", {}) as Dictionary).duplicate()
 	cutscenes = (content.get("cutscenes", {}) as Dictionary).duplicate()
+	items = (content.get("items", {}) as Dictionary).duplicate()
+	shops = (content.get("shops", {}) as Dictionary).duplicate()
 
 
 func _begin(content: Dictionary, save_store: RefCounted) -> void:
@@ -227,6 +233,26 @@ func _person_by_canon(canon_id: String, fallback_id: String) -> Dictionary:
 		if str((people[id] as Dictionary).get("canon", "")) == canon_id:
 			return _person(str(id))
 	return _person(fallback_id) if canon_id == "" else {}
+
+
+## The trades a shop offers now: [{"index", "gives", "wants"}]; empty for an unknown shop.
+func trades(shop_id: String) -> Array[Dictionary]:
+	if not shops.has(shop_id):
+		return [] as Array[Dictionary]
+	return Shop.trades(shops[shop_id], world)
+
+
+## Runs trade `index` at a shop. Returns {"ok", "error", "gave", "took", "steps_done"}. Updates
+## the quests and saves if a step was finished.
+func trade(shop_id: String, index: int) -> Dictionary:
+	if not shops.has(shop_id):
+		return {"ok": false, "error": "unknown shop '%s'" % shop_id, "gave": {}, "took": {}, "steps_done": []}
+	var before: Dictionary = _done_snapshot()
+	var out: Dictionary = Shop.trade(shops[shop_id], world, index, items)
+	out["steps_done"] = []
+	if bool(out["ok"]):
+		_after_intent(area_id(), before, out)
+	return out
 
 
 ## The cut scene's current step ({} when none is running).
