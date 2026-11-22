@@ -99,7 +99,7 @@ A fix prepared some other way can be handed to it: `python3 tools/steward.py --a
 
 **What is waiting for you**
 
-Each round the steward works out what only you can do next, most pressing first, each with its command: a pull request to merge, a plan to approve, a follow-up to finish, a gate to sign off, a task it referred. It writes the list to `next-steps.md` in the harness's state folder and shows a macOS notification when the list changes. To see it at any time:
+Each round the steward works out what only you can do next, most pressing first, each with its command: a pull request to merge, a plan to approve, a follow-up to finish, a gate to sign off, a task it referred. It writes the list to `next-steps.md` in the harness's state folder and shows a macOS notification when the list changes. The dashboard (`./ov harness gui`) shows the same list as a "Waiting for you" banner at the top of every plan, once it has been restarted on the new code. To see it at any time from the terminal:
 
 ```sh
 python3 tools/steward.py --next

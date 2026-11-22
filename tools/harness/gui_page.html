@@ -82,6 +82,8 @@
   .menu-list button:hover:not(:disabled) { background:#f1f4f1; }
   .menu-list .destructive { color:var(--red); }
   .banner { padding:10px 12px; border-left:3px solid var(--amber); background:var(--amber-soft); border-radius:0 4px 4px 0; margin-bottom:18px; font-size:12px; overflow-wrap:anywhere; }
+  .next-steps { margin:6px 0 0 18px; padding:0; }
+  .next-steps li { margin:2px 0; }
   .banner.error { color:var(--red); border-color:var(--red); background:var(--red-soft); }
   .view { animation:reveal .16s ease-out; }
   @keyframes reveal { from { opacity:.5; transform:translateY(3px); } to { opacity:1; transform:none; } }
@@ -224,6 +226,7 @@
         </div>
       </header>
       <div class="banner error" id="connection-error" role="alert" hidden></div>
+      <div class="banner" id="next-steps" role="status" hidden></div>
       <div class="banner" id="plan-notice" hidden></div>
       <main>
         <section class="view" id="view-planning" aria-label="Planning" hidden>
