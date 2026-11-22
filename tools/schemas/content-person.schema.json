@@ -40,6 +40,33 @@
     "cell": {
       "$ref": "content-defs.schema.json#/$defs/cell"
     },
+    "names": {
+      "description": "What the world calls the person, by chapter: the entry with the highest from_chapter not after the current chapter. Without names the id is shown.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "from_chapter",
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "from_chapter": {
+            "$ref": "content-defs.schema.json#/$defs/chapter"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "portrait": {
+      "description": "Portrait key; the id when absent.",
+      "type": "string",
+      "minLength": 1
+    },
     "topics": {
       "description": "What the person talks about, by chapter and flag: a dialogue id (see content-dialogue) and a topic it holds.",
       "type": "array",
