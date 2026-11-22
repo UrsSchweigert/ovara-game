@@ -1,0 +1,44 @@
+{
+  "id": "night_crew_hammock",
+  "person": "person.davin",
+  "topics": [
+    {
+      "topic": "person.jef",
+      "panels": [
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "Jef. A clever uncle, the old ones",
+            "call him."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Some of the old ones make a small",
+            "sign at his name."
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "machine.the-dragon",
+      "panels": [
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "The Dragon circles the world,",
+            "Tip to Tip."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Most take it for a living creature.",
+            "Jef tells it whom to let in."
+          ]
+        }
+      ]
+    }
+  ]
+}

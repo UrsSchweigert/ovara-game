@@ -1,0 +1,25 @@
+{
+  "id": "davin_nursery",
+  "person": "person.davin",
+  "topics": [
+    {
+      "topic": "creature.silverback",
+      "panels": [
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "The young silverbacks. Our herd.",
+            "Keep the gate shut behind you."
+          ]
+        },
+        {
+          "speaker": "person.davin",
+          "lines": [
+            "Open it, step through, close it.",
+            "Slowly. Bother will help if they bolt."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "ione",
+  "canon": "person.ione",
+  "attributes": {
+    "body": 9,
+    "hands": 11,
+    "mind": 12,
+    "standing": 12
+  },
+  "reach": 0,
+  "skills": {},
+  "traits": [],
+  "join_chapter": 1,
+  "topics": [
+    {
+      "topic": "power.undertow",
+      "dialogue": "ione_examination",
+      "when": {
+        "chapter_max": 1
+      }
+    }
+  ]
+}

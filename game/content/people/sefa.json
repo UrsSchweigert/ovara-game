@@ -1,0 +1,61 @@
+{
+  "id": "sefa",
+  "canon": "person.sefa",
+  "attributes": {
+    "body": 9,
+    "hands": 11,
+    "mind": 11,
+    "standing": 9
+  },
+  "reach": 2,
+  "skills": {
+    "mend": 1,
+    "ease": 1
+  },
+  "traits": [],
+  "join_chapter": 1,
+  "topics": [
+    {
+      "topic": "place.low-anthem",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "event.the-makers",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "power.intending",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "person.jef",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "machine.the-dragon",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    },
+    {
+      "topic": "faction.threaded",
+      "dialogue": "sefa_dry_room",
+      "when": {
+        "chapter_max": 1
+      }
+    }
+  ]
+}
