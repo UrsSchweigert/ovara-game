@@ -15,6 +15,7 @@ const HOLD_SECONDS: float = 0.3
 const KEEPER_FIGURE: String = "figure-mariners"
 const ASSET_ROOT: String = "res://assets/"
 const TITLE: String = "res://scenes/title/title.tscn"
+const DialoguePanel: GDScript = preload("res://ui/dialogue/dialogue_panel.gd")
 
 var _session: RefCounted = null
 var _frame: Control = null
@@ -36,6 +37,7 @@ var _press_tile: Vector2i = Vector2i.ZERO
 var _press_time: float = 0.0
 var _finger: Vector2 = Vector2.ZERO
 var _clock: float = 0.0
+var _dialogue: Control = null
 
 
 func _ready() -> void:
@@ -209,6 +211,8 @@ func _tile_at(local: Vector2) -> Vector2i:
 
 
 func _on_view_input(event: InputEvent) -> void:
+	if _dialogue != null:
+		return
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		var b: InputEventMouseButton = event
 		_pressed = b.pressed
@@ -290,11 +294,27 @@ func _act(goal: Dictionary) -> void:
 			_status.text = _gave_text(_session.call("use_thing", id))
 			_redraw()
 		"person":
-			var talk: Dictionary = _session.call("talk", id)
-			_status.text = "%s: %d topics" % [str(talk["name"]), (talk["topics"] as Array).size()] if bool(talk["ok"]) else ""
+			if bool(_session.call("talk", id)["ok"]):
+				_open_dialogue(id)
 		"keeper":
 			var offers: Array[Dictionary] = _session.call("trades", id)
 			_status.text = "Stall: %d trades" % offers.size()
+
+
+func _open_dialogue(person_id: String) -> void:
+	_dialogue = DialoguePanel.new()
+	_dialogue.call("setup", _session, person_id, _paths)
+	_dialogue.position = Vector2(8, 8)
+	_dialogue.closed.connect(_close_dialogue)
+	_frame.add_child(_dialogue)
+	_pressed = false
+	_holding = false
+
+
+func _close_dialogue() -> void:
+	_dialogue.queue_free()
+	_dialogue = null
+	_redraw()
 
 
 func _gave_text(used: Dictionary) -> String:
