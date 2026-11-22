@@ -383,3 +383,31 @@ func test_holds_without_giving_thing_uses_fallback() -> void:
 	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["item.x"] as Array[String], {}, {}, {"a": _thing_area([_thing("thing.plain", 1)])})
 	check_eq(found, [] as Array[String], "no errors")
 	check_eq((w.packs[QuestPlayer.STAND_IN_KEY] as Dictionary)["item.x"], 1, "fallback grant")
+
+
+func _frond_giver(id: String, cell: int) -> Dictionary:
+	return _thing(id, cell, {"gives": {"item": "item.frond", "count": 1}, "max": 5})
+
+
+func test_empty_party_collects_from_two_givers() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("t6", "item.frond", 10)
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _thing_area([_frond_giver("thing.f1", 1), _frond_giver("thing.f2", 2)])}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, areas)
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+	check_eq(w.uses_of("thing.f1"), 5, "first spent")
+	check_eq(w.uses_of("thing.f2"), 5, "second spent")
+	check_eq((w.packs[QuestPlayer.STAND_IN_KEY] as Dictionary)["item.frond"], 10, "ten fronds")
+
+
+func test_givers_short_of_holds_errors() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("t7", "item.frond", 11)
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _thing_area([_frond_giver("thing.f1", 1), _frond_giver("thing.f2", 2)])}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, areas)
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "step b" in found[0] and "item.frond" in found[0], "names step and item")
+	check(Quests.status(q, w) != Quests.CLEARED, "not cleared")
