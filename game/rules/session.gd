@@ -328,6 +328,10 @@ func pack_view() -> Dictionary:
 	return Views.pack(self)
 
 
+func stall_view(shop_id: String) -> Dictionary:
+	return Views.stall(self, shop_id)
+
+
 func _set_cell(to: Vector2i) -> void:
 	world.position["x"] = to.x
 	world.position["y"] = to.y
