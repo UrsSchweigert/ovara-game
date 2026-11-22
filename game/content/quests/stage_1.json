@@ -1,0 +1,69 @@
+{
+  "id": "stage_1",
+  "kind": "discover",
+  "giver": "person.sefa",
+  "chapters": [1, 1],
+  "steps": [
+    {
+      "id": "follow_sefa",
+      "intent": "Follow Sefa through the terraces to the sea-door.",
+      "points": 1,
+      "difficulty": 8,
+      "kind": "discover",
+      "area": "low_anthem_terraces"
+    },
+    {
+      "id": "dry_room_days",
+      "intent": "Spend three days in the dry room. Ask Sefa about each topic she offers.",
+      "points": 2,
+      "difficulty": 8,
+      "kind": "discover",
+      "area": "low_anthem_dry_room"
+    },
+    {
+      "id": "ione_examination",
+      "intent": "Let Ione examine you. Learn that the memory was taken whole, and the word undertow.",
+      "points": 2,
+      "difficulty": 10,
+      "kind": "discover",
+      "area": "low_anthem_dome_hall"
+    },
+    {
+      "id": "cut_fronds",
+      "intent": "Cut ten fronds on a row of terrace and carry them to the drying racks.",
+      "points": 2,
+      "difficulty": 8,
+      "kind": "fetch",
+      "area": "low_anthem_terraces"
+    },
+    {
+      "id": "nursery_gate",
+      "intent": "Work the nursery gate: latch it up and across. If it fails, the silverbacks get out and Bother rounds them up.",
+      "points": 3,
+      "difficulty": 12,
+      "kind": "puzzle",
+      "area": "low_anthem_terraces"
+    },
+    {
+      "id": "night_crew_hammocks",
+      "intent": "Sit with the night crew in the hammocks and hear what they say.",
+      "points": 2,
+      "difficulty": 8,
+      "kind": "discover",
+      "area": "low_anthem_dome_hall"
+    },
+    {
+      "id": "meeting_hall_lamp",
+      "intent": "Examine the dead lamp in the meeting hall. Find the seam, then move three parts into place.",
+      "points": 3,
+      "difficulty": 14,
+      "kind": "puzzle",
+      "area": "low_anthem_meeting_hall"
+    }
+  ],
+  "clears": "low_anthem.lamp_lit",
+  "sets": [
+    "low_anthem.accepted",
+    "hero.craft_mend"
+  ]
+}
