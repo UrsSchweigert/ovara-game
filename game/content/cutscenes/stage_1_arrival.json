@@ -1,0 +1,22 @@
+{
+  "id": "stage_1_arrival",
+  "area": "low_anthem_terraces",
+  "skippable": true,
+  "steps": [
+    {"op": "light", "level": 0},
+    {"op": "camera", "to": [1, 6]},
+    {"op": "light", "level": 1},
+    {"op": "say", "who": "person.ilan-voss", "lines": [
+      "Water. I am breathing water.",
+      "These are boots. Whose are they?",
+      "My wrists are marked. Something tied them."
+    ]},
+    {"op": "walk", "who": "person.sefa", "to": [2, 6]},
+    {"op": "walk", "who": "person.bother", "to": [1, 5]},
+    {"op": "say", "who": "person.sefa", "lines": [
+      "The tide brought you in. Hold still.",
+      "Wrack. That is what the tide brings in.",
+      "Wrack, then. Come up with me."
+    ]}
+  ]
+}
