@@ -36,7 +36,7 @@ static func _next_intent(quest: Dictionary, world: RefCounted) -> String:
 
 
 ## {"members": [...], "guests": [...]}; each is {"id", "name", "portrait", "body", "hands", "mind",
-## "standing", "reach", "ebb", "limit", "skills": [{"skill", "step"}]}.
+## "standing", "reach", "ebb", "limit", "skills": [{"skill", "step"}], "traits": [String]}.
 static func party(session: RefCounted) -> Dictionary:
 	var out: Dictionary = {"members": [], "guests": []}
 	for id: String in session.world.party:
@@ -51,7 +51,7 @@ static func _sheet_view(session: RefCounted, id: String) -> Dictionary:
 	person = person.duplicate()
 	person["id"] = id
 	var v: Dictionary = {"id": id, "name": People.display_name(person, session.world), "portrait": People.portrait_key(person),
-		"body": 0, "hands": 0, "mind": 0, "standing": 0, "reach": 0, "ebb": session.world.ebb_of(id), "limit": 0, "skills": []}
+		"body": 0, "hands": 0, "mind": 0, "standing": 0, "reach": 0, "ebb": session.world.ebb_of(id), "limit": 0, "skills": [], "traits": []}
 	var sheet: RefCounted = session.world.sheet_of(id)
 	if sheet == null:
 		return v
@@ -61,6 +61,7 @@ static func _sheet_view(session: RefCounted, id: String) -> Dictionary:
 	v["standing"] = sheet.standing
 	v["reach"] = sheet.reach
 	v["limit"] = sheet.ebb_limit()
+	v["traits"] = sheet.traits.duplicate()
 	var names: Array = sheet.skills.keys()
 	names.sort()
 	for k: Variant in names:
