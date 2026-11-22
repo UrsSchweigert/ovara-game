@@ -22,6 +22,8 @@ var _name: Label = null
 var _topics: ScrollContainer = null
 var _rows: VBoxContainer = null
 var _text: Label = null
+## Lines only: shows the given panels with no topics and no Close, then emits `closed` after the last.
+var _lines_only: bool = false
 
 
 ## Opens on `person_id`'s topic list. `paths` maps an asset key to its manifest path.
@@ -29,6 +31,13 @@ func setup(session: RefCounted, person_id: String, paths: Dictionary) -> void:
 	_session = session
 	_person_id = person_id
 	_paths = paths
+
+
+## Opens on `panels` ({"speaker", "portrait", "lines"} each) with no topic list, as a cut scene's say step.
+func setup_lines(panels: Array, paths: Dictionary) -> void:
+	_panels = panels
+	_paths = paths
+	_lines_only = true
 
 
 func _ready() -> void:
@@ -57,6 +66,7 @@ func _ready() -> void:
 	close.size = Vector2(PORTRAIT_SIZE.x, ROW_HEIGHT)
 	close.add_theme_font_size_override("font_size", FONT_SIZE)
 	close.pressed.connect(func() -> void: closed.emit())
+	close.visible = not _lines_only
 	add_child(close)
 	_topics = ScrollContainer.new()
 	_topics.position = BODY_RECT.position
@@ -75,7 +85,12 @@ func _ready() -> void:
 	_text.add_theme_font_size_override("font_size", FONT_SIZE)
 	_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_text)
-	_show_topics()
+	if _lines_only:
+		_topics.visible = false
+		_index = 0
+		_show_panel()
+	else:
+		_show_topics()
 
 
 func _texture(key: String) -> Texture2D:
@@ -179,5 +194,7 @@ func _gui_input(event: InputEvent) -> void:
 	_index += 1
 	if _index < _panels.size():
 		_show_panel()
+	elif _lines_only:
+		closed.emit()
 	else:
 		_show_topics()

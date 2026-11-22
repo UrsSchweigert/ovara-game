@@ -171,11 +171,34 @@ func people_here() -> Array[Dictionary]:
 		var d: Dictionary = p
 		var id: String = str(d.get("id", ""))
 		if people.has(id) and Area.holds(d.get("when"), world):
-			out.append({"kind": "person", "id": id, "cell": Area.cell_of(d.get("cell", [0, 0])), "portrait": People.portrait_key(_person(id))})
+			var canon: String = str(_person(id).get("canon", ""))
+			var moved: Variant = world.call("figure_cell", canon)
+			var cell: Vector2i = moved if moved is Vector2i else Area.cell_of(d.get("cell", [0, 0]))
+			out.append({"kind": "person", "id": id, "canon": canon, "cell": cell, "portrait": People.portrait_key(_person(id))})
 	for id: Variant in shops:
 		var shop: Dictionary = shops[id]
 		if str(shop.get("area", "")) == area_id():
 			out.append({"kind": "keeper", "id": str(id), "cell": Area.cell_of(shop.get("cell", [0, 0])), "portrait": ""})
+	return out
+
+
+## Who a finished cut scene set in this area walked in and the area does not list:
+## [{"canon", "cell"}], standing where the last walk left them. Drawn only, never talked to.
+func walked_here() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	var listed: Array[String] = []
+	for who: Dictionary in people_here():
+		listed.append(str(who.get("canon", "")))
+	for sid: Variant in cutscenes:
+		var data: Dictionary = cutscenes[sid]
+		if str(data.get("area", "")) != area_id() or not bool(world.call("has_seen_scene", str(sid))):
+			continue
+		for step: Variant in data.get("steps", []):
+			var canon: String = str((step as Dictionary).get("who", ""))
+			var cell: Variant = world.call("figure_cell", canon)
+			if str((step as Dictionary).get("op", "")) == "walk" and cell is Vector2i and not listed.has(canon):
+				listed.append(canon)
+				out.append({"canon": canon, "cell": cell})
 	return out
 
 
