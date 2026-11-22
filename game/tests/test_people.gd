@@ -135,6 +135,26 @@ func test_condition_holds_sums_packs() -> void:
 	check(not People.condition_met({"holds": {"hook": 3, "net": 1}}, w), "missing item met")
 
 
+func test_condition_entered() -> void:
+	var w: RefCounted = World.new()
+	var cond: Dictionary = {"entered": [{"area": "a", "cell": [2, 3]}]}
+	check(not People.condition_met(cond, w), "unentered cell met")
+	w.record_entry("a", Vector2i(2, 3))
+	check(People.condition_met(cond, w), "entered cell unmet")
+	cond["entered"].append({"area": "a", "cell": [0, 0]})
+	check(not People.condition_met(cond, w), "one of two cells met")
+
+
+func test_condition_used() -> void:
+	var w: RefCounted = World.new()
+	var cond: Dictionary = {"used": {"frond": 2}}
+	check(not People.condition_met(cond, w), "unused thing met")
+	w.record_use("frond")
+	check(not People.condition_met(cond, w), "one of two uses met")
+	w.record_use("frond")
+	check(People.condition_met(cond, w), "two uses unmet")
+
+
 func test_condition_combined_and_empty() -> void:
 	var w: RefCounted = World.new()
 	w.chapter = 2

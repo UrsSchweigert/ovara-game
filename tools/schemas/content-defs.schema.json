@@ -79,6 +79,32 @@
             }
           }
         },
+        "entered": {
+          "description": "Cells of areas the party has entered.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["area", "cell"],
+            "properties": {
+              "area": {
+                "$ref": "content-defs.schema.json#/$defs/content_id"
+              },
+              "cell": {
+                "$ref": "content-defs.schema.json#/$defs/cell"
+              }
+            }
+          }
+        },
+        "used": {
+          "description": "Thing id: the least number of times it has been used.",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
         "holds": {
           "type": "object",
           "minProperties": 1,
