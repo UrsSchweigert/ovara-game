@@ -258,7 +258,7 @@ def check_content(root):
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
                 continue
-            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items", "shops"):
+            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items", "shops", "cutscenes"):
                 found.setdefault(d.name, {})[data["id"]] = (f, data)
             if d.name not in LIMITS:
                 continue
