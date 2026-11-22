@@ -39,7 +39,7 @@ The repository does not contain `game/export_presets.cfg` yet. Its draft is in `
    cp docs/build/presets-draft.txt game/export_presets.cfg
    ```
 
-2. Open `game/export_presets.cfg` and replace each `REPLACE_com.example.ovara` with your own reverse-DNS identifier, for example `com.yourname.ovara`. Use the same identifier for Android (`package/unique_name`) and iOS (`application/bundle_identifier`).
+2. Open `game/export_presets.cfg` and replace each `com.example.ovara.REPLACE_ME` with your own reverse-DNS identifier, for example `com.yourname.ovara`. Use the same identifier for Android (`package/unique_name`) and iOS (`application/bundle_identifier`).
 3. Open the project once in the Godot editor, or run the first export below. Godot may rewrite the file with its own defaults. That is expected. Do not add any signing value to it.
 4. Commit `game/export_presets.cfg` only after you have checked that it has no keystore path, password, team ID or profile UUID in it.
 
