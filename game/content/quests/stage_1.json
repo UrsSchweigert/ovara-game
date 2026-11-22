@@ -3,6 +3,12 @@
   "kind": "discover",
   "giver": "person.sefa",
   "chapters": [1, 1],
+  "start": {
+    "area": "low_anthem_terraces",
+    "cell": [1, 6],
+    "party": ["hero"],
+    "guests": ["sefa", "bother"]
+  },
   "steps": [
     {
       "id": "follow_sefa",

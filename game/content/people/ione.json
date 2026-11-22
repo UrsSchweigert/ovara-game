@@ -11,6 +11,7 @@
   "skills": {},
   "traits": [],
   "join_chapter": 1,
+  "names": [{"from_chapter": 1, "name": "Ione"}],
   "topics": [
     {
       "topic": "power.undertow",

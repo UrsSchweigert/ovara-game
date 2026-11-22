@@ -4,12 +4,12 @@
   "name": "Low Anthem: the terraces",
   "chapter": 1,
   "legend": {
-    "#": {"blocks": true},
-    "k": {},
-    "n": {"blocks": true},
-    "g": {},
-    "D": {},
-    ".": {}
+    "#": {"blocks": true, "tile": "explore-wall"},
+    "k": {"tile": "explore-floor"},
+    "n": {"blocks": true, "tile": "explore-wall"},
+    "g": {"tile": "explore-floor"},
+    "D": {"tile": "explore-floor"},
+    ".": {"tile": "explore-floor"}
   },
   "rows": [
     "########################",

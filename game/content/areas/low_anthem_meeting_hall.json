@@ -4,9 +4,9 @@
   "name": "Low Anthem: the meeting hall",
   "chapter": 1,
   "legend": {
-    "#": {"blocks": true},
-    "M": {},
-    ".": {}
+    "#": {"blocks": true, "tile": "explore-wall"},
+    "M": {"tile": "explore-floor"},
+    ".": {"tile": "explore-floor"}
   },
   "rows": [
     "############",
