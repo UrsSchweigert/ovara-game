@@ -1,6 +1,6 @@
 extends Control
 ## Dialogue panel: the person's portrait and name, their topics, and the panels an answer returns.
-## It decides nothing: topics, news, answers and quest steps all come from the session.
+## It decides nothing: topics, news, names, answers and quest steps all come from the session.
 
 signal closed
 
@@ -10,6 +10,7 @@ const PORTRAIT_SIZE: Vector2 = Vector2(96, 96)
 const ROW_HEIGHT: int = 48
 const FONT_SIZE: int = 16
 const MARK_SIZE: Vector2 = Vector2(24, 24)
+const BODY_RECT: Rect2 = Rect2(116, 8, 500, 216)
 
 var _session: RefCounted = null
 var _person_id: String = ""
@@ -18,7 +19,9 @@ var _panels: Array = []
 var _index: int = 0
 var _portrait: TextureRect = null
 var _name: Label = null
-var _body: VBoxContainer = null
+var _topics: ScrollContainer = null
+var _rows: VBoxContainer = null
+var _text: Label = null
 
 
 ## Opens on `person_id`'s topic list. `paths` maps an asset key to its manifest path.
@@ -35,30 +38,43 @@ func _ready() -> void:
 	frame.size = PANEL_SIZE
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(frame)
-	var portrait_frame: TextureRect = TextureRect.new()
-	portrait_frame.texture = _texture("ui-portrait-frame")
-	portrait_frame.position = Vector2(8, 8)
-	portrait_frame.size = PORTRAIT_SIZE
-	portrait_frame.stretch_mode = TextureRect.STRETCH_SCALE
-	portrait_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var portrait_frame: TextureRect = _picture("ui-portrait-frame")
 	add_child(portrait_frame)
-	_portrait = TextureRect.new()
-	_portrait.position = Vector2(8, 8)
-	_portrait.size = PORTRAIT_SIZE
-	_portrait.stretch_mode = TextureRect.STRETCH_SCALE
-	_portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_portrait = _picture("")
 	add_child(_portrait)
 	_name = Label.new()
 	_name.position = Vector2(8, 108)
 	_name.size = Vector2(PORTRAIT_SIZE.x, 28)
+	_name.clip_text = true
+	_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_name.add_theme_font_size_override("font_size", FONT_SIZE)
 	_name.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_name)
-	_body = VBoxContainer.new()
-	_body.position = Vector2(116, 8)
-	_body.size = Vector2(PANEL_SIZE.x - 124, PANEL_SIZE.y - 16)
-	_body.add_theme_constant_override("separation", 4)
-	add_child(_body)
+	# Close sits under the name, outside the topic list, so it stays visible however many topics there are.
+	var close: Button = Button.new()
+	close.text = "Close"
+	close.position = Vector2(8, PANEL_SIZE.y - 8 - ROW_HEIGHT)
+	close.size = Vector2(PORTRAIT_SIZE.x, ROW_HEIGHT)
+	close.add_theme_font_size_override("font_size", FONT_SIZE)
+	close.pressed.connect(func() -> void: closed.emit())
+	add_child(close)
+	_topics = ScrollContainer.new()
+	_topics.position = BODY_RECT.position
+	_topics.size = BODY_RECT.size
+	_topics.clip_contents = true
+	_topics.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(_topics)
+	_rows = VBoxContainer.new()
+	_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_rows.add_theme_constant_override("separation", 4)
+	_topics.add_child(_rows)
+	_text = Label.new()
+	_text.position = BODY_RECT.position
+	_text.size = BODY_RECT.size
+	_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_text.add_theme_font_size_override("font_size", FONT_SIZE)
+	_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_text)
 	_show_topics()
 
 
@@ -68,20 +84,29 @@ func _texture(key: String) -> Texture2D:
 	return load(ASSET_ROOT + str(_paths[key])) as Texture2D
 
 
+func _picture(key: String) -> TextureRect:
+	var pic: TextureRect = TextureRect.new()
+	pic.texture = _texture(key)
+	pic.position = Vector2(8, 8)
+	pic.size = PORTRAIT_SIZE
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.stretch_mode = TextureRect.STRETCH_SCALE
+	pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	return pic
+
+
 func _set_speaker(speaker: String, portrait: String) -> void:
 	_name.text = speaker
 	_portrait.texture = _texture(portrait)
 
 
-func _clear_body() -> void:
-	for child: Node in _body.get_children():
-		_body.remove_child(child)
-		child.queue_free()
-
-
 func _show_topics() -> void:
 	_panels = []
-	_clear_body()
+	_text.visible = false
+	_topics.visible = true
+	for child: Node in _rows.get_children():
+		_rows.remove_child(child)
+		child.queue_free()
 	var talk: Dictionary = _session.call("talk", _person_id)
 	if not bool(talk["ok"]):
 		closed.emit()
@@ -89,19 +114,15 @@ func _show_topics() -> void:
 	_set_speaker(str(talk["name"]), str(talk["portrait"]))
 	for entry: Dictionary in talk["topics"]:
 		_add_topic(str(entry["topic"]), bool(entry["news"]))
-	var close: Button = Button.new()
-	close.text = "Close"
-	close.custom_minimum_size = Vector2(96, ROW_HEIGHT)
-	close.add_theme_font_size_override("font_size", FONT_SIZE)
-	close.pressed.connect(func() -> void: closed.emit())
-	_body.add_child(close)
+	_topics.scroll_vertical = 0
 
 
 func _add_topic(topic: String, news: bool) -> void:
 	var row: Button = Button.new()
-	row.text = topic.replace("_", " ").replace("-", " ").capitalize()
+	row.text = str(_session.call("topic_label", topic))
 	row.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	row.custom_minimum_size = Vector2(0, ROW_HEIGHT)
+	row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_theme_font_size_override("font_size", FONT_SIZE)
 	var row_tex: Texture2D = _texture("ui-topic-row")
 	if row_tex != null:
@@ -113,19 +134,26 @@ func _add_topic(topic: String, news: bool) -> void:
 	if news:
 		var mark: TextureRect = TextureRect.new()
 		mark.texture = _texture("ui-speaking-mark")
+		mark.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		mark.stretch_mode = TextureRect.STRETCH_SCALE
-		mark.size = MARK_SIZE
-		mark.position = Vector2(_body.size.x - MARK_SIZE.x - 8, (ROW_HEIGHT - MARK_SIZE.y) / 2)
+		mark.anchor_left = 1.0
+		mark.anchor_right = 1.0
+		mark.anchor_top = 0.5
+		mark.anchor_bottom = 0.5
+		mark.offset_left = -MARK_SIZE.x - 8
+		mark.offset_right = -8
+		mark.offset_top = -MARK_SIZE.y / 2
+		mark.offset_bottom = MARK_SIZE.y / 2
 		mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		row.add_child(mark)
-	_body.add_child(row)
+	_rows.add_child(row)
 
 
+## A topic the rules refuse, or one with nothing to say, leaves the player on the refreshed list.
 func _on_topic(topic: String) -> void:
 	var out: Dictionary = _session.call("ask", _person_id, topic)
 	if not bool(out["ok"]) or (out["panels"] as Array).is_empty():
-		_show_text(str(out["error"]))
-		_panels = []
+		_show_topics()
 		return
 	_panels = out["panels"]
 	_index = 0
@@ -135,26 +163,17 @@ func _on_topic(topic: String) -> void:
 func _show_panel() -> void:
 	var panel: Dictionary = _panels[_index]
 	_set_speaker(str(panel["speaker"]), str(panel["portrait"]))
-	_show_text("\n".join(PackedStringArray(panel["lines"])))
-
-
-func _show_text(text: String) -> void:
-	_clear_body()
-	var label: Label = Label.new()
-	label.text = text
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	label.custom_minimum_size = Vector2(_body.size.x, 0)
-	label.add_theme_font_size_override("font_size", FONT_SIZE)
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_body.add_child(label)
+	_topics.visible = false
+	_text.text = "\n".join(PackedStringArray(panel["lines"]))
+	_text.visible = true
 
 
 ## A tap anywhere on the panel moves on: the next panel, or back to the topics after the last.
 func _gui_input(event: InputEvent) -> void:
-	if not (event is InputEventMouseButton) or not (event as InputEventMouseButton).pressed:
+	if not (event is InputEventMouseButton):
 		return
-	if _body.get_child_count() == 0 or _body.get_child(0) is Button:
+	var b: InputEventMouseButton = event
+	if not b.pressed or b.button_index != MOUSE_BUTTON_LEFT or not _text.visible:
 		return
 	accept_event()
 	_index += 1

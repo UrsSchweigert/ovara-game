@@ -241,6 +241,17 @@ func ask(person_id: String, topic: String) -> Dictionary:
 	return out
 
 
+## A topic's name for the topic list: the chapter's name of the person it names, else its canon
+## id without the kind ("place.low-anthem" gives "Low anthem"). Canon has no topic names yet.
+func topic_label(topic: String) -> String:
+	var who: Dictionary = _person_by_canon(topic, "")
+	if not who.is_empty():
+		return People.display_name(who, world)
+	var bare: String = topic.get_slice(".", 1) if topic.contains(".") else topic
+	bare = bare.replace("-", " ").replace("_", " ")
+	return bare.left(1).to_upper() + bare.substr(1)
+
+
 func _person(person_id: String) -> Dictionary:
 	var person: Dictionary = (people[person_id] as Dictionary).duplicate()
 	person["id"] = person_id
