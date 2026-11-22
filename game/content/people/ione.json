@@ -13,13 +13,6 @@
   "join_chapter": 1,
   "topics": [
     {
-      "topic": "power.ebb",
-      "dialogue": "ione_examination",
-      "when": {
-        "chapter_max": 1
-      }
-    },
-    {
       "topic": "power.undertow",
       "dialogue": "ione_examination",
       "when": {

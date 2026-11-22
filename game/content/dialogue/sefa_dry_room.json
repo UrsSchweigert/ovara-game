@@ -8,8 +8,8 @@
         {
           "speaker": "person.sefa",
           "lines": [
-            "This is Low Anthem. A hold of four",
-            "hundred. Poor, and mostly Tenders."
+            "This is Low Anthem. A hold of",
+            "four hundred. Poor, and mostly Tenders."
           ]
         },
         {
@@ -32,15 +32,16 @@
         {
           "speaker": "person.sefa",
           "lines": [
-            "The Makers built the holds. And the",
-            "Dragon. Three thousand years ago."
+            "The Makers built the cities under",
+            "the sea, and the Dragon."
           ]
         },
         {
           "speaker": "person.sefa",
           "lines": [
-            "Nobody left knows how they did it.",
-            "Only Jef, they say."
+            "That was over three thousand",
+            "years ago. Jef is the last who",
+            "understands their craft."
           ]
         }
       ],
@@ -56,7 +57,7 @@
           "speaker": "person.sefa",
           "lines": [
             "The gift. The sea answers us.",
-            "I ask it to care. That is mending."
+            "I ask it to care. That is intending."
           ]
         },
         {
@@ -123,7 +124,8 @@
           "speaker": "person.sefa",
           "lines": [
             "Their rule: Keep the water. Own",
-            "nothing you cannot carry."
+            "nothing you cannot carry. Come",
+            "when you are called."
           ]
         }
       ]
