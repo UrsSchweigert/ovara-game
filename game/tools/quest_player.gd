@@ -4,6 +4,7 @@ extends RefCounted
 
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const People: GDScript = preload("res://rules/people.gd")
+const Area: GDScript = preload("res://rules/area.gd")
 ## Pack key for items granted to a party with no members.
 const STAND_IN_KEY: String = "quest_player"
 
@@ -29,6 +30,9 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		var day_errors: Array[String] = _pass_days(quest, world, people, dialogues, areas, person_areas)
 		if not day_errors.is_empty():
 			return day_errors
+		var thing_errors: Array[String] = _do_things(quest, world, areas)
+		if not thing_errors.is_empty():
+			return thing_errors
 		var held_errors: Array[String] = _grant_holds(quest, world, item_ids)
 		if not held_errors.is_empty():
 			return held_errors
@@ -99,6 +103,105 @@ static func _last_day_min(quest: Dictionary, world: RefCounted) -> int:
 	return last
 
 
+## Does the entered, used and holds steps through the areas' rules: walks into each cell with
+## Area.enter and uses each thing with Area.use_thing. Nothing happens with no areas.
+static func _do_things(quest: Dictionary, world: RefCounted, areas: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	if areas.is_empty():
+		return errors
+	for step: Dictionary in quest["steps"]:
+		var cond: Dictionary = step.get("requires", {})
+		if Quests.is_done(quest, str(step["id"]), world):
+			continue
+		var where: String = "quest %s: step %s" % [str(quest["id"]), str(step["id"])]
+		for e: Variant in cond.get("entered", []):
+			var cell: Vector2i = Area.cell_of((e as Dictionary)["cell"])
+			var failed: String = _walk_to(world, areas, str(e["area"]), cell)
+			if failed != "":
+				errors.append("%s: cannot enter %s %s: %s" % [where, str(e["area"]), str(cell), failed])
+		var used: Dictionary = cond.get("used", {})
+		for thing: Variant in used:
+			var failed: String = _use_times(world, areas, str(thing), int(used[thing]), str(step.get("area", "")))
+			if failed != "":
+				errors.append("%s: cannot use %s: %s" % [where, str(thing), failed])
+		var held: Dictionary = cond.get("holds", {})
+		for item: Variant in held:
+			var found: Array = _thing_giving(areas, str(item))
+			if found.is_empty():
+				continue
+			var need: int = int(held[item])
+			var spent: int = 0
+			while _pack_total(world, str(item)) < need and spent < 100:
+				var failed: String = _use_times(world, areas, str((found[1] as Dictionary)["id"]), int(world.call("uses_of", str((found[1] as Dictionary)["id"]))) + 1, str(found[0]))
+				if failed != "":
+					errors.append("%s: cannot use %s for %s: %s" % [where, str((found[1] as Dictionary)["id"]), str(item), failed])
+					break
+				spent += 1
+			if errors.is_empty() and _pack_total(world, str(item)) < need:
+				errors.append("%s: using %s never gives enough %s" % [where, str((found[1] as Dictionary)["id"]), str(item)])
+	return errors
+
+
+## [area id, thing] of the first thing whose use gives `item`, or an empty array.
+static func _thing_giving(areas: Dictionary, item: String) -> Array:
+	for area_id: Variant in areas:
+		for t: Variant in (areas[area_id].data as Dictionary).get("things", []):
+			var gives: Dictionary = ((t as Dictionary).get("use", {}) as Dictionary).get("gives", {})
+			if not gives.is_empty() and str(gives.get("item", "")) == item:
+				return [str(area_id), t]
+	return []
+
+
+static func _pack_total(world: RefCounted, item: String) -> int:
+	var total: int = 0
+	for pack: Variant in (world.get("packs") as Dictionary).values():
+		total += int((pack as Dictionary).get(item, 0))
+	return total
+
+
+## Walks to the thing and uses it until the world counts `times` uses. An error, or empty.
+static func _use_times(world: RefCounted, areas: Dictionary, thing_id: String, times: int, prefer: String) -> String:
+	var ids: Array = areas.keys()
+	if areas.has(prefer):
+		ids.erase(prefer)
+		ids.push_front(prefer)
+	for area_id: Variant in ids:
+		var area: RefCounted = areas[area_id]
+		for t: Variant in area.data.get("things", []):
+			if str((t as Dictionary)["id"]) != thing_id:
+				continue
+			var failed: String = _walk_to(world, areas, str(area_id), area.cell_of(t["cell"]))
+			if failed != "":
+				return failed
+			while int(world.call("uses_of", thing_id)) < times:
+				if not bool(area.use_thing(world, thing_id, true)["ok"]):
+					return "the thing cannot be used"
+			return ""
+	return "no such thing"
+
+
+## Walks the party to a cell of an area, entering each cell of the path through Area.enter.
+static func _walk_to(world: RefCounted, areas: Dictionary, area_id: String, cell: Vector2i) -> String:
+	if not areas.has(area_id):
+		return "area is unknown"
+	var trip: String = _travel(world, areas, area_id, area_id)
+	if trip != "":
+		return trip
+	var position: Dictionary = world.get("position")
+	var area: RefCounted = areas[area_id]
+	var from: Vector2i = Vector2i(int(position["x"]), int(position["y"]))
+	var path: Array[Vector2i] = area.find_path(world, from, cell)
+	if from == cell:
+		path = [from] as Array[Vector2i]
+	if path.is_empty():
+		return "no path from %s to %s" % [str(from), str(cell)]
+	for step_cell: Vector2i in path:
+		area.enter(world, step_cell)
+	world.set("position", {"area": area_id, "x": cell.x, "y": cell.y})
+	return ""
+
+
+## FALLBACK, removed in P3: gives the hero the held items that no thing gives.
 ## Tops up the hero's pack with the items that undone steps wait on; an error for any item
 ## not in `item_ids`, since the player cannot be given it.
 static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[String]) -> Array[String]:
@@ -113,6 +216,8 @@ static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[S
 		var held: Dictionary = cond["holds"]
 		for item: Variant in held:
 			var item_id: String = str(item)
+			if _pack_total(world, item_id) >= int(held[item]):
+				continue
 			if not item_ids.has(item_id):
 				errors.append("quest %s: step %s needs item %s, which is unknown" % [str(quest["id"]), str(step["id"]), item_id])
 				continue
