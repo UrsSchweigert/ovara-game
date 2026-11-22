@@ -71,6 +71,11 @@ func _section(world: RefCounted, key: String) -> Array:
 	return v[key] if v.has(key) else data.get(key, [])
 
 
+## The entries of one section (exits, things, encounters, ...) as the world sees them now.
+func section(world: RefCounted, key: String) -> Array:
+	return _section(world, key)
+
+
 func rows(world: RefCounted) -> Array:
 	return _section(world, "rows")
 
