@@ -10,7 +10,7 @@ const FIXTURE: Dictionary = {
 	"spawn": [0, 0],
 	"exits": [{"cell": [3, 0], "to": "other", "to_cell": [1, 2]}],
 	"things": [
-		{"id": "stone", "canon": "x.y", "cell": [0, 2]},
+		{"id": "stone", "canon": "x.y", "cell": [0, 2], "use": {"gives": {"item": "item.frond", "count": 2}, "max": 2}},
 		{"id": "mark", "canon": "x.y", "cell": [2, 0], "hidden": {"trait": "trait.listener"}},
 		{"id": "late", "canon": "x.y", "cell": [1, 0], "when": {"chapter_min": 3}},
 	],
@@ -110,3 +110,35 @@ func test_mariner_on_land_rule() -> void:
 	w.advance_days(1)
 	check(Area.weakened_on_land(w, "p", 1), "mariner not weakened a day on land")
 	check(not Area.weakened_on_land(_world(), "p", 1), "non-mariner weakened")
+
+
+func test_enter_records_cell() -> void:
+	var w: RefCounted = _world()
+	var r: Dictionary = _area().enter(w, Vector2i(2, 2))
+	check_eq(r["encounter"], "b1", "encounter at entered cell")
+	check(w.has_entered("fix", Vector2i(2, 2)), "entry recorded")
+	check(not w.has_entered("fix", Vector2i(0, 0)), "other cell not entered")
+	check_eq(_area().enter(w, Vector2i(3, 0))["exit"]["to"], "other", "exit at entered cell")
+
+
+func test_use_thing_gives_up_to_max() -> void:
+	var w: RefCounted = _world()
+	var a: RefCounted = _area()
+	check(w.packs.is_empty(), "pack empty before use")
+	check_eq(a.use_thing(w, "stone")["gave"]["count"], 2, "first use gives")
+	check_eq(w.packs["p"]["item.frond"], 2, "item in pack")
+	a.use_thing(w, "stone")
+	check_eq(w.packs["p"]["item.frond"], 4, "second use gives")
+	check(a.use_thing(w, "stone")["gave"].is_empty(), "use beyond max gives nothing")
+	check_eq(w.packs["p"]["item.frond"], 4, "pack unchanged beyond max")
+	check_eq(w.uses_of("stone"), 3, "uses counted")
+
+
+func test_hidden_or_unlisted_thing_unusable() -> void:
+	var w: RefCounted = _world(["trait.listener"] as Array[String])
+	var a: RefCounted = _area()
+	check(not a.use_thing(w, "mark")["ok"], "hidden before Listen")
+	check(a.use_thing(w, "mark", true)["ok"], "usable after Listen")
+	check(not a.use_thing(w, "nothing")["ok"], "unlisted id")
+	check(not a.use_thing(w, "late")["ok"], "thing whose condition fails")
+	check_eq(w.uses_of("nothing"), 0, "no count for unusable")
