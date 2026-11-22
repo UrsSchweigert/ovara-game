@@ -4,6 +4,7 @@ extends RefCounted
 
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const People: GDScript = preload("res://rules/people.gd")
+const Shop: GDScript = preload("res://rules/shop.gd")
 
 
 ## {"stage": {"id", "title", "next"}, "open": [{"id", "title", "next"}], "finished": [...]}.
@@ -85,3 +86,30 @@ static func pack(session: RefCounted) -> Dictionary:
 				items.append({"item": str(k), "count": int(held[k])})
 		(out["people"] as Array).append({"id": id, "name": People.display_name(person, session.world), "items": items, "slots": items.size()})
 	return out
+
+
+## A stall as the screen draws it: {"role", "trades": [{"index", "gives": [{"item", "count", "slot"}],
+## "wants": [{"item", "count", "have", "slot"}], "affordable"}]}. The keeper is a role, never a name.
+static func stall(session: RefCounted, shop_id: String) -> Dictionary:
+	var out: Dictionary = {"role": "", "trades": []}
+	if not session.shops.has(shop_id):
+		return out
+	var shop: Dictionary = session.shops[shop_id]
+	out["role"] = str((shop.get("keeper", {}) as Dictionary).get("role", ""))
+	var have: Dictionary = Shop.held(session.world)
+	for t: Dictionary in Shop.trades(shop, session.world):
+		var affordable: bool = true
+		var gives: Array = []
+		var wants: Array = []
+		for id: Variant in t["gives"]:
+			gives.append({"item": str(id), "count": int(t["gives"][id]), "slot": _slot(session, str(id))})
+		for id: Variant in t["wants"]:
+			var n: int = int(have.get(str(id), 0))
+			affordable = affordable and n >= int(t["wants"][id])
+			wants.append({"item": str(id), "count": int(t["wants"][id]), "have": n, "slot": _slot(session, str(id))})
+		(out["trades"] as Array).append({"index": int(t["index"]), "gives": gives, "wants": wants, "affordable": affordable})
+	return out
+
+
+static func _slot(session: RefCounted, item: String) -> String:
+	return str((session.items.get(item, {}) as Dictionary).get("slot", ""))

@@ -16,6 +16,7 @@ const KEEPER_FIGURE: String = "figure-mariners"
 const ASSET_ROOT: String = "res://assets/"
 const TITLE: String = "res://scenes/title/title.tscn"
 const DialoguePanel: GDScript = preload("res://ui/dialogue/dialogue_panel.gd")
+const StallScreen: GDScript = preload("res://ui/shop/stall_screen.gd")
 const SCREENS: Dictionary = {
 	"Journal": preload("res://ui/screens/journal_screen.gd"),
 	"Party": preload("res://ui/screens/party_screen.gd"),
@@ -125,6 +126,17 @@ func _open_screen(name: String) -> void:
 		return
 	_screen = (SCREENS[name] as GDScript).new()
 	_screen.call("setup", _session)
+	_screen.closed.connect(_close_screen)
+	_frame.add_child(_screen)
+	_pressed = false
+	_holding = false
+
+
+func _open_stall(shop_id: String) -> void:
+	if _screen != null or _dialogue != null:
+		return
+	_screen = StallScreen.new()
+	_screen.call("open", _session, shop_id, _paths)
 	_screen.closed.connect(_close_screen)
 	_frame.add_child(_screen)
 	_pressed = false
@@ -319,8 +331,7 @@ func _act(goal: Dictionary) -> void:
 			if bool(_session.call("talk", id)["ok"]):
 				_open_dialogue(id)
 		"keeper":
-			var offers: Array[Dictionary] = _session.call("trades", id)
-			_status.text = "Stall: %d trades" % offers.size()
+			_open_stall(id)
 
 
 func _open_dialogue(person_id: String) -> void:
