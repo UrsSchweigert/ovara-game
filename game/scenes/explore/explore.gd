@@ -16,6 +16,11 @@ const KEEPER_FIGURE: String = "figure-mariners"
 const ASSET_ROOT: String = "res://assets/"
 const TITLE: String = "res://scenes/title/title.tscn"
 const DialoguePanel: GDScript = preload("res://ui/dialogue/dialogue_panel.gd")
+const SCREENS: Dictionary = {
+	"Journal": preload("res://ui/screens/journal_screen.gd"),
+	"Party": preload("res://ui/screens/party_screen.gd"),
+	"Pack": preload("res://ui/screens/pack_screen.gd"),
+}
 
 var _session: RefCounted = null
 var _frame: Control = null
@@ -38,6 +43,7 @@ var _press_time: float = 0.0
 var _finger: Vector2 = Vector2.ZERO
 var _clock: float = 0.0
 var _dialogue: Control = null
+var _screen: Control = null
 
 
 func _ready() -> void:
@@ -105,13 +111,29 @@ func _build_band() -> void:
 	row.add_theme_constant_override("separation", 8)
 	_frame.add_child(row)
 	for name: String in ["Journal", "Party", "Pack"]:
-		_add_button(row, name).disabled = true
+		_add_button(row, name).pressed.connect(_open_screen.bind(name))
 	_add_button(row, "Rest").pressed.connect(_on_rest)
 	_add_button(row, "Title").pressed.connect(_on_title)
 	_status = Label.new()
 	_status.position = Vector2(8, VIEW.y + 8)
 	_status.size = Vector2(VIEW.x - 16, 32)
 	_frame.add_child(_status)
+
+
+func _open_screen(name: String) -> void:
+	if _screen != null or _dialogue != null:
+		return
+	_screen = (SCREENS[name] as GDScript).new()
+	_screen.call("setup", _session)
+	_screen.closed.connect(_close_screen)
+	_frame.add_child(_screen)
+	_pressed = false
+	_holding = false
+
+
+func _close_screen() -> void:
+	_screen.queue_free()
+	_screen = null
 
 
 func _add_button(row: HBoxContainer, text: String) -> Button:
@@ -211,7 +233,7 @@ func _tile_at(local: Vector2) -> Vector2i:
 
 
 func _on_view_input(event: InputEvent) -> void:
-	if _dialogue != null:
+	if _dialogue != null or _screen != null:
 		return
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		var b: InputEventMouseButton = event
