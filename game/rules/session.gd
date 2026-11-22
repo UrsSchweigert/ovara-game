@@ -159,6 +159,26 @@ func step_to(to: Vector2i) -> Dictionary:
 	return out
 
 
+## Who stands in the current area now: [{"kind", "id", "cell", "portrait"}]. A "person" comes
+## from the area's "people" section ({"id", "cell", "when"}) and can be talked to; a "keeper"
+## stands at a shop placed in the area, and its id is the shop's.
+func people_here() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	var a: RefCounted = current_area()
+	if a == null:
+		return out
+	for p: Variant in a.call("section", world, "people"):
+		var d: Dictionary = p
+		var id: String = str(d.get("id", ""))
+		if people.has(id) and Area.holds(d.get("when"), world):
+			out.append({"kind": "person", "id": id, "cell": Area.cell_of(d.get("cell", [0, 0])), "portrait": People.portrait_key(_person(id))})
+	for id: Variant in shops:
+		var shop: Dictionary = shops[id]
+		if str(shop.get("area", "")) == area_id():
+			out.append({"kind": "keeper", "id": str(id), "cell": Area.cell_of(shop.get("cell", [0, 0])), "portrait": ""})
+	return out
+
+
 ## Uses a thing in the current area. Returns {"ok", "gave", "steps_done"}.
 func use_thing(thing_id: String) -> Dictionary:
 	var a: RefCounted = current_area()
