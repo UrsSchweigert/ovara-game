@@ -92,6 +92,13 @@
         }
       }
     },
+    "side": {
+      "description": "A side quest closes when its place is lost; a stage does not.",
+      "type": "boolean"
+    },
+    "place": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
     "clears": {
       "$ref": "content-defs.schema.json#/$defs/flag"
     },

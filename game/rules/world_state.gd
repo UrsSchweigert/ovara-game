@@ -39,6 +39,10 @@ var mode: String = "explore"
 var topics_known: Array[String] = []
 ## Person id to the topic ids they have already answered.
 var topics_heard: Dictionary = {}
+## Quest id -> {"status": open, cleared or closed, "done": step ids finished}.
+var quests: Dictionary = {}
+## Person id to the quest points they hold.
+var points: Dictionary = {}
 
 
 func _init(new_seed: int = 1) -> void:
@@ -130,6 +134,7 @@ func to_dict() -> Dictionary:
 		"chapter": chapter, "day": day, "watch": watch,
 		"journal": journal.duplicate(), "position": position.duplicate(true), "mode": mode,
 		"topics_known": topics_known.duplicate(), "topics_heard": topics_heard.duplicate(true),
+		"quests": quests.duplicate(true), "points": points.duplicate(),
 	}
 
 
@@ -181,6 +186,8 @@ static func from_dict(data: Dictionary) -> Dictionary:
 		for t: Variant in heard[id]:
 			list.append(str(t))
 		w.topics_heard[str(id)] = list
+	w.quests = _ints(data.get("quests", {}))
+	w.points = _ints(data.get("points", {}))
 	return {"state": w, "error": ""}
 
 
