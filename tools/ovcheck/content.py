@@ -142,6 +142,11 @@ def _cross_check(root, found, errors):
                 for ref in _canon_refs(data):
                     if ref not in entries:
                         errors.append(f"{f}: canon id {ref!r} does not exist")
+    for kind_files in found.values():
+        for f, data in kind_files.values():
+            for key in _holds_keys(data):
+                if key not in ids.get("items", set()):
+                    errors.append(f"{f}: holds names unknown item {key!r}")
 
 
 def _canon_refs(node, key=""):
@@ -153,6 +158,18 @@ def _canon_refs(node, key=""):
             yield from _canon_refs(v, key)
     elif isinstance(node, str) and key in ("canon", "topic", "speaker", "person", "giver", "next"):
         yield node
+
+
+def _holds_keys(node):
+    """Item ids named as keys of any 'holds' dict in the content."""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "holds" and isinstance(v, dict):
+                yield from v.keys()
+            yield from _holds_keys(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _holds_keys(v)
 
 
 def check_content(root):
