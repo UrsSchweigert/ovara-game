@@ -63,6 +63,10 @@
               }
             }
           },
+          "names_hero": {
+            "description": "The topic tells the hero his name; the rules hold it back before chapter 7.",
+            "type": "boolean"
+          },
           "sets": {
             "description": "Flags set when the topic has been heard; only flags listed in docs/design/quests.md.",
             "type": "array",

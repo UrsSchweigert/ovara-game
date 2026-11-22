@@ -35,6 +35,10 @@ var journal: Array[String] = []
 ## Where the party stands: area or dungeon id, tile or cell, facing.
 var position: Dictionary = {}
 var mode: String = "explore"
+## Topic canon ids the party holds.
+var topics_known: Array[String] = []
+## Person id to the topic ids they have already answered.
+var topics_heard: Dictionary = {}
 
 
 func _init(new_seed: int = 1) -> void:
@@ -125,6 +129,7 @@ func to_dict() -> Dictionary:
 		"packs": packs.duplicate(true), "supplies": supplies.duplicate(), "ebb": ebb.duplicate(),
 		"chapter": chapter, "day": day, "watch": watch,
 		"journal": journal.duplicate(), "position": position.duplicate(true), "mode": mode,
+		"topics_known": topics_known.duplicate(), "topics_heard": topics_heard.duplicate(true),
 	}
 
 
@@ -168,6 +173,14 @@ static func from_dict(data: Dictionary) -> Dictionary:
 		w.journal.append(str(j))
 	w.position = _ints(data.get("position", {}))
 	w.mode = mode_value
+	for t: Variant in data.get("topics_known", []):
+		w.topics_known.append(str(t))
+	var heard: Dictionary = data.get("topics_heard", {})
+	for id: Variant in heard:
+		var list: Array[String] = []
+		for t: Variant in heard[id]:
+			list.append(str(t))
+		w.topics_heard[str(id)] = list
 	return {"state": w, "error": ""}
 
 
