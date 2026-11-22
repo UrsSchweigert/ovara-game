@@ -16,6 +16,7 @@ const KEEPER_FIGURE: String = "figure-mariners"
 const ASSET_ROOT: String = "res://assets/"
 const TITLE: String = "res://scenes/title/title.tscn"
 const DialoguePanel: GDScript = preload("res://ui/dialogue/dialogue_panel.gd")
+const CutscenePlayer: GDScript = preload("res://scenes/cutscene/cutscene_player.gd")
 const StallScreen: GDScript = preload("res://ui/shop/stall_screen.gd")
 const SCREENS: Dictionary = {
 	"Journal": preload("res://ui/screens/journal_screen.gd"),
@@ -45,6 +46,9 @@ var _finger: Vector2 = Vector2.ZERO
 var _clock: float = 0.0
 var _dialogue: Control = null
 var _screen: Control = null
+var _cutscene: Control = null
+## Person canon id -> the sprite standing for them, for the cut-scene player.
+var _figures: Dictionary = {}
 
 
 func _ready() -> void:
@@ -61,6 +65,8 @@ func _ready() -> void:
 	_build_view()
 	_build_band()
 	_redraw()
+	if not (_session.call("scene_step") as Dictionary).is_empty():
+		_play_scene()
 
 
 ## Keeps the 640-pixel frame centred when the screen is wider or taller than the base size.
@@ -170,8 +176,9 @@ func _redraw() -> void:
 	for thing: Dictionary in area.call("visible_things", world, false):
 		var cell: Vector2i = area.call("cell_of", thing["cell"])
 		_place(_texture("thing-supply"), cell)
+	_figures = {}
 	for who: Dictionary in _session.call("people_here"):
-		_place(_figure_of(who), who["cell"])
+		_figures[str(who.get("canon", ""))] = _place(_figure_of(who), who["cell"])
 	_party = _place(_texture("figure-hero"), _session.call("cell"))
 	_follow()
 
@@ -225,10 +232,30 @@ func _figure_of(who: Dictionary) -> Texture2D:
 
 ## Camera: whole pixels, centred on the party, clamped to the area (centred if it is smaller).
 func _follow() -> void:
+	_world.position = _camera_for(_session.call("cell"))
+
+
+func _play_scene() -> void:
+	_cutscene = CutscenePlayer.new()
+	_cutscene.call("setup", _session, _paths, _world, _figures, _camera_for)
+	_cutscene.size = _frame.size
+	_cutscene.finished.connect(_end_scene)
+	_frame.add_child(_cutscene)
+	_pressed = false
+	_holding = false
+
+
+func _end_scene() -> void:
+	_cutscene.queue_free()
+	_cutscene = null
+	_redraw()
+
+
+## Where the world sits to centre `cell` in the view.
+func _camera_for(cell: Vector2i) -> Vector2:
 	var area: RefCounted = _session.call("current_area")
 	var world: RefCounted = _session.get("world")
 	var size: Vector2i = Vector2i(int(area.call("width", world)), int(area.call("height", world))) * TILE
-	var cell: Vector2i = _session.call("cell")
 	var at: Vector2i = cell * TILE + Vector2i(TILE / 2, TILE / 2)
 	var cam: Vector2i = Vector2i.ZERO
 	for axis: int in 2:
@@ -236,7 +263,7 @@ func _follow() -> void:
 			cam[axis] = (size[axis] - VIEW[axis]) / 2
 		else:
 			cam[axis] = clampi(at[axis] - VIEW[axis] / 2, 0, size[axis] - VIEW[axis])
-	_world.position = Vector2(-cam)
+	return Vector2(-cam)
 
 
 func _tile_at(local: Vector2) -> Vector2i:
@@ -245,7 +272,7 @@ func _tile_at(local: Vector2) -> Vector2i:
 
 
 func _on_view_input(event: InputEvent) -> void:
-	if _dialogue != null or _screen != null:
+	if _dialogue != null or _screen != null or _cutscene != null:
 		return
 	if event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		var b: InputEventMouseButton = event

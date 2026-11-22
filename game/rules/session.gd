@@ -171,7 +171,10 @@ func people_here() -> Array[Dictionary]:
 		var d: Dictionary = p
 		var id: String = str(d.get("id", ""))
 		if people.has(id) and Area.holds(d.get("when"), world):
-			out.append({"kind": "person", "id": id, "cell": Area.cell_of(d.get("cell", [0, 0])), "portrait": People.portrait_key(_person(id))})
+			var canon: String = str(_person(id).get("canon", ""))
+			var moved: Variant = world.call("figure_cell", canon)
+			var cell: Vector2i = moved if moved is Vector2i else Area.cell_of(d.get("cell", [0, 0]))
+			out.append({"kind": "person", "id": id, "canon": canon, "cell": cell, "portrait": People.portrait_key(_person(id))})
 	for id: Variant in shops:
 		var shop: Dictionary = shops[id]
 		if str(shop.get("area", "")) == area_id():
