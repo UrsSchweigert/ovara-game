@@ -182,6 +182,26 @@ func people_here() -> Array[Dictionary]:
 	return out
 
 
+## Who a finished cut scene set in this area walked in and the area does not list:
+## [{"canon", "cell"}], standing where the last walk left them. Drawn only, never talked to.
+func walked_here() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	var listed: Array[String] = []
+	for who: Dictionary in people_here():
+		listed.append(str(who.get("canon", "")))
+	for sid: Variant in cutscenes:
+		var data: Dictionary = cutscenes[sid]
+		if str(data.get("area", "")) != area_id() or not bool(world.call("has_seen_scene", str(sid))):
+			continue
+		for step: Variant in data.get("steps", []):
+			var canon: String = str((step as Dictionary).get("who", ""))
+			var cell: Variant = world.call("figure_cell", canon)
+			if str((step as Dictionary).get("op", "")) == "walk" and cell is Vector2i and not listed.has(canon):
+				listed.append(canon)
+				out.append({"canon": canon, "cell": cell})
+	return out
+
+
 ## Uses a thing in the current area. Returns {"ok", "gave", "steps_done"}.
 func use_thing(thing_id: String) -> Dictionary:
 	var a: RefCounted = current_area()
