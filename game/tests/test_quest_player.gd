@@ -185,6 +185,50 @@ func _stage1_targets() -> Dictionary:
 		"nursery_gate": {"thing": "nursery_gate"}, "meeting_hall_lamp": {"thing": "dead_lamp"}}
 
 
+func _stage1_person_areas() -> Dictionary:
+	return {"sefa": "low_anthem_dry_room", "ione": "low_anthem_dome_hall", "davin": "low_anthem_dome_hall"}
+
+
+func _tiny_area(id: String, to: String) -> RefCounted:
+	var d: Dictionary = {"id": id, "spawn": [0, 0], "rows": ["..."], "legend": {".": {}}}
+	if to != "":
+		d["exits"] = [{"cell": [2, 0], "to": to, "to_cell": [0, 0]}]
+	return Area.from_dict(d)
+
+
+func test_person_asked_in_their_area() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("w1", "ione", "power.x")
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _tiny_area("a", "b"), "b": _tiny_area("b", "")}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues(), areas, {}, {"ione": "b"})
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(str(w.position["area"]), "b", "party is in the person's area")
+	check(w.has_entered("a", Vector2i(2, 0)), "entry went through Area.enter")
+	check(People.heard("ione", "power.x", w), "heard")
+
+
+func test_person_in_unreachable_area_fails() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("w2", "ione", "power.x")
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _tiny_area("a", ""), "b": _tiny_area("b", "")}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues(), areas, {}, {"ione": "b"})
+	check(found.size() > 0 and "ione" in found[0] and "power.x" in found[0] and " b" in found[0], "names person, topic, area")
+	check(not People.heard("ione", "power.x", w), "not asked")
+
+
+func test_ask_from_wrong_area_fails() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("w3", "ione", "power.x")
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _tiny_area("a", "b"), "b": _tiny_area("b", "")}
+	w.position = {"area": "a", "x": 0, "y": 0}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues(), areas, {}, {"ione": "c"})
+	check(found.size() > 0 and "ione" in found[0] and "power.x" in found[0] and " c" in found[0], "wrong area is an error")
+	check(not People.heard("ione", "power.x", w), "not asked")
+
+
 func _real_areas() -> Dictionary:
 	var out: Dictionary = {}
 	for d: Variant in _real("areas").values():
@@ -195,7 +239,7 @@ func _real_areas() -> Dictionary:
 func _play_stage1(people: Dictionary, w: RefCounted) -> Array[String]:
 	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
 	var items: Array[String] = ["frond"]
-	return QuestPlayer.play(q, w, [q] as Array[Dictionary], items, people, _real("dialogue"), _real_areas(), _stage1_targets())
+	return QuestPlayer.play(q, w, [q] as Array[Dictionary], items, people, _real("dialogue"), _real_areas(), _stage1_targets(), _stage1_person_areas())
 
 
 func test_stage1_needs_play() -> void:

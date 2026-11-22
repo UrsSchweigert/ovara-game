@@ -14,6 +14,12 @@ const TARGETS: Dictionary = {
 	"nursery_gate": {"thing": "nursery_gate"},
 	"meeting_hall_lamp": {"thing": "dead_lamp"},
 }
+## Where each person to be asked stands.
+const PERSON_AREAS: Dictionary = {
+	"sefa": "low_anthem_dry_room",
+	"ione": "low_anthem_dome_hall",
+	"davin": "low_anthem_dome_hall",
+}
 const USAGE: String = "usage: ./ov play <id> | --all"
 
 
@@ -66,7 +72,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Di
 	var played: int = 0
 	var shared: RefCounted = World.new()
 	for q: Dictionary in main:
-		var found: Array[String] = QuestPlayer.play(q, shared, quests, item_ids, people, dialogues, by_id, TARGETS)
+		var found: Array[String] = QuestPlayer.play(q, shared, quests, item_ids, people, dialogues, by_id, TARGETS, PERSON_AREAS)
 		if want == "" or want == str(q["id"]):
 			played += 1
 			print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
@@ -76,7 +82,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Di
 			continue
 		var world: RefCounted = World.new()
 		world.chapter = int(q["chapters"][0])
-		var found: Array[String] = QuestPlayer.play(q, world, quests, item_ids, people, dialogues, by_id, TARGETS)
+		var found: Array[String] = QuestPlayer.play(q, world, quests, item_ids, people, dialogues, by_id, TARGETS, PERSON_AREAS)
 		played += 1
 		print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
 		errors.append_array(found)

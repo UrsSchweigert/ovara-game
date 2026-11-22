@@ -13,8 +13,9 @@ const STAND_IN_KEY: String = "quest_player"
 ## given for steps that wait on holds. `people` maps file id to person JSON and `dialogues` maps
 ## dialogue id to dialogue JSON, for steps that wait on topics heard. `areas` maps area id to Area
 ## and `targets` maps step id to {"thing": id} or {"exit": area id}: the player must find a path
-## from the area's spawn to that thing or exit before the step is done.
-static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}, areas: Dictionary = {}, targets: Dictionary = {}) -> Array[String]:
+## from the area's spawn to that thing or exit before the step is done. `person_areas` maps
+## person id to the area they are in: the party walks there, through Area.enter, before asking.
+static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}, areas: Dictionary = {}, targets: Dictionary = {}, person_areas: Dictionary = {}) -> Array[String]:
 	var id: String = str(quest["id"])
 	if not Quests.open(quest, world):
 		return ["quest %s: cannot open at chapter %d (chapters %s)" % [id, world.chapter, str(quest["chapters"])]]
@@ -29,7 +30,7 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		var held_errors: Array[String] = _grant_holds(quest, world, item_ids)
 		if not held_errors.is_empty():
 			return held_errors
-		var heard_errors: Array[String] = _hear_topics(quest, world, people, dialogues)
+		var heard_errors: Array[String] = _hear_topics(quest, world, people, dialogues, areas, person_areas)
 		if not heard_errors.is_empty():
 			return heard_errors
 		Quests.update(quest, world)
@@ -117,7 +118,7 @@ static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[S
 
 ## Has the hero ask the topics that undone steps wait on. The topic is first learned, as if the
 ## world had taught it; the ask itself goes through People, so a refused ask is an error.
-static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary) -> Array[String]:
+static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary, areas: Dictionary = {}, person_areas: Dictionary = {}) -> Array[String]:
 	var errors: Array[String] = []
 	for step: Dictionary in quest["steps"]:
 		var cond: Dictionary = step.get("requires", {})
@@ -139,11 +140,80 @@ static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionar
 			if not offered:
 				errors.append("%s, but the topic is unknown" % where)
 				continue
+			if person_areas.has(person_id) and not areas.is_empty():
+				var to_area: String = str(person_areas[person_id])
+				var trip: String = _travel(world, areas, to_area, str(step.get("area", "")))
+				if trip != "" or str((world.get("position") as Dictionary).get("area", "")) != to_area:
+					errors.append("%s in %s, but the party cannot get there: %s" % [where, to_area, trip])
+					continue
 			_learn_by_next(topic, people, dialogues, world, [topic] as Array[String])
 			var result: Dictionary = People.ask(person, dialogues, topic, world)
 			if not bool(result["ok"]):
 				errors.append("%s, but the ask was refused: %s" % [where, str(result["error"])])
 	return errors
+
+
+## Walks the party to `to_area`: from the position (or the spawn of `start_area`) to an exit cell,
+## entering each cell of the path through Area.enter, then through the exit, leg by leg along the
+## shortest chain of exits. An error message, or empty if the party is there.
+static func _travel(world: RefCounted, areas: Dictionary, to_area: String, start_area: String) -> String:
+	var position: Dictionary = world.get("position")
+	if position.is_empty():
+		if not areas.has(start_area):
+			return "no area to start in"
+		var first: RefCounted = areas[start_area]
+		var spawn: Vector2i = first.cell_of(first.data.get("spawn", [0, 0]))
+		position = {"area": start_area, "x": spawn.x, "y": spawn.y}
+		world.set("position", position)
+	var hops: int = 0
+	while str(position["area"]) != to_area:
+		hops += 1
+		var here: String = str(position["area"])
+		var route: Array[String] = _route(areas, here, to_area)
+		if route.size() < 2 or hops > areas.size():
+			return "no way from %s to %s" % [here, to_area]
+		var area: RefCounted = areas[here]
+		var from: Vector2i = Vector2i(int(position["x"]), int(position["y"]))
+		var path: Array[Vector2i] = []
+		for e: Variant in area.data.get("exits", []):
+			if str((e as Dictionary)["to"]) == route[1]:
+				path = area.find_path(world, from, area.cell_of((e as Dictionary)["cell"]))
+				if not path.is_empty():
+					break
+		if path.is_empty():
+			return "no path in %s to the exit to %s" % [here, route[1]]
+		for cell: Vector2i in path:
+			area.enter(world, cell)
+		if area.take_exit(world, path[path.size() - 1]).is_empty():
+			return "the exit of %s to %s is shut" % [here, route[1]]
+		position = world.get("position")
+	return ""
+
+
+## Shortest chain of area ids from `from` to `to` along the areas' exits, both included.
+static func _route(areas: Dictionary, from: String, to: String) -> Array[String]:
+	var came: Dictionary = {from: ""}
+	var queue: Array[String] = [from]
+	var head: int = 0
+	while head < queue.size() and not came.has(to):
+		var here: String = queue[head]
+		head += 1
+		if not areas.has(here):
+			continue
+		for e: Variant in (areas[here].data as Dictionary).get("exits", []):
+			var next: String = str((e as Dictionary)["to"])
+			if not came.has(next):
+				came[next] = here
+				queue.append(next)
+	var route: Array[String] = []
+	if not came.has(to):
+		return route
+	var at: String = to
+	while at != "":
+		route.append(at)
+		at = str(came[at])
+	route.reverse()
+	return route
 
 
 ## Makes `topic` known the way play does: ask a topic whose dialogue opens it, learning that one
