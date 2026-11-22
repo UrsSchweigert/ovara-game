@@ -31,6 +31,10 @@
     "rows": {
       "$ref": "content-defs.schema.json#/$defs/rows"
     },
+    "rest": {
+      "description": "True if the party may rest here; resting passes one day.",
+      "type": "boolean"
+    },
     "spawn": {
       "description": "Where the party stands on a new game or when no exit led here.",
       "$ref": "content-defs.schema.json#/$defs/cell"
