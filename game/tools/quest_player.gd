@@ -102,11 +102,35 @@ static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionar
 			if not offered:
 				errors.append("%s, but the topic is unknown" % where)
 				continue
-			People.learn_topic(world, topic)
+			_learn_by_next(topic, people, dialogues, world, [topic] as Array[String])
 			var result: Dictionary = People.ask(person, dialogues, topic, world)
 			if not bool(result["ok"]):
 				errors.append("%s, but the ask was refused: %s" % [where, str(result["error"])])
 	return errors
+
+
+## Makes `topic` known the way play does: ask a topic whose dialogue opens it, learning that one
+## first the same way. A topic nobody opens is learned outright, as if the world had taught it.
+static func _learn_by_next(topic: String, people: Dictionary, dialogues: Dictionary, world: RefCounted, seen: Array[String]) -> void:
+	var known: Array[String] = world.get("topics_known")
+	if known.has(topic):
+		return
+	for person: Variant in people.values():
+		for t: Variant in (person as Dictionary).get("topics", []):
+			var other: String = str((t as Dictionary)["topic"])
+			if seen.has(other):
+				continue
+			var e: Dictionary = {}
+			for d: Variant in (dialogues.get(str(t["dialogue"]), {}) as Dictionary).get("topics", []):
+				if str((d as Dictionary).get("topic", "")) == other:
+					e = d
+			if not (e.get("next", []) as Array).has(topic):
+				continue
+			seen.append(other)
+			_learn_by_next(other, people, dialogues, world, seen)
+			if bool(People.ask(person, dialogues, other, world)["ok"]) and known.has(topic):
+				return
+	People.learn_topic(world, topic)
 
 
 ## Sets the flags that undone steps wait on, when another quest can set them.

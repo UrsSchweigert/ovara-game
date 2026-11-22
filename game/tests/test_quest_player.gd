@@ -131,3 +131,39 @@ func test_heard_refused_ask() -> void:
 	check_eq(found.size(), 1, "one message")
 	check(found.size() > 0 and "e4" in found[0] and "step b" in found[0] and "ione" in found[0] and "power.x" in found[0] and "refused" in found[0], "names quest, step, person, topic")
 	check(not People.heard("ione", "power.x", w), "not faked")
+
+
+func test_heard_topic_learned_by_next() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("n1", "ione", "power.y")
+	var people: Dictionary = _people()
+	(people["ione"]["topics"] as Array).append({"topic": "power.y", "dialogue": "d", "when": {}})
+	var dialogues: Dictionary = _dialogues()
+	(dialogues["d"]["topics"][0] as Dictionary)["next"] = ["power.y"]
+	(dialogues["d"]["topics"] as Array).append({"topic": "power.y", "panels": [{"speaker": "person.ione", "lines": ["Next."]}]})
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], people, dialogues)
+	check_eq(found, [] as Array[String], "no errors")
+	check(People.heard("ione", "power.x", w), "opening topic asked first")
+	check(People.heard("ione", "power.y", w), "next topic heard")
+
+
+func test_all_conditions_need_play() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("m1", "")
+	q["steps"][1]["requires"] = {"day_min": 3, "holds": {"thing.x": 1}, "heard": [{"person": "ione", "topic": "power.x"}]}
+	Quests.update(q, w)
+	check(Quests.status(q, w) != Quests.CLEARED, "update alone does not clear")
+	check(not Quests.is_done(q, "b", w), "step b open")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["thing.x"] as Array[String], _people(), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared by play")
+	check_eq(w.day, 3, "days passed")
+
+
+func test_unsatisfiable_flag_beside_heard_names_flag_step() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("m2", "ione", "power.x")
+	q["steps"].append({"id": "c", "intent": "Wait.", "points": 1, "difficulty": 8, "requires": {"flag": "nobody.sets"}})
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "stuck at step c" in found[0] and not "step b" in found[0], "names only step c")
