@@ -124,3 +124,22 @@ static func ask(person: Dictionary, dialogues: Dictionary, topic: String, world:
 	for n: Variant in e.get("next", []):
 		learn_topic(world, str(n))
 	return {"ok": true, "panels": panels, "error": ""}
+
+
+## The name the world calls the person by at the world's chapter: the entry of `names` with the
+## highest from_chapter not after it. A later name is never returned early. Without one, the id.
+static func display_name(person: Dictionary, world: RefCounted) -> String:
+	var chapter: int = int(world.get("chapter"))
+	var best: int = -1
+	var out: String = str(person.get("id", ""))
+	for n: Variant in person.get("names", []):
+		var from: int = int((n as Dictionary).get("from_chapter", 1))
+		if from <= chapter and from > best:
+			best = from
+			out = str((n as Dictionary).get("name", out))
+	return out
+
+
+## The key the client looks a portrait up by.
+static func portrait_key(person: Dictionary) -> String:
+	return str(person.get("portrait", person.get("id", "")))

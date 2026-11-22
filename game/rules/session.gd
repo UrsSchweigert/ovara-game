@@ -7,6 +7,8 @@ const World: GDScript = preload("res://rules/world_state.gd")
 const Area: GDScript = preload("res://rules/area.gd")
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const SaveStore: GDScript = preload("res://rules/save_store.gd")
+const People: GDScript = preload("res://rules/people.gd")
+const Views: GDScript = preload("res://rules/views.gd")
 
 ## Person the party holds when no start block names one.
 const HERO_ID: String = "hero"
@@ -16,6 +18,9 @@ var world: RefCounted = null
 var areas: Dictionary = {}
 var quests: Array[Dictionary] = []
 var store: RefCounted = null
+## Person id -> person JSON, and dialogue id -> dialogue JSON.
+var people: Dictionary = {}
+var dialogues: Dictionary = {}
 ## Empty, or why resume began a new game.
 var note: String = ""
 
@@ -51,6 +56,8 @@ func _load_content(content: Dictionary, save_store: RefCounted) -> void:
 		areas[str(id)] = Area.from_dict(raw[id])
 	for q: Variant in content.get("quests", []):
 		quests.append(q)
+	people = (content.get("people", {}) as Dictionary).duplicate()
+	dialogues = (content.get("dialogues", {}) as Dictionary).duplicate()
 
 
 func _begin(content: Dictionary, save_store: RefCounted) -> void:
@@ -163,6 +170,66 @@ func rest() -> Dictionary:
 	out["day"] = int(world.day)
 	_after_intent(area_id(), before, out)
 	return out
+
+
+## The dialogue panel's opening: {"ok", "name", "portrait", "topics": [{"topic", "news"}]}.
+## An unknown person gives ok false.
+func talk(person_id: String) -> Dictionary:
+	var out: Dictionary = {"ok": false, "name": "", "portrait": "", "topics": []}
+	if not people.has(person_id):
+		return out
+	var person: Dictionary = _person(person_id)
+	out["ok"] = true
+	out["name"] = People.display_name(person, world)
+	out["portrait"] = People.portrait_key(person)
+	for topic: String in People.available_topics(person, dialogues, world):
+		(out["topics"] as Array).append({"topic": topic, "news": not People.heard(person_id, topic, world)})
+	return out
+
+
+## Asks a topic. Returns {"ok", "error", "panels", "steps_done"}; each panel is {"speaker" (display
+## name), "portrait", "lines"} with at most three lines. Saves if a quest step was finished.
+func ask(person_id: String, topic: String) -> Dictionary:
+	var out: Dictionary = {"ok": false, "error": "unknown person '%s'" % person_id, "panels": [], "steps_done": []}
+	if not people.has(person_id):
+		return out
+	var before: Dictionary = _done_snapshot()
+	var asked: Dictionary = People.ask(_person(person_id), dialogues, topic, world)
+	out["ok"] = asked["ok"]
+	out["error"] = asked["error"]
+	for p: Dictionary in asked["panels"]:
+		var who: Dictionary = _person_by_canon(str(p.get("speaker", "")), person_id)
+		(out["panels"] as Array).append({"speaker": People.display_name(who, world) if not who.is_empty() else str(p.get("speaker", "")),
+			"portrait": str(p.get("portrait", People.portrait_key(who))), "lines": (p.get("lines", []) as Array).duplicate()})
+	if bool(asked["ok"]):
+		_after_intent(area_id(), before, out)
+	return out
+
+
+func _person(person_id: String) -> Dictionary:
+	var person: Dictionary = (people[person_id] as Dictionary).duplicate()
+	person["id"] = person_id
+	return person
+
+
+## The person a panel's canon speaker id names; the asked person if it names none.
+func _person_by_canon(canon_id: String, fallback_id: String) -> Dictionary:
+	for id: Variant in people:
+		if str((people[id] as Dictionary).get("canon", "")) == canon_id:
+			return _person(str(id))
+	return _person(fallback_id) if canon_id == "" else {}
+
+
+func journal_view() -> Dictionary:
+	return Views.journal(self)
+
+
+func party_view() -> Dictionary:
+	return Views.party(self)
+
+
+func pack_view() -> Dictionary:
+	return Views.pack(self)
 
 
 func _set_cell(to: Vector2i) -> void:
