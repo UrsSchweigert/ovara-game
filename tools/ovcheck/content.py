@@ -80,22 +80,37 @@ def _reachable(rows, legend, spawn):
 
 
 def _area(where, data, errors):
-    """Cells inside the grid and, if there is a spawn, reachable from it. Returns the cells found."""
-    rows = data["rows"]
+    """Cells inside the grid and, if there is a spawn, reachable from it.
+
+    Each variant's rows must match the base shape and legend; a variant's cells are checked
+    against its own rows when it has them, otherwise against the base rows."""
+    legend, base = data["legend"], data["rows"]
     places = [(f"{where}/spawn", data["spawn"])] if "spawn" in data else []
     for key in ("exits", "things", "encounters", "trait_access"):
         places += [(f"{where}/{key}/{i}/cell", e["cell"]) for i, e in enumerate(data.get(key, []))]
+    groups = [(base, places)]
     for i, v in enumerate(data.get("variants", [])):
-        for key in ("exits", "things"):
-            places += [(f"{where}/variants/{i}/{key}/{j}/cell", e["cell"]) for j, e in enumerate(v.get(key, []))]
-    inside = [(w, c) for w, c in places if _inside(w, c, rows, errors)]
-    if "spawn" in data:
-        seen = _reachable(rows, data["legend"], data["spawn"])
+        vw = f"{where}/variants/{i}"
+        rows = base
+        if "rows" in v:
+            if not _grid(vw, v["rows"], legend, LIMITS["areas"], errors):
+                continue
+            if len(v["rows"]) != len(base) or len(v["rows"][0]) != len(base[0]):
+                errors.append(f"{vw}/rows: must have the same shape as the base rows")
+                continue
+            rows = v["rows"]
+        vplaces = [(f"{vw}/{key}/{j}/cell", e["cell"]) for key in ("exits", "things")
+                   for j, e in enumerate(v.get(key, []))]
+        groups.append((rows, vplaces))
+    for rows, group in groups:
+        inside = [(w, c) for w, c in group if _inside(w, c, rows, errors)]
+        if "spawn" not in data or not _inside(f"{where}/spawn", data["spawn"], rows, []):
+            continue
+        seen = _reachable(rows, legend, data["spawn"])
         for w, (x, y) in inside:
             near = {(x, y), (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)}
             if not near & seen:
                 errors.append(f"{w}: {[x, y]} cannot be reached from the spawn")
-    return [c for _, c in inside]
 
 
 def _cross_check(root, found, errors):
@@ -110,7 +125,7 @@ def _cross_check(root, found, errors):
             else:
                 _inside(f"{f}: exit to {e['to']}", e["to_cell"], target[1]["rows"], errors)
         for e in a.get("encounters", []):
-            if "battles" in ids and e["battle"] not in ids["battles"]:
+            if e["battle"] not in ids.get("battles", set()):
                 errors.append(f"{f}: encounter with unknown battle {e['battle']!r}")
     for f, p in found.get("people", {}).values():
         if "area" in p and p["area"] not in ids.get("areas", set()):
@@ -122,8 +137,8 @@ def _cross_check(root, found, errors):
     if canon.is_dir():
         from .canon import load_entries
         entries = load_entries(canon, [], [])
-        for kind, items in found.items():
-            for f, data in items.values():
+        for kind in ("areas", "people", "dialogue", "quests"):
+            for f, data in found.get(kind, {}).values():
                 for ref in _canon_refs(data):
                     if ref not in entries:
                         errors.append(f"{f}: canon id {ref!r} does not exist")
@@ -165,7 +180,7 @@ def check_content(root):
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
                 continue
-            if d.name in ("areas", "people", "dialogue", "quests"):
+            if d.name in ("areas", "battles", "people", "dialogue", "quests"):
                 found.setdefault(d.name, {})[data["id"]] = (f, data)
             if d.name not in LIMITS:
                 continue

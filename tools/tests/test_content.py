@@ -231,10 +231,6 @@ class SheetContentTests(ContentCase):
         self.assertFails("x.json", "/trial")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 STAGE1_AREA = area(
     legend={".": {}, "#": {"blocks": True}}, rows=["..#.", "..#.", "...."], spawn=[0, 0],
     exits=[{"cell": [1, 2], "to": "b", "to_cell": [0, 0], "when": {"flag": "q.done"}}],
@@ -307,3 +303,28 @@ class Stage1ContentTests(ContentCase):
         canon.mkdir(parents=True)
         self.put_area(canon="place.nowhere")
         self.assertFails("a.json", "canon id 'place.nowhere' does not exist")
+
+    def test_encounter_unknown_battle_fails(self):
+        self.put_area()
+        (self.root / "game" / "content" / "battles").mkdir()
+        self.assertFails("a.json", "unknown battle 'bt'")
+
+    def test_variant_rows_bad_glyph_or_shape_fail(self):
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["ZZZZ"] * 3}])
+        self.assertFails("/variants/0/rows", "glyph 'Z'")
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["..", ".."]}])
+        self.assertFails("/variants/0/rows", "same shape")
+
+    def test_variant_cells_checked_against_variant_rows(self):
+        self.put("battles", battle(id="bt"))
+        walled = ["..#.", "..#.", "..##"]
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": walled,
+                                 "things": [{"id": "t", "canon": "place.low-anthem", "cell": [3, 0]}]}])
+        self.assertFails("/variants/0/things/0/cell", "cannot be reached")
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["...."] * 3,
+                                 "exits": [{"cell": [9, 0], "to": "b", "to_cell": [0, 0]}]}])
+        self.assertFails("/variants/0/exits/0/cell", "outside")
+
+
+if __name__ == "__main__":
+    unittest.main()
