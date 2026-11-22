@@ -55,4 +55,5 @@ func test_day_min_never_moves_back() -> void:
 	w.advance_days(4)
 	var q: Dictionary = _quest("d2", "", false, 3)
 	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
+	check(Quests.is_done(q, "b", w), "step b done")
 	check_eq(w.day, 5, "day unchanged past day_min")
