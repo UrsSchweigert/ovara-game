@@ -1,0 +1,17 @@
+{
+  "id": "low_anthem_stall",
+  "keeper": {"place": "place.low-anthem", "role": "stall keeper"},
+  "area": "low_anthem_dome_hall",
+  "cell": [8, 5],
+  "stock": [
+    {
+      "when": {"flag": "low_anthem.lamp_lit"},
+      "items": ["sea_grapes", "sea_pear", "lampweed"],
+      "trades": [
+        {"gives": {"sea_grapes": 1}, "wants": {"frond": 2}},
+        {"gives": {"sea_pear": 1}, "wants": {"frond": 2}},
+        {"gives": {"lampweed": 1}, "wants": {"frond": 1}}
+      ]
+    }
+  ]
+}
