@@ -28,6 +28,7 @@ TILE_W, TILE_H = 64, 48  # battle hex, pointy-top
 SCALE, COLS, PAD = 2, 8, 8  # contact sheet: twice size, eight to a row
 FIG_W, FIG_H = 32, 48  # figures stand on the hex, feet on the bottom row at x 16
 THING_SIZE = 24
+PORTRAIT_SIZE = 96  # painted face beside dialogue (art.md, Portraits)
 EXPLORE_SIZE = 32  # exploring tiles are square, one per cell
 DUNGEON_SIZE = 32  # dungeon textures tile without a seam, so arcs wrap at this size
 LABEL_X, LABEL_Y = 12, 21  # two-letter label at chest height
@@ -79,6 +80,17 @@ FIGURES = {
                         ("body", ("trap", 16, 12, 40, 4, 8)), ("body", ("box", 13, 41, 15, 47)),
                         ("body", ("box", 17, 41, 19, 47)), ("tool", ("box", 21, 24, 23, 27))]},
 }
+# Portraits: the hero and one per faction figure, none for the rays (art.md). Head and body colours and
+# outline are the figure's; "bg" is the flat ground behind. Canon ids are the figure's; the hero has none.
+PORTRAIT_SHAPES = [("head", ("ellipse", 48, 36, 16, 20)), ("body", ("box", 44, 52, 52, 60)),
+                   ("body", ("trap", 48, 56, 95, 22, 46))]
+PORTRAIT_BG = {"hero": "deep-2", "mariners": "deep-1", "agravars": "stone-1", "threaded": "kelp-1",
+               "fouled": "brass-0", "makers": "stone-3", "meridian": "stone-2"}
+PORTRAITS = {key: {"canon": FIGURES[key]["canon"], "bg": bg,
+                   "parts": {k: v for k, v in FIGURES[key]["parts"].items() if k != "tool"},
+                   "outline": FIGURES[key].get("outline"), "rim": FIGURES[key].get("rim"),
+                   "note": FIGURES[key]["note"], "shapes": PORTRAIT_SHAPES}
+             for key, bg in PORTRAIT_BG.items()}
 THINGS = {
     "weapon": {"parts": {"blade": "stone-6", "guard": "brass-4", "grip": "deep-2", "pommel": "brass-5"},
                "shapes": [("blade", ("box", 11, 1, 12, 16)), ("guard", ("box", 8, 16, 15, 17)),
@@ -280,6 +292,16 @@ def sprite_image(root: Path, size: tuple[int, int], spec: dict) -> Image.Image:
     return img
 
 
+def portrait_image(root: Path, key: str) -> Image.Image:
+    """Head and shoulders in the figure's colours and outline on a flat opaque ground."""
+    rgb, _ = load_palette(root)
+    spec = {k: v for k, v in PORTRAITS[key].items() if v is not None}
+    img = Image.new("RGBA", (PORTRAIT_SIZE, PORTRAIT_SIZE), rgb[spec["bg"]] + (255,))
+    figure = sprite_image(root, (PORTRAIT_SIZE, PORTRAIT_SIZE), spec)
+    img.paste(figure, (0, 0), figure)
+    return img
+
+
 def explore_image(root: Path, name: str) -> Image.Image:
     rgb, data = load_palette(root)
     img = Image.new("RGBA", (EXPLORE_SIZE, EXPLORE_SIZE))
@@ -344,6 +366,20 @@ def figure_entry(key: str) -> dict:
     return entry
 
 
+def portrait_entry(key: str) -> dict:
+    entry = {"path": f"portraits/portrait-{key}.png", "kind": "portrait"}
+    if PORTRAITS[key]["canon"]:
+        entry["canon"] = PORTRAITS[key]["canon"]
+    entry["brief"] = f"briefs/portrait-{key}.md"
+    return entry
+
+
+def portrait_brief(key: str) -> str:
+    spec = PORTRAITS[key]
+    return (f"{key.capitalize()} portrait, 96 by 96, head and shoulders on {spec['bg']}: {spec['note']}.\n"
+            "Placeholder from tools/art/make_placeholders.py, for owner approval. Not final art.\n")
+
+
 def thing_entry(key: str) -> dict:
     return {"path": f"sprites/thing-{key}.png", "kind": "thing", "brief": f"briefs/thing-{key}.md"}
 
@@ -393,7 +429,7 @@ def upsert_manifest(root: Path, entries: list[dict]) -> list[dict]:
 def build(root: Path) -> list[dict]:
     """Writes the tiles and briefs, upserts their manifest entries, and returns the entries."""
     assets = assets_dir(root)
-    for folder in ("tiles", "sprites", "briefs"):
+    for folder in ("tiles", "sprites", "portraits", "briefs"):
         (assets / folder).mkdir(parents=True, exist_ok=True)
     entries = []
     for region in REGIONS:
@@ -406,6 +442,11 @@ def build(root: Path) -> list[dict]:
         entry = figure_entry(key)
         sprite_image(root, (FIG_W, FIG_H), FIGURES[key]).save(assets / entry["path"])
         (assets / entry["brief"]).write_text(figure_brief(key), encoding="utf-8")
+        entries.append(entry)
+    for key in PORTRAITS:
+        entry = portrait_entry(key)
+        portrait_image(root, key).save(assets / entry["path"])
+        (assets / entry["brief"]).write_text(portrait_brief(key), encoding="utf-8")
         entries.append(entry)
     for key in THINGS:
         entry = thing_entry(key)
@@ -472,19 +513,19 @@ def render_corridor(root: Path) -> Image.Image:
 
 
 def dungeon_picture(root: Path) -> Image.Image:
-    """The corridor twice size, for the owner to look at (shots/ is not committed)."""
+    """The corridor twice size, for the owner to look at."""
     return render_corridor(root).resize((CORRIDOR_W * 2, CORRIDOR_H * 2), Image.NEAREST)
 
 
 def main() -> None:
     build(ROOT)
     sheet, cells = contact_sheet(ROOT)
-    out = ROOT / "shots" / "placeholders.png"
+    out = ROOT / "docs" / "review" / "placeholders.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out)
-    picture = ROOT / "shots" / "dungeon-placeholder.png"
+    picture = ROOT / "docs" / "review" / "dungeon-placeholder.png"
     dungeon_picture(ROOT).save(picture)
-    print(f"wrote {len(REGIONS) * len(STATES)} tiles, {len(FIGURES)} figures, {len(THINGS)} things, "
+    print(f"wrote {len(REGIONS) * len(STATES)} tiles, {len(FIGURES)} figures, {len(PORTRAITS)} portraits, {len(THINGS)} things, "
           f"{len(EXPLORE_TILES)} exploring tiles, {len(SETS) * len(MAKER_PARTS)} dungeon textures, "
           f"briefs and manifest entries; sheet {out} with {len(cells)} cells; dungeon picture {picture}")
 
