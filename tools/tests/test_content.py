@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ovcheck.content import check_content
+from ovcheck.content import _canon_refs, check_content
 
 LEGEND = {"~": {"name": "water"}, "#": {"name": "wall"}}
 BLEGEND = {"~": {"terrain": "open_water", "water": "clean"}}
@@ -177,6 +177,10 @@ class StoryContentTests(ContentCase):
         self.assertEqual(self.errors(), [])
         self.put("dialogue", {**DIALOGUE, "topics": [{**topic, "when": {"day_max": 3}}]})
         self.assertFails("x.json", "/topics/0/when")
+
+    def test_heard_person_is_file_id_not_canon(self):
+        heard = {"heard": [{"person": "sefa", "topic": "place.low-anthem"}]}
+        self.assertEqual(list(_canon_refs(heard)), ["place.low-anthem"])
 
     def test_condition_holds_unknown_item_fails(self):
         topic = {"topic": "place.low-anthem", "when": {"holds": {"nothing": 1}}, "panels": [PANEL]}

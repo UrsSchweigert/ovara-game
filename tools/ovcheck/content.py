@@ -152,7 +152,11 @@ def _cross_check(root, found, errors):
 def _canon_refs(node, key=""):
     if isinstance(node, dict):
         for k, v in node.items():
-            yield from _canon_refs(v, k)
+            if k == "heard" and isinstance(v, list):
+                # heard names its person by file id (sefa), not canon; only the topic is canon.
+                yield from (str(e["topic"]) for e in v if isinstance(e, dict) and "topic" in e)
+            else:
+                yield from _canon_refs(v, k)
     elif isinstance(node, list):
         for v in node:
             yield from _canon_refs(v, key)
