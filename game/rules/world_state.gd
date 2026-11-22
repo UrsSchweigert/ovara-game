@@ -47,6 +47,10 @@ var points: Dictionary = {}
 var entered: Dictionary = {}
 ## Thing id -> number of times the party has used it.
 var used: Dictionary = {}
+## Cut scene ids the party has watched or skipped.
+var seen_scenes: Array[String] = []
+## Canon id -> {"x", "y"}: where a cut scene left a figure.
+var figures: Dictionary = {}
 
 
 func _init(new_seed: int = 1) -> void:
@@ -147,6 +151,26 @@ func uses_of(thing_id: String) -> int:
 	return int(used.get(thing_id, 0))
 
 
+func mark_scene_seen(scene_id: String) -> void:
+	if not seen_scenes.has(scene_id):
+		seen_scenes.append(scene_id)
+
+
+func has_seen_scene(scene_id: String) -> bool:
+	return seen_scenes.has(scene_id)
+
+
+func set_figure_cell(canon_id: String, cell: Vector2i) -> void:
+	figures[canon_id] = {"x": cell.x, "y": cell.y}
+
+
+## Where a cut scene left the figure; null if it never moved one.
+func figure_cell(canon_id: String) -> Variant:
+	if not figures.has(canon_id):
+		return null
+	return Vector2i(int(figures[canon_id]["x"]), int(figures[canon_id]["y"]))
+
+
 func to_dict() -> Dictionary:
 	var sheet_data: Dictionary = {}
 	for id: Variant in sheets:
@@ -160,6 +184,7 @@ func to_dict() -> Dictionary:
 		"topics_known": topics_known.duplicate(), "topics_heard": topics_heard.duplicate(true),
 		"quests": quests.duplicate(true), "points": points.duplicate(),
 		"entered": entered.duplicate(true), "used": used.duplicate(),
+		"seen_scenes": seen_scenes.duplicate(), "figures": figures.duplicate(true),
 	}
 
 
@@ -215,6 +240,9 @@ static func from_dict(data: Dictionary) -> Dictionary:
 	w.points = _ints(data.get("points", {}))
 	w.entered = _ints(data.get("entered", {}))
 	w.used = _ints(data.get("used", {}))
+	for sc: Variant in data.get("seen_scenes", []):
+		w.seen_scenes.append(str(sc))
+	w.figures = _ints(data.get("figures", {}))
 	return {"state": w, "error": ""}
 
 

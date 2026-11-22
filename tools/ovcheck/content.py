@@ -141,6 +141,22 @@ def _cross_check(root, found, errors):
                 errors.append(f"{f}: start names unknown area {start['area']!r}")
             else:
                 _inside(f"{f}: start {start['area']}", start["cell"], target[1]["rows"], errors)
+            arrival = start.get("arrival")
+            if arrival and arrival not in ids.get("cutscenes", set()):
+                errors.append(f"{f}: start names unknown arrival cut scene {arrival!r}")
+    for f, c in found.get("cutscenes", {}).values():
+        if "area" not in c:
+            if any(s.get("arrival") == c.get("id") for _, q in found.get("quests", {}).values()
+                   for s in [q.get("start") or {}]):
+                errors.append(f"{f}: arrival cut scene needs an area")
+            continue
+        target = found.get("areas", {}).get(c["area"])
+        if target is None:
+            errors.append(f"{f}: cut scene names unknown area {c['area']!r}")
+            continue
+        for i, st in enumerate(c["steps"]):
+            if st["op"] in ("walk", "camera"):
+                _inside(f"{f}: step {i} {st['op']}", st["to"], target[1]["rows"], errors)
     canon = Path(root) / "canon"
     if canon.is_dir():
         from .canon import load_entries

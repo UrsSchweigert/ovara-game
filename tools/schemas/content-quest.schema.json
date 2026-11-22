@@ -101,7 +101,8 @@
         "area": {"$ref": "content-defs.schema.json#/$defs/content_id"},
         "cell": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}},
         "party": {"type": "array", "items": {"type": "string", "minLength": 1}},
-        "guests": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        "guests": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "arrival": {"$ref": "content-defs.schema.json#/$defs/content_id"}
       }
     },
     "side": {
