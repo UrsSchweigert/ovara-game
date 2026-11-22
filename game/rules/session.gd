@@ -9,6 +9,7 @@ const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const SaveStore: GDScript = preload("res://rules/save_store.gd")
 const People: GDScript = preload("res://rules/people.gd")
 const Views: GDScript = preload("res://rules/views.gd")
+const Cutscene: GDScript = preload("res://rules/cutscene.gd")
 
 ## Person the party holds when no start block names one.
 const HERO_ID: String = "hero"
@@ -21,6 +22,10 @@ var store: RefCounted = null
 ## Person id -> person JSON, and dialogue id -> dialogue JSON.
 var people: Dictionary = {}
 var dialogues: Dictionary = {}
+## Cut scene id -> cut scene JSON.
+var cutscenes: Dictionary = {}
+## The cut scene running now, or null.
+var scene: RefCounted = null
 ## Empty, or why resume began a new game.
 var note: String = ""
 
@@ -58,6 +63,7 @@ func _load_content(content: Dictionary, save_store: RefCounted) -> void:
 		quests.append(q)
 	people = (content.get("people", {}) as Dictionary).duplicate()
 	dialogues = (content.get("dialogues", {}) as Dictionary).duplicate()
+	cutscenes = (content.get("cutscenes", {}) as Dictionary).duplicate()
 
 
 func _begin(content: Dictionary, save_store: RefCounted) -> void:
@@ -83,6 +89,9 @@ func _start_fresh() -> void:
 	if areas.has(area_id):
 		areas[area_id].call("enter", world, cell)
 	_update_quests()
+	var arrival: String = str(start.get("arrival", ""))
+	if cutscenes.has(arrival) and not world.has_seen_scene(arrival):
+		scene = Cutscene.new(cutscenes[arrival], world, people)
 
 
 func _first_main_start() -> Dictionary:
@@ -218,6 +227,36 @@ func _person_by_canon(canon_id: String, fallback_id: String) -> Dictionary:
 		if str((people[id] as Dictionary).get("canon", "")) == canon_id:
 			return _person(str(id))
 	return _person(fallback_id) if canon_id == "" else {}
+
+
+## The cut scene's current step ({} when none is running).
+func scene_step() -> Dictionary:
+	return {} if scene == null else scene.call("current")
+
+
+## Finishes the current step. Returns the next step; saves when the scene ends.
+func advance_scene() -> Dictionary:
+	if scene == null:
+		return {}
+	var next: Dictionary = scene.call("advance")
+	_close_scene()
+	return next
+
+
+## Skips to the end state. Returns {"ok"}; false when no scene runs or it cannot be skipped.
+func skip_scene() -> Dictionary:
+	if scene == null:
+		return {"ok": false}
+	var out: Dictionary = scene.call("skip")
+	_close_scene()
+	return out
+
+
+func _close_scene() -> void:
+	if scene != null and bool(scene.call("finished")):
+		scene = null
+		if store != null:
+			store.call("save", world)
 
 
 func journal_view() -> Dictionary:
