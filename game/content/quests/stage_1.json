@@ -18,7 +18,18 @@
       "points": 2,
       "difficulty": 8,
       "kind": "discover",
-      "area": "low_anthem_dry_room"
+      "area": "low_anthem_dry_room",
+      "requires": {
+        "day_min": 4,
+        "heard": [
+          { "person": "sefa", "topic": "place.low-anthem" },
+          { "person": "sefa", "topic": "event.the-makers" },
+          { "person": "sefa", "topic": "power.intending" },
+          { "person": "sefa", "topic": "person.jef" },
+          { "person": "sefa", "topic": "machine.the-dragon" },
+          { "person": "sefa", "topic": "faction.threaded" }
+        ]
+      }
     },
     {
       "id": "ione_examination",
@@ -26,7 +37,10 @@
       "points": 2,
       "difficulty": 10,
       "kind": "discover",
-      "area": "low_anthem_dome_hall"
+      "area": "low_anthem_dome_hall",
+      "requires": {
+        "heard": [{ "person": "ione", "topic": "power.undertow" }]
+      }
     },
     {
       "id": "cut_fronds",
@@ -34,7 +48,10 @@
       "points": 2,
       "difficulty": 8,
       "kind": "fetch",
-      "area": "low_anthem_terraces"
+      "area": "low_anthem_terraces",
+      "requires": {
+        "holds": { "frond": 10 }
+      }
     },
     {
       "id": "nursery_gate",
@@ -50,7 +67,13 @@
       "points": 2,
       "difficulty": 8,
       "kind": "discover",
-      "area": "low_anthem_dome_hall"
+      "area": "low_anthem_dome_hall",
+      "requires": {
+        "heard": [
+          { "person": "davin", "topic": "person.jef" },
+          { "person": "davin", "topic": "machine.the-dragon" }
+        ]
+      }
     },
     {
       "id": "meeting_hall_lamp",
@@ -58,7 +81,10 @@
       "points": 3,
       "difficulty": 14,
       "kind": "puzzle",
-      "area": "low_anthem_meeting_hall"
+      "area": "low_anthem_meeting_hall",
+      "requires": {
+        "day_min": 9
+      }
     }
   ],
   "clears": "low_anthem.lamp_lit",
