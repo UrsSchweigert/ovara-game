@@ -7,7 +7,8 @@
     "area": "low_anthem_terraces",
     "cell": [1, 6],
     "party": ["hero"],
-    "guests": ["sefa", "bother"]
+    "guests": ["sefa", "bother"],
+    "arrival": "stage_1_arrival"
   },
   "steps": [
     {
