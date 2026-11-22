@@ -65,6 +65,28 @@ def test_gui_serves_the_dashboard_and_read_only_status(gui_server, tmp_path):
     assert not (tmp_path / "home" / "harness.sqlite").exists()
 
 
+def test_gui_shows_the_owners_next_steps_from_the_steward_file(gui_server, tmp_path):
+    home = tmp_path / "home"
+    home.mkdir(parents=True, exist_ok=True)
+    (home / "next-steps.md").write_text(
+        "# What is waiting for you\n\n1. Merge pull request 7.\n2. Run <b>x</b>:  ./ov harness start\nnot a step\n3. " + "z" * 900 + "\n",
+        encoding="utf-8")
+    code, _, body = request(gui_server, "GET", "/api/status")
+    steps = json.loads(body)["next_steps"]
+    assert code == 200
+    assert steps[:2] == ["Merge pull request 7.", "Run <b>x</b>:  ./ov harness start"]
+    assert len(steps) == 3 and len(steps[2]) == 600
+    code, _, page = request(gui_server, "GET", "/")
+    assert 'id="next-steps"' in page
+    code, _, script = request(gui_server, "GET", "/app.js")
+    assert "snapshot.next_steps" in script and "textContent" not in script.split("snapshot.next_steps")[1][:260]
+
+
+def test_gui_has_no_next_steps_without_the_file(gui_server):
+    code, _, body = request(gui_server, "GET", "/api/status")
+    assert code == 200 and json.loads(body)["next_steps"] == []
+
+
 def test_gui_refuses_mutations_without_the_session_token(gui_server):
     code, headers, body = request(gui_server, "POST", "/api/pause", {"plan_id": "anything"},
                                   {"Content-Type": "application/json"})

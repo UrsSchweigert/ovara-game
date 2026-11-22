@@ -5,6 +5,7 @@ import base64
 import hmac
 import json
 import os
+import re
 import secrets
 import sqlite3
 import subprocess
@@ -22,6 +23,25 @@ from .broker import BrokerRejected, assert_no_secrets
 from .store import Store, default_home
 
 MAX_BODY = 16 * 1024 * 1024
+NEXT_STEPS_FILE = "next-steps.md"
+
+
+def read_next_steps(home) -> list:
+    """The owner's to-do list, written beside the store by the steward (tools/steward.py) and nothing else.
+
+    It is text for the page to show: a missing or unreadable file is an empty list, and the page never treats a
+    line as markup or as a command it may run.
+    """
+    try:
+        text = (Path(home) / NEXT_STEPS_FILE).read_text(encoding="utf-8")[:20000]
+    except (OSError, UnicodeDecodeError):
+        return []
+    steps = []
+    for line in text.splitlines():
+        match = re.match(r"^\d+\.\s+(.*)$", line.strip())
+        if match:
+            steps.append(match.group(1)[:600])
+    return steps[:20]
 MODEL_PROBE_MIN_INTERVAL_S = 60
 
 
@@ -100,6 +120,7 @@ class GuiServer(ThreadingHTTPServer):
             report["checks"] = [job for job in report["checks"] if job["plan_id"] == selected]
         order = {row["issue_id"]: rank for rank, row in enumerate(report["queue"])}
         report["checks"].sort(key=lambda job: (order.get(job["issue_id"], len(order)), job["issue_id"], job["stage"]))
+        report["next_steps"] = read_next_steps(self.home)
         report["read_only"] = self.read_only
         report["repository"] = self.repo_slug
         report["managed_runs"] = []
