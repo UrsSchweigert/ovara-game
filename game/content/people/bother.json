@@ -1,0 +1,14 @@
+{
+  "id": "bother",
+  "canon": "person.bother",
+  "attributes": {
+    "body": 10,
+    "hands": 8,
+    "mind": 8,
+    "standing": 8
+  },
+  "reach": 0,
+  "skills": {},
+  "traits": [],
+  "join_chapter": 1
+}

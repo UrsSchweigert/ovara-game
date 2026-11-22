@@ -2,14 +2,186 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "description": "An area: a tile map of at most 64 columns by 48 rows (PLAN.md section 2). Each row is a string of one glyph per tile; each glyph is a key of legend.",
   "type": "object",
-  "required": ["id", "canon", "name", "legend", "rows"],
+  "required": [
+    "id",
+    "canon",
+    "name",
+    "legend",
+    "rows"
+  ],
   "additionalProperties": true,
   "properties": {
-    "id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
-    "canon": {"$ref": "content-defs.schema.json#/$defs/canon_id"},
-    "name": {"type": "string", "minLength": 1},
-    "chapter": {"$ref": "content-defs.schema.json#/$defs/chapter"},
-    "legend": {"$ref": "content-defs.schema.json#/$defs/legend"},
-    "rows": {"$ref": "content-defs.schema.json#/$defs/rows"}
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "canon": {
+      "$ref": "content-defs.schema.json#/$defs/canon_id"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chapter": {
+      "$ref": "content-defs.schema.json#/$defs/chapter"
+    },
+    "legend": {
+      "$ref": "content-defs.schema.json#/$defs/legend"
+    },
+    "rows": {
+      "$ref": "content-defs.schema.json#/$defs/rows"
+    },
+    "spawn": {
+      "description": "Where the party stands on a new game or when no exit led here.",
+      "$ref": "content-defs.schema.json#/$defs/cell"
+    },
+    "exits": {
+      "$ref": "#/$defs/exits"
+    },
+    "things": {
+      "$ref": "#/$defs/things"
+    },
+    "encounters": {
+      "description": "Cells that start a battle (battle is a battle id).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cell",
+          "battle"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cell": {
+            "$ref": "content-defs.schema.json#/$defs/cell"
+          },
+          "battle": {
+            "$ref": "content-defs.schema.json#/$defs/content_id"
+          },
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          }
+        }
+      }
+    },
+    "light": {
+      "description": "Light level, 0 (dark) to 1 (day).",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "trait_access": {
+      "description": "Cells that only a party member with the trait can enter.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cell",
+          "trait"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cell": {
+            "$ref": "content-defs.schema.json#/$defs/cell"
+          },
+          "trait": {
+            "$ref": "content-defs.schema.json#/$defs/trait_ref"
+          }
+        }
+      }
+    },
+    "variants": {
+      "description": "Per-flag states: while when holds, the given rows, things or exits replace the base ones.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "when"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          },
+          "rows": {
+            "$ref": "content-defs.schema.json#/$defs/rows"
+          },
+          "things": {
+            "$ref": "#/$defs/things"
+          },
+          "exits": {
+            "$ref": "#/$defs/exits"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "things": {
+      "description": "Things to look at, take or use. hidden: only a party member with the trait sees it. when: only while the condition holds.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "canon",
+          "cell"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "id": {
+            "$ref": "content-defs.schema.json#/$defs/content_id"
+          },
+          "canon": {
+            "$ref": "content-defs.schema.json#/$defs/canon_id"
+          },
+          "cell": {
+            "$ref": "content-defs.schema.json#/$defs/cell"
+          },
+          "hidden": {
+            "type": "object",
+            "required": [
+              "trait"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "trait": {
+                "$ref": "content-defs.schema.json#/$defs/trait_ref"
+              }
+            }
+          },
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          }
+        }
+      }
+    },
+    "exits": {
+      "description": "Cells that lead to another area (to) at a cell of it (to_cell).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "cell",
+          "to",
+          "to_cell"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cell": {
+            "$ref": "content-defs.schema.json#/$defs/cell"
+          },
+          "to": {
+            "$ref": "content-defs.schema.json#/$defs/content_id"
+          },
+          "to_cell": {
+            "$ref": "content-defs.schema.json#/$defs/cell"
+          },
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          }
+        }
+      }
+    }
   }
 }

@@ -231,5 +231,100 @@ class SheetContentTests(ContentCase):
         self.assertFails("x.json", "/trial")
 
 
+STAGE1_AREA = area(
+    legend={".": {}, "#": {"blocks": True}}, rows=["..#.", "..#.", "...."], spawn=[0, 0],
+    exits=[{"cell": [1, 2], "to": "b", "to_cell": [0, 0], "when": {"flag": "q.done"}}],
+    things=[{"id": "lamp", "canon": "place.low-anthem", "cell": [3, 0], "hidden": {"trait": "trait.water-breather"}}],
+    encounters=[{"cell": [1, 1], "battle": "bt"}], light=0.5, trait_access=[{"cell": [3, 2], "trait": "trait.water-breather"}],
+    variants=[{"when": {"flag": "q.done"}, "rows": ["...."] * 3}])
+OTHER_AREA = area(id="b", legend={".": {}}, rows=["..", ".."])
+
+
+class Stage1ContentTests(ContentCase):
+    def put_area(self, **kw):
+        self.put("areas", {**STAGE1_AREA, **kw}, "a.json")
+        self.put("areas", OTHER_AREA, "b.json")
+
+    def test_valid_stage1_content_passes(self):
+        self.put_area()
+        self.put("battles", battle(id="bt"))
+        self.put("dialogue", {**DIALOGUE, "topics": [{**DIALOGUE["topics"][0], "sets": ["q.done"],
+                                                      "next": ["place.low-anthem"]}]})
+        self.put("people", sheet(area="a", cell=[0, 0], topics=[{"topic": "place.low-anthem", "dialogue": "dl"}]), "p.json")
+        self.put("quests", {**QUEST, "steps": [{**QUEST["steps"][0], "kind": "discover", "area": "a",
+                                                "requires": {"flag": "q.done"}, "sets": ["q.done"]}]})
+        self.assertEqual(self.errors(), [])
+
+    def test_area_bad_fields_fail(self):
+        self.put_area(exits=[{"cell": [1, 2], "to": "b"}])
+        self.assertFails("a.json", "/exits/0", "to_cell")
+        self.put_area(light=2)
+        self.assertFails("a.json", "/light")
+        self.put_area(things=[{"id": "t", "canon": "Lamp", "cell": [0, 0]}])
+        self.assertFails("a.json", "/things/0/canon")
+
+    def test_exit_to_unknown_area_fails(self):
+        self.put_area(exits=[{"cell": [1, 2], "to": "nowhere", "to_cell": [0, 0]}])
+        self.assertFails("a.json", "unknown area 'nowhere'")
+
+    def test_exit_target_cell_outside_fails(self):
+        self.put_area(exits=[{"cell": [1, 2], "to": "b", "to_cell": [5, 5]}])
+        self.assertFails("a.json", "exit to b", "outside")
+
+    def test_cell_outside_area_fails(self):
+        self.put_area(spawn=[9, 9])
+        self.assertFails("a.json", "/spawn", "outside")
+
+    def test_unreachable_exit_fails(self):
+        self.put_area(rows=["..#.", "..#.", "..#."], exits=[{"cell": [3, 1], "to": "b", "to_cell": [0, 0]}],
+                      things=[], encounters=[], trait_access=[], variants=[])
+        self.assertFails("/exits/0/cell", "cannot be reached")
+
+    def test_person_unknown_area_or_dialogue_fails(self):
+        self.put_area()
+        self.put("people", sheet(area="zz", topics=[{"topic": "place.low-anthem", "dialogue": "nope"}]), "p.json")
+        self.assertFails("p.json", "unknown area 'zz'")
+        self.assertFails("p.json", "unknown dialogue 'nope'")
+
+    def test_person_topic_needs_dialogue_fails(self):
+        self.put("people", sheet(topics=[{"topic": "place.low-anthem"}]), "p.json")
+        self.assertFails("p.json", "/topics/0", "dialogue")
+
+    def test_dialogue_bad_sets_fails(self):
+        self.put("dialogue", {**DIALOGUE, "topics": [{**DIALOGUE["topics"][0], "sets": ["Bad Flag"]}]})
+        self.assertFails("x.json", "/topics/0/sets/0")
+
+    def test_quest_step_bad_kind_fails(self):
+        self.put("quests", {**QUEST, "steps": [{**QUEST["steps"][0], "kind": "battle"}]})
+        self.assertFails("x.json", "/steps/0/kind")
+
+    def test_unknown_canon_id_fails(self):
+        canon = self.root / "canon" / "places"
+        canon.mkdir(parents=True)
+        self.put_area(canon="place.nowhere")
+        self.assertFails("a.json", "canon id 'place.nowhere' does not exist")
+
+    def test_encounter_unknown_battle_fails(self):
+        self.put_area()
+        (self.root / "game" / "content" / "battles").mkdir()
+        self.assertFails("a.json", "unknown battle 'bt'")
+
+    def test_variant_rows_bad_glyph_or_shape_fail(self):
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["ZZZZ"] * 3}])
+        self.assertFails("/variants/0/rows", "glyph 'Z'")
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["..", ".."]}])
+        self.assertFails("/variants/0/rows", "same shape")
+
+    def test_variant_cells_checked_against_variant_rows(self):
+        self.put("battles", battle(id="bt"))
+        walled = ["..#.", "..#.", "..##"]
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": walled,
+                                 "things": [{"id": "t", "canon": "place.low-anthem", "cell": [3, 0]}]}])
+        self.assertFails("/variants/0/things/0/cell", "cannot be reached")
+        self.put_area(variants=[{"when": {"flag": "q.done"}, "rows": ["...."] * 3,
+                                 "exits": [{"cell": [9, 0], "to": "b", "to_cell": [0, 0]}]}])
+        self.assertFails("/variants/0/exits/0/cell", "outside")
+
+
 if __name__ == "__main__":
     unittest.main()

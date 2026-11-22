@@ -32,6 +32,36 @@
     },
     "join_chapter": {
       "$ref": "content-defs.schema.json#/$defs/chapter"
+    },
+    "area": {
+      "description": "Area id where the person stands.",
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
+    "cell": {
+      "$ref": "content-defs.schema.json#/$defs/cell"
+    },
+    "topics": {
+      "description": "What the person talks about, by chapter and flag: a dialogue id (see content-dialogue) and a topic it holds.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "topic",
+          "dialogue"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "topic": {
+            "$ref": "content-defs.schema.json#/$defs/canon_id"
+          },
+          "dialogue": {
+            "$ref": "content-defs.schema.json#/$defs/content_id"
+          },
+          "when": {
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          }
+        }
+      }
     }
   }
 }

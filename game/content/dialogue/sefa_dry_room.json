@@ -1,0 +1,134 @@
+{
+  "id": "sefa_dry_room",
+  "person": "person.sefa",
+  "topics": [
+    {
+      "topic": "place.low-anthem",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "This is Low Anthem. A hold of",
+            "four hundred. Poor, and mostly Tenders."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "We net the fall and seal it up.",
+            "Somebody has to."
+          ]
+        }
+      ],
+      "next": [
+        "event.the-makers",
+        "power.intending",
+        "creature.silverback"
+      ]
+    },
+    {
+      "topic": "event.the-makers",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "The Makers built the cities under",
+            "the sea, and the Dragon."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "That was over three thousand",
+            "years ago. Jef is the last who",
+            "understands their craft."
+          ]
+        }
+      ],
+      "next": [
+        "person.jef",
+        "machine.the-dragon"
+      ]
+    },
+    {
+      "topic": "power.intending",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "The gift. The sea answers us.",
+            "I ask it to care. That is intending."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Your gift? I cannot tell.",
+            "Ione will look at you."
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "person.jef",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Jef is about nine hundred years old.",
+            "He has no gift. He keeps the Dragon."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "He makes the Threaded.",
+            "They answer only to him."
+          ]
+        }
+      ],
+      "next": [
+        "faction.threaded"
+      ]
+    },
+    {
+      "topic": "machine.the-dragon",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "The Dragon. A kilometre of pale",
+            "metal, circling the world."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Most take it for a living creature.",
+            "It is a Maker thing."
+          ]
+        }
+      ]
+    },
+    {
+      "topic": "faction.threaded",
+      "panels": [
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Jef's warrior monks. About a hundred.",
+            "Alone or in twos and threes."
+          ]
+        },
+        {
+          "speaker": "person.sefa",
+          "lines": [
+            "Their rule: Keep the water. Own",
+            "nothing you cannot carry. Come",
+            "when you are called."
+          ]
+        }
+      ]
+    }
+  ]
+}

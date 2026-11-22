@@ -1,0 +1,26 @@
+{
+  "id": "low_anthem_dry_room",
+  "canon": "place.low-anthem",
+  "name": "Low Anthem: the dry room",
+  "chapter": 1,
+  "legend": {
+    "#": {"blocks": true},
+    "d": {},
+    ".": {}
+  },
+  "rows": [
+    "########",
+    "#......#",
+    "#......#",
+    "#......#",
+    "###d####"
+  ],
+  "spawn": [3, 3],
+  "exits": [
+    {"cell": [3, 4], "to": "low_anthem_dome_hall", "to_cell": [5, 1]}
+  ],
+  "things": [
+    {"id": "guest_bed", "canon": "place.low-anthem", "cell": [1, 1]},
+    {"id": "warm_stone", "canon": "place.low-anthem", "cell": [6, 1]}
+  ]
+}

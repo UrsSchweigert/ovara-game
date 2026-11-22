@@ -68,9 +68,36 @@
               12,
               14
             ]
+          },
+          "kind": {
+            "enum": [
+              "fetch",
+              "discover",
+              "puzzle"
+            ]
+          },
+          "area": {
+            "$ref": "content-defs.schema.json#/$defs/content_id"
+          },
+          "requires": {
+            "description": "Condition that clears the step. Completion is kept in quest state, not in a flag.",
+            "$ref": "content-defs.schema.json#/$defs/condition"
+          },
+          "sets": {
+            "type": "array",
+            "items": {
+              "$ref": "content-defs.schema.json#/$defs/flag"
+            }
           }
         }
       }
+    },
+    "side": {
+      "description": "A side quest closes when its place is lost; a stage does not.",
+      "type": "boolean"
+    },
+    "place": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
     },
     "clears": {
       "$ref": "content-defs.schema.json#/$defs/flag"
