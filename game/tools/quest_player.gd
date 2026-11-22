@@ -5,24 +5,22 @@ extends RefCounted
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const People: GDScript = preload("res://rules/people.gd")
 const Area: GDScript = preload("res://rules/area.gd")
-## Pack key for items granted to a party with no members.
-const STAND_IN_KEY: String = "quest_player"
+## Party member the player becomes when the world has none, so that used things fill a pack.
+const PLAYER_ID: String = "player"
 
 
 ## Error messages; empty if the quest was cleared. `all_quests` are the loaded quests whose
-## flags may stand in for the world's other doings. `item_ids` are the items the player may be
-## given for steps that wait on holds. `people` maps file id to person JSON and `dialogues` maps
-## dialogue id to dialogue JSON, for steps that wait on topics heard. `areas` maps area id to Area
-## and `targets` maps step id to {"thing": id} or {"exit": area id}: the player must find a path
-## from the area's spawn to that thing or exit before the step is done. `person_areas` maps
-## person id to the area they are in: the party walks there, through Area.enter, before asking.
-static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}, areas: Dictionary = {}, targets: Dictionary = {}, person_areas: Dictionary = {}) -> Array[String]:
+## flags may stand in for the world's other doings. `people` maps file id to person JSON and
+## `dialogues` maps dialogue id to dialogue JSON, for steps that wait on topics heard. `areas`
+## maps area id to Area: entered, used and holds steps are done by walking and using things there.
+## `person_areas` maps person id to the area they are in: the party walks there, through
+## Area.enter, before asking.
+static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], people: Dictionary = {}, dialogues: Dictionary = {}, areas: Dictionary = {}, person_areas: Dictionary = {}) -> Array[String]:
 	var id: String = str(quest["id"])
 	if not Quests.open(quest, world):
 		return ["quest %s: cannot open at chapter %d (chapters %s)" % [id, world.chapter, str(quest["chapters"])]]
-	var walk_errors: Array[String] = _walk_to_steps(quest, world, areas, targets)
-	if not walk_errors.is_empty():
-		return walk_errors
+	if (world.get("party") as Array).is_empty():
+		(world.get("party") as Array).append(PLAYER_ID)
 	for pass_number: int in 2:
 		for step: Dictionary in quest["steps"]:
 			if not step.has("requires"):
@@ -33,9 +31,6 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		var thing_errors: Array[String] = _do_things(quest, world, areas)
 		if not thing_errors.is_empty():
 			return thing_errors
-		var held_errors: Array[String] = _grant_holds(quest, world, item_ids)
-		if not held_errors.is_empty():
-			return held_errors
 		var heard_errors: Array[String] = _hear_topics(quest, world, people, dialogues, areas, person_areas)
 		if not heard_errors.is_empty():
 			return heard_errors
@@ -48,38 +43,6 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		if not Quests.is_done(quest, str(step["id"]), world):
 			stuck.append(str(step["id"]))
 	return ["quest %s: stuck at step %s" % [id, ", ".join(stuck)]]
-
-
-## Finds a path in the step's area from its spawn to the step's thing or exit; an error if none.
-static func _walk_to_steps(quest: Dictionary, world: RefCounted, areas: Dictionary, targets: Dictionary) -> Array[String]:
-	var errors: Array[String] = []
-	for step: Dictionary in quest["steps"]:
-		var step_id: String = str(step["id"])
-		if not targets.has(step_id) or Quests.is_done(quest, step_id, world):
-			continue
-		var area_id: String = str(step.get("area", ""))
-		var where: String = "quest %s: step %s in %s" % [str(quest["id"]), step_id, area_id]
-		if not areas.has(area_id):
-			errors.append("%s: area is unknown" % where)
-			continue
-		var area: RefCounted = areas[area_id]
-		var target: Dictionary = targets[step_id]
-		var cell: Variant = null
-		if target.has("thing"):
-			for t: Variant in area.data.get("things", []):
-				if str((t as Dictionary)["id"]) == str(target["thing"]):
-					cell = area.cell_of((t as Dictionary)["cell"])
-		else:
-			for e: Variant in area.data.get("exits", []):
-				if str((e as Dictionary)["to"]) == str(target.get("exit", "")):
-					cell = area.cell_of((e as Dictionary)["cell"])
-		if cell == null:
-			errors.append("%s: no such thing or exit %s" % [where, str(target)])
-			continue
-		var from: Vector2i = area.cell_of(area.data.get("spawn", [0, 0]))
-		if area.find_path(world, from, cell as Vector2i).is_empty():
-			errors.append("%s: no path from %s to %s" % [where, str(from), str(cell)])
-	return errors
 
 
 ## Lets the days pass for undone steps that wait on a day, one day at a time and never back. Each
@@ -128,9 +91,8 @@ static func _do_things(quest: Dictionary, world: RefCounted, areas: Dictionary) 
 		for item: Variant in held:
 			var givers: Array = _things_giving(areas, str(item), str(step.get("area", "")))
 			if givers.is_empty():
+				errors.append("%s: no thing gives %s" % [where, str(item)])
 				continue
-			if (world.get("party") as Array).is_empty():
-				(world.get("party") as Array).append(STAND_IN_KEY)
 			var need: int = int(held[item])
 			var failed_use: bool = false
 			for found: Variant in givers:
@@ -212,38 +174,6 @@ static func _walk_to(world: RefCounted, areas: Dictionary, area_id: String, cell
 		area.enter(world, step_cell)
 	world.set("position", {"area": area_id, "x": cell.x, "y": cell.y})
 	return ""
-
-
-## FALLBACK, removed in P3: gives the hero the held items that no thing gives.
-## Tops up the hero's pack with the items that undone steps wait on; an error for any item
-## not in `item_ids`, since the player cannot be given it.
-static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[String]) -> Array[String]:
-	var errors: Array[String] = []
-	var packs: Dictionary = world.get("packs")
-	var party: Array = world.get("party")
-	var hero: String = str(party[0]) if not party.is_empty() else STAND_IN_KEY
-	for step: Dictionary in quest["steps"]:
-		var cond: Dictionary = step.get("requires", {})
-		if Quests.is_done(quest, str(step["id"]), world) or not cond.has("holds"):
-			continue
-		var held: Dictionary = cond["holds"]
-		for item: Variant in held:
-			var item_id: String = str(item)
-			if _pack_total(world, item_id) >= int(held[item]):
-				continue
-			if not item_ids.has(item_id):
-				errors.append("quest %s: step %s needs item %s, which is unknown" % [str(quest["id"]), str(step["id"]), item_id])
-				continue
-			var total: int = 0
-			for pack: Variant in packs.values():
-				total += int((pack as Dictionary).get(item_id, 0))
-			var missing: int = int(held[item]) - total
-			if missing > 0:
-				if not packs.has(hero):
-					packs[hero] = {}
-				var mine: Dictionary = packs[hero]
-				mine[item_id] = int(mine.get(item_id, 0)) + missing
-	return errors
 
 
 ## Has the hero ask the topics that undone steps wait on. The topic is first learned, as if the

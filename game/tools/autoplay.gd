@@ -7,13 +7,6 @@ const People: GDScript = preload("res://rules/people.gd")
 const World: GDScript = preload("res://rules/world_state.gd")
 const Walker: GDScript = preload("res://tools/walker.gd")
 const QuestPlayer: GDScript = preload("res://tools/quest_player.gd")
-## Where the player must walk for the steps that have a place: a thing or an exit of the step's area.
-const TARGETS: Dictionary = {
-	"follow_sefa": {"exit": "low_anthem_dome_hall"},
-	"cut_fronds": {"thing": "drying_rack_1"},
-	"nursery_gate": {"thing": "nursery_gate"},
-	"meeting_hall_lamp": {"thing": "dead_lamp"},
-}
 ## Where each person to be asked stands.
 const PERSON_AREAS: Dictionary = {
 	"sefa": "low_anthem_dry_room",
@@ -34,9 +27,6 @@ func _init() -> void:
 	for data: Dictionary in _load_dir("res://content/areas"):
 		areas.append(Area.from_dict(data))
 	var quests: Array[Dictionary] = _load_dir("res://content/quests")
-	var item_ids: Array[String] = []
-	for item: Dictionary in _load_dir("res://content/items"):
-		item_ids.append(str(item.get("id", "")))
 	var people: Dictionary = _load_keyed("res://content/people")
 	var dialogues: Dictionary = _load_keyed("res://content/dialogue")
 	var by_id: Dictionary = {}
@@ -52,7 +42,7 @@ func _init() -> void:
 		var found: Array[String] = [] if not (area.errors as Array).is_empty() else Walker.walk(area)
 		print("walker: %s %s" % [area.id, "OK" if found.is_empty() and (area.errors as Array).is_empty() else "FAILED"])
 		errors.append_array(found)
-	played += _play_quests(quests, item_ids, people, dialogues, by_id, want, errors)
+	played += _play_quests(quests, people, dialogues, by_id, want, errors)
 	if want != "" and played == 0:
 		errors.append("play: unknown id %s" % want)
 	for message: String in errors:
@@ -63,7 +53,7 @@ func _init() -> void:
 
 
 ## Main stages in chapter order on one world, then each side quest on a fresh world.
-func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Dictionary, dialogues: Dictionary, by_id: Dictionary, want: String, errors: Array[String]) -> int:
+func _play_quests(quests: Array[Dictionary], people: Dictionary, dialogues: Dictionary, by_id: Dictionary, want: String, errors: Array[String]) -> int:
 	var main: Array[Dictionary] = []
 	var sides: Array[Dictionary] = []
 	for q: Dictionary in quests:
@@ -72,7 +62,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Di
 	var played: int = 0
 	var shared: RefCounted = World.new()
 	for q: Dictionary in main:
-		var found: Array[String] = QuestPlayer.play(q, shared, quests, item_ids, people, dialogues, by_id, TARGETS, PERSON_AREAS)
+		var found: Array[String] = QuestPlayer.play(q, shared, quests, people, dialogues, by_id, PERSON_AREAS)
 		if want == "" or want == str(q["id"]):
 			played += 1
 			print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
@@ -82,7 +72,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Di
 			continue
 		var world: RefCounted = World.new()
 		world.chapter = int(q["chapters"][0])
-		var found: Array[String] = QuestPlayer.play(q, world, quests, item_ids, people, dialogues, by_id, TARGETS, PERSON_AREAS)
+		var found: Array[String] = QuestPlayer.play(q, world, quests, people, dialogues, by_id, PERSON_AREAS)
 		played += 1
 		print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
 		errors.append_array(found)
