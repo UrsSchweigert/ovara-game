@@ -16,6 +16,18 @@ static func condition_met(cond: Dictionary, world: RefCounted) -> bool:
 		return false
 	if cond.has("not_flag") and bool(world.call("get_flag", str(cond["not_flag"]))):
 		return false
+	if cond.has("day_min") and int(world.get("day")) < int(cond["day_min"]):
+		return false
+	for h: Variant in cond.get("heard", []):
+		if not heard(str(h["person"]), str(h["topic"]), world):
+			return false
+	var held: Dictionary = cond.get("holds", {})
+	for item: Variant in held:
+		var total: int = 0
+		for pack: Variant in (world.get("packs") as Dictionary).values():
+			total += int((pack as Dictionary).get(item, 0))
+		if total < int(held[item]):
+			return false
 	return true
 
 

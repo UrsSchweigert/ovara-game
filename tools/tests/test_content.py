@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ovcheck.content import check_content
+from ovcheck.content import _canon_refs, check_content
 
 LEGEND = {"~": {"name": "water"}, "#": {"name": "wall"}}
 BLEGEND = {"~": {"terrain": "open_water", "water": "clean"}}
@@ -125,6 +125,23 @@ class StoryContentTests(ContentCase):
             self.put(kind, d)
         self.assertEqual(self.errors(), [])
 
+    def test_item_unknown_canon_id_fails(self):
+        (self.root / "canon" / "items").mkdir(parents=True)
+        self.put("items", {**ITEM, "canon": "thing.nowhere"})
+        self.assertFails("x.json", "canon id 'thing.nowhere' does not exist")
+
+    def test_item_canon_unchecked_without_canon_dir(self):
+        self.put("items", {**ITEM, "canon": "thing.nowhere"})
+        self.assertEqual(self.errors(), [])
+
+    def test_item_known_canon_id_passes(self):
+        machine = ("id: machine.hook\nname: Hook\ntype: machine\nkind: tool\n"
+                   "summary: A hook.\nfacts:\n  - It is bent.\nsources: [world-bible.md#1]\n")
+        (self.root / "canon" / "machines").mkdir(parents=True)
+        (self.root / "canon" / "machines" / "hook.yaml").write_text(machine, encoding="utf-8")
+        self.put("items", {**ITEM, "canon": "machine.hook"})
+        self.assertEqual(self.errors(), [])
+
     def test_item_bad_slot_fails(self):
         self.put("items", {**ITEM, "slot": "hat"})
         self.assertFails("x.json", "/slot")
@@ -151,6 +168,24 @@ class StoryContentTests(ContentCase):
     def test_dialogue_topic_must_be_canon_id(self):
         self.put("dialogue", {**DIALOGUE, "topics": [{"topic": "Low Anthem", "panels": [PANEL]}]})
         self.assertFails("x.json", "/topics/0/topic")
+
+    def test_condition_new_keys_pass_and_unknown_key_fails(self):
+        when = {"day_min": 3, "heard": [{"person": "mender", "topic": "place.low-anthem"}], "holds": {"hook": 2}}
+        topic = {"topic": "place.low-anthem", "panels": [PANEL]}
+        self.put("items", {**ITEM, "id": "hook"})
+        self.put("dialogue", {**DIALOGUE, "topics": [{**topic, "when": when}]})
+        self.assertEqual(self.errors(), [])
+        self.put("dialogue", {**DIALOGUE, "topics": [{**topic, "when": {"day_max": 3}}]})
+        self.assertFails("x.json", "/topics/0/when")
+
+    def test_heard_person_is_file_id_not_canon(self):
+        heard = {"heard": [{"person": "sefa", "topic": "place.low-anthem"}]}
+        self.assertEqual(list(_canon_refs(heard)), ["place.low-anthem"])
+
+    def test_condition_holds_unknown_item_fails(self):
+        topic = {"topic": "place.low-anthem", "when": {"holds": {"nothing": 1}}, "panels": [PANEL]}
+        self.put("dialogue", {**DIALOGUE, "topics": [topic]})
+        self.assertFails("x.json", "unknown item 'nothing'")
 
     def test_quest_bad_kind_fails(self):
         self.put("quests", {**QUEST, "kind": "battle"})

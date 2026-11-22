@@ -2,16 +2,42 @@ extends "res://tests/test_case.gd"
 
 const World: GDScript = preload("res://rules/world_state.gd")
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
+const People: GDScript = preload("res://rules/people.gd")
 const QuestPlayer: GDScript = preload("res://tools/quest_player.gd")
 
 
-func _quest(id: String, requires_flag: String, side: bool = false) -> Dictionary:
+func _quest(id: String, requires_flag: String, side: bool = false, day_min: int = 0) -> Dictionary:
 	var gated: Dictionary = {"id": "b", "intent": "Wait.", "points": 1, "difficulty": 8}
 	if requires_flag != "":
 		gated["requires"] = {"flag": requires_flag}
+	if day_min > 0:
+		gated["requires"] = {"day_min": day_min}
 	return {"id": id, "kind": "discover", "giver": "person.x", "chapters": [1, 1], "side": side,
 		"steps": [{"id": "a", "intent": "Go.", "points": 1, "difficulty": 8, "sets": ["%s.a" % id]}, gated],
 		"clears": "%s.done" % id, "sets": []}
+
+
+func _holding(id: String, item_id: String, count: int) -> Dictionary:
+	var q: Dictionary = _quest(id, "")
+	q["steps"][1]["requires"] = {"holds": {item_id: count}}
+	return q
+
+
+func test_holds_known_item_clears() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("h1", "thing.x", 2)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["thing.x"] as Array[String])
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+	check_eq((w.packs[QuestPlayer.STAND_IN_KEY] as Dictionary)["thing.x"], 2, "pack holds two")
+
+
+func test_holds_unknown_item_names_step() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("h2", "thing.x", 1)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary])
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "h2" in found[0] and "step b" in found[0] and "thing.x" in found[0], "names quest, step and item")
 
 
 func test_fixture_stage_is_cleared() -> void:
@@ -38,3 +64,168 @@ func test_side_quest_leaves_chapter() -> void:
 	var q: Dictionary = _quest("side", "", true)
 	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
 	check_eq(w.chapter, 1, "chapter unchanged")
+
+
+func test_day_min_advances_forward() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("d1", "", false, 3)
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
+	check(Quests.is_done(q, "b", w), "step b done")
+	check_eq(w.day, 3, "day advanced to 3")
+
+
+func test_day_min_never_moves_back() -> void:
+	var w: RefCounted = World.new()
+	w.advance_days(4)
+	var q: Dictionary = _quest("d2", "", false, 3)
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
+	check(Quests.is_done(q, "b", w), "step b done")
+	check_eq(w.day, 5, "day unchanged past day_min")
+
+
+func _hearing(id: String, person: String, topic: String) -> Dictionary:
+	var q: Dictionary = _quest(id, "")
+	q["steps"][1]["requires"] = {"heard": [{"person": person, "topic": topic}]}
+	return q
+
+
+func _people(chapter_min: int = 0) -> Dictionary:
+	var when: Dictionary = {"chapter_min": chapter_min} if chapter_min > 0 else {}
+	return {"ione": {"id": "ione", "topics": [{"topic": "power.x", "dialogue": "d", "when": when}]}}
+
+
+func _dialogues() -> Dictionary:
+	return {"d": {"id": "d", "topics": [{"topic": "power.x", "panels": [{"speaker": "person.ione", "lines": ["Hello."]}]}]}}
+
+
+func test_heard_topic_clears() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e1", "ione", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check(People.heard("ione", "power.x", w), "topic heard")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+
+
+func test_heard_unknown_person() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e2", "nobody", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e2" in found[0] and "step b" in found[0] and "nobody" in found[0] and "power.x" in found[0] and "person is unknown" in found[0], "names quest, step, person, topic")
+
+
+func test_heard_unknown_topic() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e3", "ione", "power.none")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e3" in found[0] and "step b" in found[0] and "ione" in found[0] and "power.none" in found[0] and "topic is unknown" in found[0], "names quest, step, person, topic")
+	check(not People.heard("ione", "power.none", w), "not faked")
+
+
+func test_heard_refused_ask() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e4", "ione", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(5), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e4" in found[0] and "step b" in found[0] and "ione" in found[0] and "power.x" in found[0] and "refused" in found[0], "names quest, step, person, topic")
+	check(not People.heard("ione", "power.x", w), "not faked")
+
+
+func test_heard_topic_learned_by_next() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("n1", "ione", "power.y")
+	var people: Dictionary = _people()
+	(people["ione"]["topics"] as Array).append({"topic": "power.y", "dialogue": "d", "when": {}})
+	var dialogues: Dictionary = _dialogues()
+	(dialogues["d"]["topics"][0] as Dictionary)["next"] = ["power.y"]
+	(dialogues["d"]["topics"] as Array).append({"topic": "power.y", "panels": [{"speaker": "person.ione", "lines": ["Next."]}]})
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], people, dialogues)
+	check_eq(found, [] as Array[String], "no errors")
+	check(People.heard("ione", "power.x", w), "opening topic asked first")
+	check(People.heard("ione", "power.y", w), "next topic heard")
+
+
+func test_all_conditions_need_play() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("m1", "")
+	q["steps"][1]["requires"] = {"day_min": 3, "holds": {"thing.x": 1}, "heard": [{"person": "ione", "topic": "power.x"}]}
+	Quests.update(q, w)
+	check(Quests.status(q, w) != Quests.CLEARED, "update alone does not clear")
+	check(not Quests.is_done(q, "b", w), "step b open")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["thing.x"] as Array[String], _people(), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared by play")
+	check_eq(w.day, 3, "days passed")
+
+
+func test_unsatisfiable_flag_beside_heard_names_flag_step() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("m2", "ione", "power.x")
+	q["steps"].append({"id": "c", "intent": "Wait.", "points": 1, "difficulty": 8, "requires": {"flag": "nobody.sets"}})
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "stuck at step c" in found[0] and not "step b" in found[0], "names only step c")
+
+
+const Area: GDScript = preload("res://rules/area.gd")
+
+
+func _real(dir: String) -> Dictionary:
+	var out: Dictionary = {}
+	for file: String in DirAccess.get_files_at("res://content/" + dir):
+		var d: Dictionary = People.load_json("res://content/%s/%s" % [dir, file])
+		out[str(d.get("id", ""))] = d
+	return out
+
+
+func _stage1_targets() -> Dictionary:
+	return {"follow_sefa": {"exit": "low_anthem_dome_hall"}, "cut_fronds": {"thing": "drying_rack_1"},
+		"nursery_gate": {"thing": "nursery_gate"}, "meeting_hall_lamp": {"thing": "dead_lamp"}}
+
+
+func _real_areas() -> Dictionary:
+	var out: Dictionary = {}
+	for d: Variant in _real("areas").values():
+		out[str((d as Dictionary)["id"])] = Area.from_dict(d)
+	return out
+
+
+func _play_stage1(people: Dictionary, w: RefCounted) -> Array[String]:
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	var items: Array[String] = ["frond"]
+	return QuestPlayer.play(q, w, [q] as Array[Dictionary], items, people, _real("dialogue"), _real_areas(), _stage1_targets())
+
+
+func test_stage1_needs_play() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	Quests.open(q, w)
+	Quests.update(q, w)
+	check(Quests.status(q, w) != Quests.CLEARED, "update alone does not clear")
+	var w2: RefCounted = World.new()
+	check_eq(_play_stage1(_real("people"), w2), [] as Array[String], "no errors")
+	check_eq(w2.chapter, 2, "chapter advanced")
+
+
+func test_stage1_missing_topic_is_stuck() -> void:
+	var people: Dictionary = _real("people").duplicate(true)
+	var sefa: Dictionary = people["sefa"]
+	var kept: Array = []
+	for t: Variant in sefa["topics"]:
+		if str((t as Dictionary)["topic"]) != "person.jef":
+			kept.append(t)
+	sefa["topics"] = kept
+	var found: Array[String] = _play_stage1(people, World.new())
+	check(found.size() > 0 and "person.jef" in found[0], "names the missing topic")
+
+
+func test_walled_target_has_no_path() -> void:
+	var data: Dictionary = (_real("areas")["low_anthem_terraces"] as Dictionary).duplicate(true)
+	data["rows"] = ["#".repeat(str(data["rows"][0]).length())]
+	data["legend"]["#"] = {"blocks": true}
+	var areas: Dictionary = {"low_anthem_terraces": Area.from_dict(data)}
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	var found: Array[String] = QuestPlayer.play(q, World.new(), [q] as Array[Dictionary], [] as Array[String], {}, {}, areas, _stage1_targets())
+	check(found.size() > 0 and "no path" in found[0], "reports no path")
