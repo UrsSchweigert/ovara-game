@@ -16,6 +16,29 @@ func _quest(id: String, requires_flag: String, side: bool = false, day_min: int 
 		"clears": "%s.done" % id, "sets": []}
 
 
+func _holding(id: String, item_id: String, count: int) -> Dictionary:
+	var q: Dictionary = _quest(id, "")
+	q["steps"][1]["requires"] = {"holds": {item_id: count}}
+	return q
+
+
+func test_holds_known_item_clears() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("h1", "thing.x", 2)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["thing.x"] as Array[String])
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+	check_eq((w.packs[QuestPlayer.STAND_IN_KEY] as Dictionary)["thing.x"], 2, "pack holds two")
+
+
+func test_holds_unknown_item_names_step() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("h2", "thing.x", 1)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary])
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "h2" in found[0] and "step b" in found[0] and "thing.x" in found[0], "names quest, step and item")
+
+
 func test_fixture_stage_is_cleared() -> void:
 	var w: RefCounted = World.new()
 	var q: Dictionary = _quest("s1", "outside.flag")
