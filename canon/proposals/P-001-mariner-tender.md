@@ -8,4 +8,12 @@
 
 **Why it matters.** Shops in holds need a price. If this is refused, hold shops trade goods for goods only.
 
-**Status:** waiting for the owner. Not answered. A pending draft entry is in `P-001-draft-entry.md`; it is not canon.
+**Status:** accepted as written. Entered as `world.pearl-reckoning` (an entry of its own, first appears chapter 1, applies in all chapters). The draft entry file is removed.
+
+**Owner's answers** (given with P-001, together with the open items in `gaps.md` and `ingestion-conflicts.md`):
+
+1. The pearl reckoning is an entry of its own.
+2. Hold shops price in pearls between holds; within a hold things are owed and remembered.
+3. "Strung in tens" is kept.
+4. It applies in all chapters.
+5. Rule 9 binds people, not the engine; Bother stays `person.bother`; the hero never learns Restore (see `gaps.md`, `ingestion-conflicts.md`).
