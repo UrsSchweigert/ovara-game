@@ -172,10 +172,16 @@ class StoryContentTests(ContentCase):
     def test_condition_new_keys_pass_and_unknown_key_fails(self):
         when = {"day_min": 3, "heard": [{"person": "mender", "topic": "place.low-anthem"}], "holds": {"hook": 2}}
         topic = {"topic": "place.low-anthem", "panels": [PANEL]}
+        self.put("items", {**ITEM, "id": "hook"})
         self.put("dialogue", {**DIALOGUE, "topics": [{**topic, "when": when}]})
         self.assertEqual(self.errors(), [])
         self.put("dialogue", {**DIALOGUE, "topics": [{**topic, "when": {"day_max": 3}}]})
         self.assertFails("x.json", "/topics/0/when")
+
+    def test_condition_holds_unknown_item_fails(self):
+        topic = {"topic": "place.low-anthem", "when": {"holds": {"nothing": 1}}, "panels": [PANEL]}
+        self.put("dialogue", {**DIALOGUE, "topics": [topic]})
+        self.assertFails("x.json", "unknown item 'nothing'")
 
     def test_quest_bad_kind_fails(self):
         self.put("quests", {**QUEST, "kind": "battle"})
