@@ -11,6 +11,8 @@
   "skills": {},
   "traits": [],
   "join_chapter": 1,
+  "portrait": "portrait-mariners",
+  "names": [{"from_chapter": 1, "name": "Ione"}],
   "topics": [
     {
       "topic": "power.undertow",

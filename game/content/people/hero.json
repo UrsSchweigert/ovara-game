@@ -1,0 +1,16 @@
+{
+  "id": "hero",
+  "canon": "person.ilan-voss",
+  "names": [{"from_chapter": 1, "name": "Wrack"}],
+  "attributes": {
+    "body": 12,
+    "hands": 11,
+    "mind": 10,
+    "standing": 9
+  },
+  "reach": 5,
+  "skills": {},
+  "traits": [],
+  "join_chapter": 1,
+  "portrait": "portrait-hero"
+}

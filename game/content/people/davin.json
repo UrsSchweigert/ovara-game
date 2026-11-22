@@ -13,6 +13,8 @@
   },
   "traits": [],
   "join_chapter": 1,
+  "portrait": "portrait-mariners",
+  "names": [{"from_chapter": 1, "name": "Davin"}],
   "topics": [
     {
       "topic": "creature.silverback",

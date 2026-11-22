@@ -4,11 +4,11 @@
   "name": "Low Anthem: the dome",
   "chapter": 1,
   "legend": {
-    "#": {"blocks": true},
-    "S": {},
-    "d": {},
-    "M": {},
-    ".": {}
+    "#": {"blocks": true, "tile": "explore-wall"},
+    "S": {"tile": "explore-floor"},
+    "d": {"tile": "explore-floor"},
+    "M": {"tile": "explore-floor"},
+    ".": {"tile": "explore-floor"}
   },
   "rows": [
     "#####d##############",

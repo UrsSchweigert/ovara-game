@@ -10,5 +10,6 @@
   "reach": 0,
   "skills": {},
   "traits": [],
-  "join_chapter": 1
+  "join_chapter": 1,
+  "names": [{"from_chapter": 1, "name": "Bother"}]
 }
