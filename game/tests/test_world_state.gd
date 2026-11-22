@@ -29,18 +29,19 @@ func _sample() -> RefCounted:
 	w.journal.append("first entry")
 	w.position = {"area": "a1", "x": 3, "y": 4}
 	w.mode = "dungeon"
-	w.dice_seed = 99
-	w.dice.append_array([3, 5, 2])
+	w.dice_for("act.one")
 	return w
 
 
 func test_round_trip_is_lossless() -> void:
 	var w: RefCounted = _sample()
-	var back: RefCounted = World.from_json(w.to_json())
-	check(back != null, "from_json returned null: %s" % World.last_error)
+	var read: Dictionary = World.parse(w.to_json())
+	var back: RefCounted = read["state"]
+	check(back != null, "parse refused: %s" % read["error"])
 	if back != null:
 		check_eq(back.to_dict(), w.to_dict(), "dict after json round trip")
-		check_eq(back.dice, [3, 5, 2], "stored dice are kept, not redrawn")
+		back.seed_value = 12345
+		check_eq(back.dice_for("act.one"), w.dice_for("act.one"), "stored dice are kept, not redrawn")
 		check_eq(back.get_flag("a.count"), 4, "flag stays an int")
 		check_eq(back.position["x"], 3, "position stays an int")
 
@@ -48,16 +49,21 @@ func test_round_trip_is_lossless() -> void:
 func test_missing_version_refused() -> void:
 	var d: Dictionary = _sample().to_dict()
 	d.erase("version")
-	check(World.from_dict(d) == null, "missing version accepted")
-	check(World.last_error.contains("no version"), "error was '%s'" % World.last_error)
+	var r: Dictionary = World.from_dict(d)
+	check(r["state"] == null, "missing version accepted")
+	check(str(r["error"]).contains("no version"), "error was '%s'" % r["error"])
 
 
 func test_wrong_version_refused() -> void:
 	var d: Dictionary = _sample().to_dict()
 	d["version"] = 2
-	check(World.from_dict(d) == null, "wrong version accepted")
-	check(World.last_error.contains("version 2"), "error was '%s'" % World.last_error)
+	var r: Dictionary = World.from_dict(d)
+	check(r["state"] == null, "wrong version accepted")
+	check(str(r["error"]).contains("version 2"), "error was '%s'" % r["error"])
+	d["version"] = "1"
+	check(World.from_dict(d)["state"] == null, "text version accepted")
 	check(World.from_json("[1]") == null, "non-object accepted")
+	check(str(World.parse("[1]")["error"]).contains("JSON object"), "non-object error")
 
 
 func test_flags() -> void:
@@ -90,3 +96,10 @@ func test_sheet_derived_values() -> void:
 	check_eq(w.sheet_of("wrack").quickness(), 10, "quickness")
 	w.add_ebb("wrack", 20)
 	check_eq(w.ebb_of("wrack"), 23, "ebb may pass the limit")
+
+
+func test_unknown_person_has_no_sheet() -> void:
+	var w: RefCounted = World.new()
+	check(not w.has_sheet("nobody"), "sheet for unknown person")
+	check_eq(w.health_of("nobody"), World.NO_SHEET, "health of unknown person")
+	check_eq(w.ebb_limit_of("nobody"), World.NO_SHEET, "ebb limit of unknown person")

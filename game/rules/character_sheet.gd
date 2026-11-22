@@ -25,6 +25,7 @@ func ebb_limit() -> int:
 
 ## The average of Hands and Mind, rounded down.
 func quickness() -> int:
+	@warning_ignore("integer_division")
 	return (hands + mind) / 2
 
 
