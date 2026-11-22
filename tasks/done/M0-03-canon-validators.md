@@ -36,7 +36,20 @@ Make consistency a machine check. After this task, a broken reference, a banned 
 
 ## Result
 
+Done. The checks were built in `val-canon-schemas-refs` (`acd79cf`), `val-glossary-chapter` (`7c5506c`), `content-map-schemas` (`4d18784`), `content-story-schemas` (`ddb24b3`), `content-sheet-schemas` (`98453e6`) and `val-flag-check-index` (`6da1f89`), all merged on `main`. Facts from the repository:
+
+- **Schemas:** 19 JSON Schema files in `tools/schemas/` (canon entry, canon chapter, canon trait, asset manifest, and content kinds: ability, area, battle, cutscene, defs, dialogue, dungeon, item, person, quest, shop, skill, teacher, trait, unit), plus a README.
+- **Checks in `tools/checks.py`:** canon schema, reference, glossary, `TODO-CANON`, chapter, flag and content checks, run by `./ov check`.
+- **`./ov index`:** generates `canon/index.md`, which is 216 lines, under the 400-line limit.
+- **Tests:** Python tests in `tools/tests/` (`test_canon.py`, `test_chapters.py`, `test_content.py`, `test_flags.py`, `test_glossary.py`, `test_art.py`, `test_placeholders.py`), run as part of `./ov check`.
+- **Python packages:** pinned in `tools/requirements.txt` (PyYAML, jsonschema, pillow).
+
+**Not verified:** I did not separately confirm that each check has a deliberately broken fixture that fails with a useful message, beyond the test files existing and passing. The check on the real canon passes, so no canon-keeper tasks were needed for it.
+
 ## Verification
+
+- `bash ov check` at this revision: 102 tests `OK`, `canon: 0 error(s), 0 warning(s)`, `glossary: 0 error(s), 0 warning(s)`, `references: 0 error(s), 0 warning(s)`, `CHECK PASSED`.
+- Not done: running each check against a broken fixture by hand.
 
 ## Added by decision 0003
 

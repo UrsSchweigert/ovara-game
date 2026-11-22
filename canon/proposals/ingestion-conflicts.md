@@ -6,7 +6,7 @@ Places where sources, or a source and the world rules in `CLAUDE.md`, seem to di
 
 - **CLAUDE.md, world rule 9:** "Nobody orders the sea before chapter 11. The hero learns how in chapter 10."
 - **campaign.md#chapter-10:** Rook sets the engine's governor in a bowl of sea and drives it through the Thread; the water goes deaf for good. **world-bible.md#6** says the Makers' great engine orders the same way, and **world-bible.md#13** that it orders the sea when run by force.
-- **Reading applied:** no person orders the sea before chapter 11; in chapter 10 the engine does, on a bowl, and Rook has no gift (world rule 10). `power.ordering` records the chapter 10 bowl as the engine's work. Owner to confirm that rule 9 means people, not the engine.
+- **Reading applied:** no person orders the sea before chapter 11; in chapter 10 the engine does, on a bowl, and Rook has no gift (world rule 10). `power.ordering` records the chapter 10 bowl as the engine's work. **Resolved by the owner:** rule 9 applies to people, not the engine. In chapter 10 Rook drives the engine's governor through the Thread; no person orders the sea before the hero in chapter 11.
 
 ## power.reach-unheard-of: nobody at reach 5
 

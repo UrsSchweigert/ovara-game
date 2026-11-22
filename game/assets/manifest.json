@@ -1,4 +1,11 @@
 {"assets": [
+  {"path": "portraits/portrait-agravars.png", "kind": "portrait", "canon": "faction.agravars", "brief": "briefs/portrait-agravars.md"},
+  {"path": "portraits/portrait-fouled.png", "kind": "portrait", "canon": "creature.the-fouled", "brief": "briefs/portrait-fouled.md"},
+  {"path": "portraits/portrait-hero.png", "kind": "portrait", "brief": "briefs/portrait-hero.md"},
+  {"path": "portraits/portrait-makers.png", "kind": "portrait", "canon": "event.the-makers", "brief": "briefs/portrait-makers.md"},
+  {"path": "portraits/portrait-mariners.png", "kind": "portrait", "canon": "faction.mariners", "brief": "briefs/portrait-mariners.md"},
+  {"path": "portraits/portrait-meridian.png", "kind": "portrait", "canon": "faction.meridian", "brief": "briefs/portrait-meridian.md"},
+  {"path": "portraits/portrait-threaded.png", "kind": "portrait", "canon": "faction.threaded", "brief": "briefs/portrait-threaded.md"},
   {"path": "sprites/figure-agravars.png", "kind": "figure", "canon": "faction.agravars", "brief": "briefs/figure-agravars.md"},
   {"path": "sprites/figure-fouled.png", "kind": "figure", "canon": "creature.the-fouled", "brief": "briefs/figure-fouled.md"},
   {"path": "sprites/figure-hero.png", "kind": "figure", "brief": "briefs/figure-hero.md"},

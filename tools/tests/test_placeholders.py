@@ -47,7 +47,7 @@ class PlaceholderTests(unittest.TestCase):
         entries = json.loads((mp.assets_dir(self.root) / "manifest.json").read_text(encoding="utf-8"))["assets"]
         _, cells = mp.contact_sheet(self.root)
         self.assertEqual(len(cells), len(entries))
-        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.THINGS)
+        self.assertEqual(len(cells), len(mp.REGIONS) * len(mp.STATES) + len(mp.FIGURES) + len(mp.PORTRAITS) + len(mp.THINGS)
                          + len(mp.EXPLORE_TILES) + len(mp.SETS) * len(mp.MAKER_PARTS))
 
     def palette_hexes(self):
@@ -130,6 +130,25 @@ class PlaceholderTests(unittest.TestCase):
                 brief = (assets / e["brief"]).read_text(encoding="utf-8").splitlines()
                 self.assertTrue(1 <= len(brief) <= 3)
 
+    def test_portraits_are_96_square_opaque_palette_only_with_entry_and_brief(self):
+        mp.build(self.root)
+        palette = self.palette_hexes()
+        assets = mp.assets_dir(self.root)
+        entries = {e["path"]: e for e in json.loads((assets / "manifest.json").read_text(encoding="utf-8"))["assets"]}
+        self.assertEqual(set(mp.PORTRAITS), set(mp.FIGURES) - {"rays"})
+        for key in mp.PORTRAITS:
+            path = f"portraits/portrait-{key}.png"
+            img = Image.open(assets / path).convert("RGBA")
+            self.assertEqual(img.size, (96, 96))
+            self.assertEqual({p[3] for p in img.getdata()}, {255})
+            self.assertTrue({p[:3] for p in img.getdata()} <= palette, path)
+            e = entries[path]
+            self.assertEqual(e["kind"], "portrait")
+            self.assertEqual(e.get("canon"), mp.FIGURES[key]["canon"])
+            brief = (assets / e["brief"]).read_text(encoding="utf-8").splitlines()
+            self.assertEqual(len(brief), 2)
+        self.assertNotIn("portraits/portrait-rays.png", entries)
+
     def test_rerun_changes_nothing(self):
         mp.build(self.root)
         assets = mp.assets_dir(self.root)
@@ -195,6 +214,16 @@ class PlaceholderTests(unittest.TestCase):
         used = {p[:3] for p in picture.convert("RGBA").getdata() if p[3] == 255}
         self.assertTrue(used <= self.palette_hexes(), "dungeon picture uses off-palette colours")
         self.assertEqual(mp.render_corridor(self.root).size, (320, 180))
+
+    def test_review_pictures_match_generated(self):
+        mp.build(self.root)  # after portraits, so the contact sheet includes them
+        review = REAL / "docs" / "review"
+        sheet, _ = mp.contact_sheet(self.root)
+        picture = mp.dungeon_picture(self.root)
+        for name, generated in [("placeholders.png", sheet), ("dungeon-placeholder.png", picture)]:
+            committed = Image.open(review / name).convert("RGBA")
+            self.assertEqual(committed.size, generated.size, name)
+            self.assertEqual(committed.tobytes(), generated.convert("RGBA").tobytes(), f"docs/review/{name} is stale")
 
     def test_manifest_upsert_keeps_other_entries(self):
         assets = mp.assets_dir(self.root)

@@ -1,0 +1,20 @@
+id: world.pearl-reckoning
+name: Pearl reckoning
+type: world
+summary: >
+  Holds have no coin. Between holds, and with Driftfolk, value is reckoned
+  in pearls from Pearl Stair, strung in tens.
+facts:
+  - Holds have no coin.
+  - Between holds, value is reckoned in pearls from Pearl Stair, strung in tens.
+  - With Driftfolk, value is reckoned in pearls from Pearl Stair, strung in tens.
+  - Within a hold nothing is bought; things are owed and remembered.
+  - The reckoning holds in every chapter.
+links:
+  places: [place.pearl-stair, place.nine-spires]
+first_appears: ch01
+changes: {}
+sources:
+  - P-001-mariner-tender.md
+  - world-bible.md#2
+  - world-bible.md#4

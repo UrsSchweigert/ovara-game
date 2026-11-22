@@ -15,7 +15,7 @@ Things the sources do not say. Each needs the owner before it becomes a fact.
 ## people
 
 - **Unnamed cast.** The campaign's supporting cast lists people with no name: the Threaded of the gallery (old woman with a clay tube, girl with a harpoon, two brothers from Pearl Stair, the young man from Fallow), the woman of Fallow and her father, the Meridian captain, the senior Lockkeeper and the Halcyon lieutenant. They have no `person.*` entry; naming them is canon.
-- **Bother.** The cast table lists Sefa's tide hound among the supporting cast. It is entered as `person.bother` with `kind: animal`; the owner may prefer a creature entry.
+- **Bother.** The cast table lists Sefa's tide hound among the supporting cast. It is entered as `person.bother` with `kind: animal`; **Resolved by the owner:** Bother stays `person.bother` (`kind: animal`).
 - **Home places.** The sources do not say where Tam lives, so `person.tam` has no region. Regions of Ilan, Nerys and Tomas Voss (Saltgate), Rook (Meridian Exchange) and Maelis (the Quiet) are the places the sources tie them to, not stated homes.
 - **Ages and looks.** Sefa, Okonta, Hesper, Ione and others have no stated looks or ages beyond those entered.
 
@@ -30,7 +30,7 @@ Things the sources do not say. Each needs the owner before it becomes a fact.
 - **Hero's craft.** There is no `power.*` entry for the craft, so `hero_craft` (`none`, `mend`) records it. The Make stage comes during chapter 18, so it is not yet in the file.
 - **Chapter 15.** The hero is ebbed and cannot call (Yeva: a month); abilities are what he knows, not what he can do that day.
 - **`known_to_*` and `dragon` values** are labels written for this file; the sources give the events, not the labels. Dragon: running, late (ch3), slow (ch4 to 5), stalled (ch6), heart-taken (ch16 on).
-- **Restore and the hero.** In chapter 17 the healers of the Hush and six thousand healers Restore, while the hero sits shut out of the sea; the growth table gives him no Restore. `power.restore` is not in any chapter's `hero_abilities`. Whether he ever learns it is for the owner.
+- **Restore and the hero.** In chapter 17 the healers of the Hush and six thousand healers Restore, while the hero sits shut out of the sea; the growth table gives him no Restore. `power.restore` is not in any chapter's `hero_abilities`. **Resolved by the owner:** the hero never learns Restore; the healers restore in chapter 17 while he is shut out. `hero_abilities` is unchanged.
 
 ## game needs
 
