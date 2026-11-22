@@ -101,3 +101,49 @@ func test_panel_over_three_lines_refused() -> void:
 	var r: Dictionary = People.ask(_person(), _dialogues(), "topic.long", w)
 	check(not bool(r["ok"]), "long panel accepted")
 	check(not People.heard("visitor", "topic.long", w), "refused ask marked heard")
+
+
+func test_condition_day_min() -> void:
+	var w: RefCounted = World.new()
+	check(not People.condition_met({"day_min": 3}, w), "day 1 met day_min 3")
+	w.advance_days(2)
+	check(People.condition_met({"day_min": 3}, w), "day 3 unmet day_min 3")
+
+
+func test_condition_heard() -> void:
+	var w: RefCounted = _world(1)
+	var cond: Dictionary = {"heard": [{"person": "visitor", "topic": "topic.long"}]}
+	check(not People.condition_met(cond, w), "unheard topic met")
+	People.ask(_person(), _dialogues(), "topic.long", w)
+	check(not People.condition_met(cond, w), "refused ask marks heard")
+	People.ask(_person(), _dialogues(), "topic.shut", w)
+	cond = {"heard": [{"person": "visitor", "topic": "topic.shut"}]}
+	check(People.condition_met(cond, w), "heard topic unmet")
+	cond["heard"].append({"person": "visitor", "topic": "topic.door"})
+	check(not People.condition_met(cond, w), "one of two heard met")
+
+
+func test_condition_holds_sums_packs() -> void:
+	var w: RefCounted = World.new()
+	var cond: Dictionary = {"holds": {"hook": 3}}
+	check(not People.condition_met(cond, w), "empty packs met")
+	w.packs["a"] = {"hook": 1}
+	w.packs["b"] = {"hook": 1, "rope": 4}
+	check(not People.condition_met(cond, w), "two of three met")
+	w.packs["b"]["hook"] = 2
+	check(People.condition_met(cond, w), "three over two packs unmet")
+	check(not People.condition_met({"holds": {"hook": 3, "net": 1}}, w), "missing item met")
+
+
+func test_condition_combined_and_empty() -> void:
+	var w: RefCounted = World.new()
+	w.chapter = 2
+	w.advance_days(1)
+	w.packs["a"] = {"hook": 1}
+	var cond: Dictionary = {"chapter_min": 2, "flag": "door.open", "day_min": 2, "holds": {"hook": 1}}
+	check(not People.condition_met(cond, w), "met without flag")
+	w.set_flag("door.open")
+	check(People.condition_met(cond, w), "unmet with all keys")
+	w.chapter = 1
+	check(not People.condition_met(cond, w), "met below chapter_min")
+	check(People.condition_met({}, w), "empty condition false")

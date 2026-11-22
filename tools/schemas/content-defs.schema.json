@@ -57,6 +57,35 @@
         },
         "not_flag": {
           "$ref": "content-defs.schema.json#/$defs/flag"
+        },
+        "day_min": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "heard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["person", "topic"],
+            "properties": {
+              "person": {
+                "type": "string",
+                "minLength": 1
+              },
+              "topic": {
+                "$ref": "content-defs.schema.json#/$defs/canon_id"
+              }
+            }
+          }
+        },
+        "holds": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 1
+          }
         }
       }
     },
