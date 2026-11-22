@@ -220,6 +220,17 @@ class StoryContentTests(ContentCase):
         self.put("cutscenes", {**CUTSCENE, "steps": [{"op": "dance"}]})
         self.assertFails("x.json", "/steps/0")
 
+    def test_arrival_cutscene_with_area_passes(self):
+        self.put("areas", area())
+        self.put("cutscenes", {**CUTSCENE, "id": "arr", "area": "a", "steps": [{"op": "camera", "to": [0, 0]}]})
+        self.put("quests", {**QUEST, "start": {"area": "a", "cell": [0, 0], "arrival": "arr"}})
+        self.assertEqual(self.errors(), [])
+
+    def test_arrival_unknown_cutscene_fails(self):
+        self.put("areas", area())
+        self.put("quests", {**QUEST, "start": {"area": "a", "cell": [0, 0], "arrival": "nope"}})
+        self.assertFails("unknown arrival cut scene", "'nope'")
+
 
 SHEET = {"id": "p", "canon": "person.bea", "attributes": {"body": 10, "hands": 10, "mind": 10, "standing": 10},
          "reach": 2, "skills": {"listen": 3}, "traits": ["trait.water-breather"]}
