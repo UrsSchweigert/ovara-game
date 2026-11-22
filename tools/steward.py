@@ -269,6 +269,74 @@ def after_tasks(args, status):
     book = Book(status.get("store", ""))
     steward_fixes.fixes_round(ROOT, args, status, book, harness, options_in, task_blocks)
     steward_milestone.milestone_round(ROOT, args, status, book, harness, claude_json)
+    if not args.dry_run:
+        publish_next(status, book)
+
+
+def next_steps(status, book):
+    """What is waiting on the owner, most pressing first, each with the command to run."""
+    steps = []
+    plans = {p["plan_id"]: p for p in status.get("plans", [])}
+    for task in status.get("human_tasks", []):
+        if task.get("state") != "Requested":
+            continue
+        task_id, kind = task.get("task_id", ""), task.get("kind")
+        fix = book.data["fixes"].get(task_id, {})
+        if fix.get("stage") == "open":
+            steps.append("Read and merge pull request %s, the harness fix for %s." % (fix["pr"], task_id))
+        elif kind == "promotion":
+            continue  # the steward audits and merges a finished run itself
+        elif kind != "decision" or task_id in book.data["escalated"]:
+            steps.append("Answer %s (%s):  ./ov harness tasks" % (task_id, kind))
+    for plan_id, record in book.data["milestones"].items():
+        audit = record.get("audit") or {}
+        if record.get("referred"):
+            steps.append("%s was audited as not sound and is not merged. Read steward-notes/%s-audit.md." % (plan_id, plan_id))
+        gap_path = record.get("gap_path")
+        waiting = record.get("awaiting_approval")
+        if waiting and plans.get(waiting, {}).get("state") in ("Draft", "Proposed"):
+            steps.append("Approve the drafted plan:  ./ov harness approve %s" % waiting)
+        elif gap_path and not record.get("gaps_waived") and not record.get("done"):
+            follow_up = steward_milestone.plan_id_for(gap_path)
+            if follow_up not in plans:
+                steps.append("Finish the follow-up for %s's gaps:  ./ov harness start --requirements %s --model-source claude" % (
+                    plan_id, os.path.relpath(gap_path, ROOT)))
+        if record.get("gate_asked") and plan_id not in book.data["signed"] and not record.get("done"):
+            steps.append("Look at what %s needs from you (%s), then:  python3 tools/steward.py --sign-off %s" % (
+                plan_id, "; ".join(audit.get("needs_person", []))[:300], plan_id))
+    tracked = {r.get("awaiting_approval") for r in book.data["milestones"].values()}
+    running = [p for p in plans.values() if p.get("state") in ("Executing", "Paused")]
+    for plan in plans.values():
+        if plan.get("state") in ("Draft", "Proposed") and plan["plan_id"] not in tracked:
+            path = steward_milestone.file_for_plan(ROOT, plan["plan_id"])
+            where = os.path.relpath(path, ROOT) if path else "<its requirements file>"
+            when = " once %s has finished" % running[0]["plan_id"] if running else ""
+            steps.append("The plan %s is drafted and not approved. Run it%s:  ./ov harness start --requirements %s --model-source claude" % (
+                plan["plan_id"], when, where))
+    for plan in running:
+        if plan.get("state") == "Paused":
+            steps.append("%s is paused:  ./ov harness resume %s" % (plan["plan_id"], plan["plan_id"]))
+    if not steps:
+        steps.append("Nothing is waiting for you." + (" Running: %s." % ", ".join(p["plan_id"] for p in running) if running else " Nothing is running."))
+    return steps
+
+
+def publish_next(status, book):
+    """Write the list beside the store, and show a notification when it has changed."""
+    steps = next_steps(status, book)
+    text = "# What is waiting for you\n\n%s\n" % "\n".join("%d. %s" % (i, step) for i, step in enumerate(steps, 1))
+    if not book.store:
+        return steps
+    path = os.path.join(book.store, "next-steps.md")
+    old = open(path).read() if os.path.exists(path) else ""
+    if text != old:
+        with open(path, "w") as fh:
+            fh.write(text)
+        if sys.platform == "darwin" and shutil.which("osascript") and not steps[0].startswith("Nothing is waiting"):
+            message = steps[0].split(":  ")[0][:180].replace('"', "'").replace("\\", "")
+            subprocess.run(["osascript", "-e", 'display notification "%s" with title "Ovara steward" subtitle "%d thing(s) waiting for you"'
+                            % (message, len(steps))], capture_output=True)
+    return steps
 
 
 def try_file(path, model):
@@ -296,9 +364,16 @@ def main():
     ap.add_argument("--for-task", metavar="TASK_ID", help="the blocked task that --adopt-fix will unblock")
     ap.add_argument("--audit", metavar="PLAN_ID", help="check and audit that plan's run branch now and print the report; changes nothing")
     ap.add_argument("--sign-off", metavar="PLAN_ID", help="record that you have looked at what that milestone needs from you")
+    ap.add_argument("--next", action="store_true", help="print what is waiting for you, with the command for each, and stop")
+    ap.add_argument("--skip-gaps", metavar="PLAN_ID", help="let the next milestone start although that milestone's follow-up is not merged")
     args = ap.parse_args()
     if args.try_path:
         try_file(args.try_path, args.model)
+        return 0
+    if args.next:
+        status = read_status()
+        for number, step in enumerate(next_steps(status, Book(status.get("store", ""))), 1):
+            print("%d. %s" % (number, step))
         return 0
     if args.adopt_fix:
         if not args.for_task:
@@ -307,13 +382,19 @@ def main():
         status = read_status()
         steward_fixes.adopt(Book(status.get("store", "")), status, args.adopt_fix, args.for_task)
         return 0
-    if args.audit or args.sign_off:
+    if args.audit or args.sign_off or args.skip_gaps:
         status = read_status()
         plans = {p["plan_id"]: p for p in status.get("plans", [])}
-        plan_id = args.audit or args.sign_off
+        plan_id = args.audit or args.sign_off or args.skip_gaps
         if plan_id not in plans:
             print("no such plan: %s (known: %s)" % (plan_id, ", ".join(plans) or "none"))
             return 2
+        if args.skip_gaps:
+            book = Book(status.get("store", ""))
+            book.data["milestones"].setdefault(plan_id, {})["gaps_waived"] = True
+            book.save()
+            book.log("waived  %s: the owner lets the next milestone start without its follow-up" % plan_id)
+            return 0
         if args.sign_off:
             book = Book(status.get("store", ""))
             book.data["signed"][plan_id] = datetime.datetime.now().isoformat(timespec="seconds")
