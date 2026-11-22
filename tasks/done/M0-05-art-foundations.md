@@ -37,7 +37,20 @@ Fix the look before any scene is built. After this task there is one palette, a 
 
 ## Result
 
+Done in these commits: the palette and guide in `4fedebc`, `2a1aa50` and `ef23ebe` (merged as `a41f8f4`); the manifest schema and art check in `906e24e` (merged as `ed6558f`); the placeholder generator and its tiles, figures, textures and things in `be16701`, `3a0ec5a`, `07481ee`, `6294ba4`, `cc6a4bc`, `1c35081` and their merges; the review pictures, moved from `shots/` to `docs/review/` in `1dc2b6a`. Facts from the repository:
+
+- **Palette:** `game/assets/palettes/ovara.json`, with a swatch `ovara-swatch.png`. Keys are `name`, `size`, `colours`, `ramps`, `subsets`, `water`, `region_water` and `region_pattern`.
+- **Guide:** `docs/style/art.md`, with five observations about the reference at the top, region subsets, water states, outlines, frames, portraits and a manifest section.
+- **Manifest:** `game/assets/manifest.json`, 73 entries: 30 tiles, 16 dungeon textures, 8 figures, 8 exploring tiles, 7 portraits and 4 things. Each entry has `path`, `kind`, `canon` and `brief`.
+- **Art check:** passes in `./ov check` at this revision.
+- **Contact sheet:** `docs/review/placeholders.png`. The task asked for `shots/placeholders.png`; the file was moved to `docs/review/` in `1dc2b6a`, so that is the path to approve. The dungeon picture is `docs/review/dungeon-placeholder.png`.
+
+**Pending the owner:** approval of the master palette and the placeholder contact sheet, `docs/review/placeholders.png`. Nothing here is a visual check: no one has looked at the pictures on a phone, and I did not look at them in this session. The greyscale test (six water states told apart) was not run by me.
+
 ## Verification
+
+- `bash ov check` at this revision: `art: 0 error(s), 0 warning(s)`, `CHECK PASSED`.
+- Not done: the greyscale distinguishability check and looking at `docs/review/placeholders.png`.
 
 ## Added by decision 0003
 

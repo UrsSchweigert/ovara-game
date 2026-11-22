@@ -43,4 +43,20 @@ Turn the three prose documents in `canon/source/` into structured canon entries,
 
 ## Result
 
+Done. The ingestion was made in these commits: power entries `7c61dde`; people `41ff64b`, `604ed72`, merged as `7c4d782`; machines, creatures, flora and events `06a0885`, `5a85179`, `de9faa2`, merged as `e1b5f82`; chapter files `257d342`, `dfb7385`, merged as `147d491`; glossary, conflicts and gaps `f557f6a`, `020c7e7`, merged as `0f1c510`. Facts below are from the repository and git log:
+
+- **People:** 36 entry files under `canon/people/`, from the bible, the campaign's cast tables and the novel.
+- **Factions:** 16 entry files under `canon/factions/` (the five corporations, mariners, agravars, the rays, Tenders, Breakers, the Threaded, Wellwalkers, Driftfolk, Shallowborn, wreckers, the Clean Hands, and the others the bible lists).
+- **Places:** entry files under `canon/places/`, one per gazetteer place.
+- **Powers, machines, creatures, flora, events:** `canon/powers/`, `canon/machines/`, `canon/creatures/`, `canon/flora/`, `canon/events/`.
+- **World:** `canon/world/distances.yaml` (`world.distances`), `canon/world/physical.yaml` (`world.physical`), and `canon/world/pearl-reckoning.yaml`, added later by `canon-pearl-reckoning`.
+- **Chapters:** `canon/chapters/ch01.yaml` to `ch18.yaml`.
+- **Glossary:** `canon/glossary.yaml` extended to 175 lines.
+- **Conflicts and gaps:** `canon/proposals/ingestion-conflicts.md` (37 lines) and `canon/proposals/gaps.md` (27 lines) exist. Later stage-1 proposals `P-002` to `P-006` and `P-001` are in `canon/proposals/`.
+
+**Not verified:** I did not re-check every acceptance line. `./ov check` validates canon schemas, references and chapters, and it passes. I did not confirm by hand that every proper noun in the bible resolves, that every distance figure is unchanged, or that every chapter file matches the hero's-growth table. Those are the owner's or canon keeper's to confirm.
+
 ## Verification
+
+- `bash ov check` at this revision: `canon: 0 error(s), 0 warning(s)`, `references, chapters` passes, `CHECK PASSED`.
+- Not done: reading each canon file against the bible.
