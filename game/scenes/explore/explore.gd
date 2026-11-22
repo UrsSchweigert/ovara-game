@@ -49,6 +49,8 @@ var _screen: Control = null
 var _cutscene: Control = null
 ## Person canon id -> the sprite standing for them, for the cut-scene player.
 var _figures: Dictionary = {}
+## Canon ids of people a cut scene walked in who are not among the area's people; drawn where the world left them.
+var _walkers: Array[String] = []
 
 
 func _ready() -> void:
@@ -179,6 +181,10 @@ func _redraw() -> void:
 	_figures = {}
 	for who: Dictionary in _session.call("people_here"):
 		_figures[str(who.get("canon", ""))] = _place(_figure_of(who), who["cell"])
+	for canon: String in _walkers:
+		var left: Variant = (_session.get("world") as RefCounted).call("figure_cell", canon)
+		if left != null and not _figures.has(canon):
+			_figures[canon] = _place(_texture(KEEPER_FIGURE), left)
 	_party = _place(_texture("figure-hero"), _session.call("cell"))
 	_follow()
 
@@ -237,12 +243,21 @@ func _follow() -> void:
 
 func _play_scene() -> void:
 	_cutscene = CutscenePlayer.new()
-	_cutscene.call("setup", _session, _paths, _world, _figures, _camera_for)
+	_cutscene.call("setup", _session, _paths, _world, _figures, _camera_for, _walk_in)
 	_cutscene.size = _frame.size
 	_cutscene.finished.connect(_end_scene)
 	_frame.add_child(_cutscene)
 	_pressed = false
 	_holding = false
+
+
+## A placeholder figure for a person a cut scene walks who is not drawn yet, standing on the party's cell.
+func _walk_in(canon: String) -> Sprite2D:
+	if not _walkers.has(canon):
+		_walkers.append(canon)
+	var s: Sprite2D = _place(_texture(KEEPER_FIGURE), _session.call("cell"))
+	_figures[canon] = s
+	return s
 
 
 func _end_scene() -> void:

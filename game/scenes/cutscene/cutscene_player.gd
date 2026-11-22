@@ -22,18 +22,21 @@ var _paths: Dictionary = {}
 var _world: Node2D = null
 var _figures: Dictionary = {}
 var _camera_for: Callable = Callable()
+var _make_figure: Callable = Callable()
 var _tween: Tween = null
 var _panel: Control = null
 var _done: bool = false
 
 
-## `figures` maps a person's canon id to its sprite; `camera_for` maps a cell to the world's position.
-func setup(session: RefCounted, paths: Dictionary, world: Node2D, figures: Dictionary, camera_for: Callable) -> void:
+## `figures` maps a person's canon id to its sprite; `camera_for` maps a cell to the world's position;
+## `make_figure` gives a placeholder sprite to a walked person who has none yet.
+func setup(session: RefCounted, paths: Dictionary, world: Node2D, figures: Dictionary, camera_for: Callable, make_figure: Callable) -> void:
 	_session = session
 	_paths = paths
 	_world = world
 	_figures = figures
 	_camera_for = camera_for
+	_make_figure = make_figure
 
 
 ## Covers the whole frame so taps on the map and the band wait for the scene. Light dims only the
@@ -92,8 +95,8 @@ func _stop_tween() -> void:
 func _walk(step: Dictionary) -> void:
 	var sprite: Sprite2D = _figures.get(str(step["who"]), null)
 	if sprite == null:
-		_next()
-		return
+		sprite = _make_figure.call(str(step["who"]))
+		_figures[str(step["who"])] = sprite
 	var to: Array = step["to"]
 	var at: Vector2 = Vector2(int(to[0]) * TILE + TILE / 2, (int(to[1]) + 1) * TILE)
 	var tween: Tween = _new_tween()
