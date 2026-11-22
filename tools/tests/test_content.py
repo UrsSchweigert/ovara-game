@@ -127,8 +127,8 @@ class StoryContentTests(ContentCase):
 
     def test_item_unknown_canon_id_fails(self):
         (self.root / "canon" / "items").mkdir(parents=True)
-        self.put("items", {**ITEM, "canon": "item.does-not-exist"})
-        self.assertFails("x.json", "canon id 'item.does-not-exist' does not exist")
+        self.put("items", {**ITEM, "canon": "thing.nowhere"})
+        self.assertFails("x.json", "canon id 'thing.nowhere' does not exist")
 
     def test_item_bad_slot_fails(self):
         self.put("items", {**ITEM, "slot": "hat"})
