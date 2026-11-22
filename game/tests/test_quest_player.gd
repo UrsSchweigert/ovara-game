@@ -273,3 +273,50 @@ func test_walled_target_has_no_path() -> void:
 	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
 	var found: Array[String] = QuestPlayer.play(q, World.new(), [q] as Array[Dictionary], [] as Array[String], {}, {}, areas, _stage1_targets())
 	check(found.size() > 0 and "no path" in found[0], "reports no path")
+
+
+func _waiting(offered_from_day: int, day_min: int) -> Dictionary:
+	var q: Dictionary = _hearing("w1", "ione", "power.x")
+	q["steps"][1]["requires"]["day_min"] = day_min
+	return q
+
+
+func _people_from_day(day: int) -> Dictionary:
+	var people: Dictionary = _people()
+	(people["ione"]["topics"][0] as Dictionary)["when"] = {"day_min": day}
+	return people
+
+
+func test_topic_offered_on_day_two_is_heard_day_by_day() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _waiting(2, 3)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people_from_day(2), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check(People.heard("ione", "power.x", w), "topic heard")
+	check_eq(w.day, 3, "stopped at day_min, no further")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared after the days")
+
+
+func test_days_never_jump() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _waiting(2, 4)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people_from_day(2), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(w.day, 4, "each day passed once")
+	check(People.heard("ione", "power.x", w), "topic heard")
+
+
+func test_step_not_done_before_days_pass() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _waiting(2, 3)
+	Quests.update(q, w)
+	check(not Quests.is_done(q, "b", w), "step open before play")
+	check_eq(w.day, 1, "calendar untouched by update")
+
+
+func test_topic_never_offered_before_day_min_errors() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _waiting(9, 3)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people_from_day(9), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "power.x" in found[0] and "day 3" in found[0], "names topic and day")

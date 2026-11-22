@@ -26,7 +26,9 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		for step: Dictionary in quest["steps"]:
 			if not step.has("requires"):
 				Quests.complete_step(quest, str(step["id"]), world)
-		_advance_days(quest, world)
+		var day_errors: Array[String] = _pass_days(quest, world, people, dialogues, areas, person_areas)
+		if not day_errors.is_empty():
+			return day_errors
 		var held_errors: Array[String] = _grant_holds(quest, world, item_ids)
 		if not held_errors.is_empty():
 			return held_errors
@@ -76,15 +78,25 @@ static func _walk_to_steps(quest: Dictionary, world: RefCounted, areas: Dictiona
 	return errors
 
 
-## Lets the days pass for undone steps that wait on a day; never moves the calendar back.
-static func _advance_days(quest: Dictionary, world: RefCounted) -> void:
+## Lets the days pass for undone steps that wait on a day, one day at a time and never back. Each
+## day, before it ends, the party asks the topics those steps need that the person offers that day.
+static func _pass_days(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary, areas: Dictionary, person_areas: Dictionary) -> Array[String]:
+	while int(world.get("day")) < _last_day_min(quest, world):
+		var errors: Array[String] = _hear_topics(quest, world, people, dialogues, areas, person_areas, true)
+		if not errors.is_empty():
+			return errors
+		world.advance_days(1)
+	return []
+
+
+## The largest day_min among the undone steps; 0 if none waits on a day.
+static func _last_day_min(quest: Dictionary, world: RefCounted) -> int:
+	var last: int = 0
 	for step: Dictionary in quest["steps"]:
 		var cond: Dictionary = step.get("requires", {})
-		if Quests.is_done(quest, str(step["id"]), world) or not cond.has("day_min"):
-			continue
-		var day_min: int = int(cond["day_min"])
-		if int(world.get("day")) < day_min:
-			world.advance_days(day_min - int(world.get("day")))
+		if not Quests.is_done(quest, str(step["id"]), world) and cond.has("day_min"):
+			last = maxi(last, int(cond["day_min"]))
+	return last
 
 
 ## Tops up the hero's pack with the items that undone steps wait on; an error for any item
@@ -117,12 +129,15 @@ static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[S
 
 
 ## Has the hero ask the topics that undone steps wait on. The topic is first learned, as if the
-## world had taught it; the ask itself goes through People, so a refused ask is an error.
-static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary, areas: Dictionary = {}, person_areas: Dictionary = {}) -> Array[String]:
+## world had taught it; the ask itself goes through People, so a refused ask is an error. When
+## `waiting`, only steps whose day has not come are served, and only with topics offered today.
+static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary, areas: Dictionary = {}, person_areas: Dictionary = {}, waiting: bool = false) -> Array[String]:
 	var errors: Array[String] = []
 	for step: Dictionary in quest["steps"]:
 		var cond: Dictionary = step.get("requires", {})
 		if Quests.is_done(quest, str(step["id"]), world):
+			continue
+		if waiting and int(cond.get("day_min", 0)) <= int(world.get("day")):
 			continue
 		for entry: Variant in cond.get("heard", []):
 			var person_id: String = str(entry["person"])
@@ -147,9 +162,11 @@ static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionar
 					errors.append("%s in %s, but the party cannot get there: %s" % [where, to_area, trip])
 					continue
 			_learn_by_next(topic, people, dialogues, world, [topic] as Array[String])
+			if waiting and not People.available_topics(person, dialogues, world).has(topic):
+				continue
 			var result: Dictionary = People.ask(person, dialogues, topic, world)
 			if not bool(result["ok"]):
-				errors.append("%s, but the ask was refused: %s" % [where, str(result["error"])])
+				errors.append("%s, but the ask was refused on day %d: %s" % [where, int(world.get("day")), str(result["error"])])
 	return errors
 
 
