@@ -320,3 +320,66 @@ func test_topic_never_offered_before_day_min_errors() -> void:
 	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people_from_day(9), _dialogues())
 	check_eq(found.size(), 1, "one message")
 	check(found.size() > 0 and "power.x" in found[0] and "day 3" in found[0], "names topic and day")
+
+
+func _thing_area(things: Array) -> RefCounted:
+	return Area.from_dict({"id": "a", "spawn": [0, 0], "rows": ["..."], "legend": {".": {}}, "things": things})
+
+
+func _thing(id: String, cell: int, use: Dictionary = {}) -> Dictionary:
+	var t: Dictionary = {"id": id, "cell": [cell, 0]}
+	if not use.is_empty():
+		t["use"] = use
+	return t
+
+
+func test_holds_cleared_by_using_giving_thing() -> void:
+	var w: RefCounted = World.new()
+	w.party = ["hero"] as Array[String]
+	var q: Dictionary = _holding("t1", "item.frond", 2)
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _thing_area([_thing("thing.frond", 2, {"gives": {"item": "item.frond", "count": 1}, "max": 5})])}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, areas)
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+	check_eq(w.uses_of("thing.frond"), 2, "used twice")
+	check(w.has_entered("a", Vector2i(2, 0)), "walked to the thing")
+	check(not w.packs.has(QuestPlayer.STAND_IN_KEY), "no fallback grant")
+
+
+func test_used_count_three_clears_after_three_uses() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("t2", "")
+	q["steps"][1]["requires"] = {"used": {"thing.lever": 3}}
+	q["steps"][1]["area"] = "a"
+	var areas: Dictionary = {"a": _thing_area([_thing("thing.lever", 1)])}
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, areas), [] as Array[String], "no errors")
+	check_eq(w.uses_of("thing.lever"), 3, "three uses")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+
+
+func test_entered_step_clears_after_walk() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("t3", "")
+	q["steps"][1]["requires"] = {"entered": [{"area": "a", "cell": [2, 0]}]}
+	var areas: Dictionary = {"a": _thing_area([])}
+	check(not w.has_entered("a", Vector2i(2, 0)), "not yet entered")
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, areas), [] as Array[String], "no errors")
+	check(w.has_entered("a", Vector2i(2, 0)), "entered")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+
+
+func test_used_missing_thing_is_named() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("t4", "")
+	q["steps"][1]["requires"] = {"used": {"thing.gone": 1}}
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], {}, {}, {"a": _thing_area([])})
+	check(found.size() > 0 and "thing.gone" in found[0] and "step b" in found[0], "names thing and step")
+
+
+func test_holds_without_giving_thing_uses_fallback() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _holding("t5", "item.x", 1)
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], ["item.x"] as Array[String], {}, {}, {"a": _thing_area([_thing("thing.plain", 1)])})
+	check_eq(found, [] as Array[String], "no errors")
+	check_eq((w.packs[QuestPlayer.STAND_IN_KEY] as Dictionary)["item.x"], 1, "fallback grant")
