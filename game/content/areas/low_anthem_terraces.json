@@ -1,0 +1,37 @@
+{
+  "id": "low_anthem_terraces",
+  "canon": "place.low-anthem",
+  "name": "Low Anthem: the terraces",
+  "chapter": 1,
+  "legend": {
+    "#": {"blocks": true},
+    "k": {},
+    "n": {"blocks": true},
+    "g": {},
+    "D": {},
+    ".": {}
+  },
+  "rows": [
+    "########################",
+    "#kkkkkkkk#kkkkkkkk#nnnn#",
+    "#........#........#nnnn#",
+    "#kkkkkkkk#kkkkkkkk#nnnn#",
+    "#........#........###g##",
+    "#......................#",
+    "#......................D",
+    "#......................#",
+    "########################"
+  ],
+  "spawn": [1, 6],
+  "exits": [
+    {"cell": [23, 6], "to": "low_anthem_dome_hall", "to_cell": [1, 4]}
+  ],
+  "things": [
+    {"id": "kelp_row_west", "canon": "flora.anthem-kelp", "cell": [2, 1]},
+    {"id": "kelp_row_east", "canon": "flora.anthem-kelp", "cell": [12, 3]},
+    {"id": "drying_rack_1", "canon": "place.low-anthem", "cell": [3, 7]},
+    {"id": "drying_rack_2", "canon": "place.low-anthem", "cell": [5, 7]},
+    {"id": "drying_rack_3", "canon": "place.low-anthem", "cell": [7, 7]},
+    {"id": "nursery_gate", "canon": "creature.silverback", "cell": [21, 4]}
+  ]
+}
