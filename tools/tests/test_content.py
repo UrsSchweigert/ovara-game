@@ -231,6 +231,31 @@ class StoryContentTests(ContentCase):
         self.put("quests", {**QUEST, "start": {"area": "a", "cell": [0, 0], "arrival": "nope"}})
         self.assertFails("unknown arrival cut scene", "'nope'")
 
+    def test_cutscene_walk_outside_area_fails(self):
+        self.put("areas", area())
+        self.put("cutscenes", {"id": "c", "area": "a", "steps": [{"op": "walk", "who": "person.mender", "to": [5, 5]}]})
+        self.assertFails("x.json", "step 0 walk", "outside the area")
+
+    def test_cutscene_camera_outside_area_fails(self):
+        self.put("areas", area())
+        self.put("cutscenes", {"id": "c", "area": "a", "steps": [
+            {"op": "walk", "who": "person.mender", "to": [0, 0]}, {"op": "camera", "to": [5, 5]}]})
+        self.assertFails("x.json", "step 1 camera", "outside the area")
+
+    def test_cutscene_unknown_area_fails(self):
+        self.put("cutscenes", {"id": "c", "area": "nowhere", "steps": [{"op": "camera", "to": [0, 0]}]})
+        self.assertFails("unknown area", "nowhere")
+
+    def test_arrival_cutscene_without_area_fails(self):
+        self.put("areas", area())
+        self.put("cutscenes", {"id": "arr", "steps": [{"op": "camera", "to": [0, 0]}]})
+        self.put("quests", {**QUEST, "start": {"area": "a", "cell": [0, 0], "arrival": "arr"}})
+        self.assertFails("arrival cut scene needs an area")
+
+    def test_cutscene_without_area_not_checked_against_cells_passes(self):
+        self.put("cutscenes", {"id": "c", "steps": [{"op": "camera", "to": [50, 50]}]})
+        self.assertEqual(self.errors(), [])
+
 
 SHEET = {"id": "p", "canon": "person.bea", "attributes": {"body": 10, "hands": 10, "mind": 10, "standing": 10},
          "reach": 2, "skills": {"listen": 3}, "traits": ["trait.water-breather"]}
