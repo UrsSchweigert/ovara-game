@@ -71,5 +71,12 @@
   {"path": "tiles/shelves-fouled.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-fouled.md"},
   {"path": "tiles/shelves-orphan.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-orphan.md"},
   {"path": "tiles/shelves-storm.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-storm.md"},
-  {"path": "tiles/shelves-well.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-well.md"}
+  {"path": "tiles/shelves-well.png", "kind": "tile", "canon": "place.bright-shelves", "brief": "briefs/shelves-well.md"},
+  {"path": "ui/ui-dialogue-frame.png", "kind": "ui", "brief": "briefs/ui-dialogue-frame.md"},
+  {"path": "ui/ui-button.png", "kind": "ui", "brief": "briefs/ui-button.md"},
+  {"path": "ui/ui-button-pressed.png", "kind": "ui", "brief": "briefs/ui-button-pressed.md"},
+  {"path": "ui/ui-topic-row.png", "kind": "ui", "brief": "briefs/ui-topic-row.md"},
+  {"path": "ui/ui-speaking-mark.png", "kind": "ui", "brief": "briefs/ui-speaking-mark.md"},
+  {"path": "ui/ui-portrait-frame.png", "kind": "ui", "brief": "briefs/ui-portrait-frame.md"},
+  {"path": "ui/ui-menu-band.png", "kind": "ui", "brief": "briefs/ui-menu-band.md"}
 ]}
