@@ -1,0 +1,27 @@
+{
+  "id": "low_anthem_meeting_hall",
+  "canon": "place.low-anthem",
+  "name": "Low Anthem: the meeting hall",
+  "chapter": 1,
+  "legend": {
+    "#": {"blocks": true},
+    "M": {},
+    ".": {}
+  },
+  "rows": [
+    "############",
+    "#..........#",
+    "#..........#",
+    "M..........#",
+    "#..........#",
+    "#..........#",
+    "############"
+  ],
+  "spawn": [1, 3],
+  "exits": [
+    {"cell": [0, 3], "to": "low_anthem_dome_hall", "to_cell": [18, 4]}
+  ],
+  "things": [
+    {"id": "dead_lamp", "canon": "place.low-anthem", "cell": [6, 3]}
+  ]
+}
