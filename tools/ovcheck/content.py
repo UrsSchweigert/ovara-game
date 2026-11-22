@@ -137,7 +137,7 @@ def _cross_check(root, found, errors):
     if canon.is_dir():
         from .canon import load_entries
         entries = load_entries(canon, [], [])
-        for kind in ("areas", "people", "dialogue", "quests"):
+        for kind in ("areas", "people", "dialogue", "quests", "items"):
             for f, data in found.get(kind, {}).values():
                 for ref in _canon_refs(data):
                     if ref not in entries:
@@ -180,7 +180,7 @@ def check_content(root):
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
                 continue
-            if d.name in ("areas", "battles", "people", "dialogue", "quests"):
+            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items"):
                 found.setdefault(d.name, {})[data["id"]] = (f, data)
             if d.name not in LIMITS:
                 continue
