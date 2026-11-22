@@ -12,6 +12,9 @@
       "type": "string",
       "pattern": "^[a-z0-9_]+$"
     },
+    "area": {
+      "$ref": "content-defs.schema.json#/$defs/content_id"
+    },
     "skippable": {
       "type": "boolean"
     },

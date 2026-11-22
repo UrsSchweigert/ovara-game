@@ -133,13 +133,52 @@ def _cross_check(root, found, errors):
         for t in p.get("topics", []):
             if t["dialogue"] not in ids.get("dialogue", set()):
                 errors.append(f"{f}: topic {t['topic']} names unknown dialogue {t['dialogue']!r}")
+    for f, q in found.get("quests", {}).values():
+        start = q.get("start")
+        if start:
+            target = found.get("areas", {}).get(start["area"])
+            if target is None:
+                errors.append(f"{f}: start names unknown area {start['area']!r}")
+            else:
+                _inside(f"{f}: start {start['area']}", start["cell"], target[1]["rows"], errors)
+            arrival = start.get("arrival")
+            if arrival and arrival not in ids.get("cutscenes", set()):
+                errors.append(f"{f}: start names unknown arrival cut scene {arrival!r}")
+    for f, c in found.get("cutscenes", {}).values():
+        if "area" not in c:
+            if any(s.get("arrival") == c.get("id") for _, q in found.get("quests", {}).values()
+                   for s in [q.get("start") or {}]):
+                errors.append(f"{f}: arrival cut scene needs an area")
+            continue
+        target = found.get("areas", {}).get(c["area"])
+        if target is None:
+            errors.append(f"{f}: cut scene names unknown area {c['area']!r}")
+            continue
+        for i, st in enumerate(c["steps"]):
+            if st["op"] in ("walk", "camera"):
+                _inside(f"{f}: step {i} {st['op']}", st["to"], target[1]["rows"], errors)
+    items = found.get("items", {})
+    for f, shop in found.get("shops", {}).values():
+        if "area" in shop and shop["area"] not in ids.get("areas", set()):
+            errors.append(f"{f}: shop stands in unknown area {shop['area']!r}")
+        for entry in shop["stock"]:
+            for t in entry.get("trades", []):
+                for side in ("gives", "wants"):
+                    for item in t[side]:
+                        if item not in items:
+                            errors.append(f"{f}: trade {side} unknown item {item!r}")
+                        elif side == "wants" and items[item][1].get("slot") == "key":
+                            errors.append(f"{f}: trade wants key item {item!r}")
     canon = Path(root) / "canon"
     if canon.is_dir():
         from .canon import load_entries
         entries = load_entries(canon, [], [])
-        for kind in ("areas", "people", "dialogue", "quests", "items"):
+        for kind in ("areas", "people", "dialogue", "quests", "items", "shops"):
             for f, data in found.get(kind, {}).values():
-                for ref in _canon_refs(data):
+                refs = list(_canon_refs(data))
+                if kind == "shops" and "keeper" in data:
+                    refs.append(data["keeper"]["place"])
+                for ref in refs:
                     if ref not in entries:
                         errors.append(f"{f}: canon id {ref!r} does not exist")
     things = {t["id"] for _, a in found.get("areas", {}).values()
@@ -219,7 +258,7 @@ def check_content(root):
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
                 continue
-            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items"):
+            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items", "shops", "cutscenes"):
                 found.setdefault(d.name, {})[data["id"]] = (f, data)
             if d.name not in LIMITS:
                 continue

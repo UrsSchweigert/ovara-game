@@ -92,6 +92,19 @@
         }
       }
     },
+    "start": {
+      "description": "Where a new game begins, read from the first main quest: area, cell, party and guests.",
+      "type": "object",
+      "required": ["area", "cell"],
+      "additionalProperties": false,
+      "properties": {
+        "area": {"$ref": "content-defs.schema.json#/$defs/content_id"},
+        "cell": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 0}},
+        "party": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "guests": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "arrival": {"$ref": "content-defs.schema.json#/$defs/content_id"}
+      }
+    },
     "side": {
       "description": "A side quest closes when its place is lost; a stage does not.",
       "type": "boolean"

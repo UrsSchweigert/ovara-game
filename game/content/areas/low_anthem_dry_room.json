@@ -4,9 +4,9 @@
   "name": "Low Anthem: the dry room",
   "chapter": 1,
   "legend": {
-    "#": {"blocks": true},
-    "d": {},
-    ".": {}
+    "#": {"blocks": true, "tile": "explore-wall"},
+    "d": {"tile": "explore-floor"},
+    ".": {"tile": "explore-floor"}
   },
   "rows": [
     "########",
@@ -15,6 +15,7 @@
     "#......#",
     "###d####"
   ],
+  "rest": true,
   "spawn": [3, 3],
   "exits": [
     {"cell": [3, 4], "to": "low_anthem_dome_hall", "to_cell": [5, 1]}
