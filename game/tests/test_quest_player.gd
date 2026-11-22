@@ -2,6 +2,7 @@ extends "res://tests/test_case.gd"
 
 const World: GDScript = preload("res://rules/world_state.gd")
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
+const People: GDScript = preload("res://rules/people.gd")
 const QuestPlayer: GDScript = preload("res://tools/quest_player.gd")
 
 
@@ -80,3 +81,53 @@ func test_day_min_never_moves_back() -> void:
 	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
 	check(Quests.is_done(q, "b", w), "step b done")
 	check_eq(w.day, 5, "day unchanged past day_min")
+
+
+func _hearing(id: String, person: String, topic: String) -> Dictionary:
+	var q: Dictionary = _quest(id, "")
+	q["steps"][1]["requires"] = {"heard": [{"person": person, "topic": topic}]}
+	return q
+
+
+func _people(chapter_min: int = 0) -> Dictionary:
+	var when: Dictionary = {"chapter_min": chapter_min} if chapter_min > 0 else {}
+	return {"ione": {"id": "ione", "topics": [{"topic": "power.x", "dialogue": "d", "when": when}]}}
+
+
+func _dialogues() -> Dictionary:
+	return {"d": {"id": "d", "topics": [{"topic": "power.x", "panels": [{"speaker": "person.ione", "lines": ["Hello."]}]}]}}
+
+
+func test_heard_topic_clears() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e1", "ione", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found, [] as Array[String], "no errors")
+	check(People.heard("ione", "power.x", w), "topic heard")
+	check_eq(Quests.status(q, w), Quests.CLEARED, "cleared")
+
+
+func test_heard_unknown_person() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e2", "nobody", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e2" in found[0] and "step b" in found[0] and "nobody" in found[0] and "power.x" in found[0] and "person is unknown" in found[0], "names quest, step, person, topic")
+
+
+func test_heard_unknown_topic() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e3", "ione", "power.none")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e3" in found[0] and "step b" in found[0] and "ione" in found[0] and "power.none" in found[0] and "topic is unknown" in found[0], "names quest, step, person, topic")
+	check(not People.heard("ione", "power.none", w), "not faked")
+
+
+func test_heard_refused_ask() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _hearing("e4", "ione", "power.x")
+	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(5), _dialogues())
+	check_eq(found.size(), 1, "one message")
+	check(found.size() > 0 and "e4" in found[0] and "step b" in found[0] and "ione" in found[0] and "power.x" in found[0] and "refused" in found[0], "names quest, step, person, topic")
+	check(not People.heard("ione", "power.x", w), "not faked")

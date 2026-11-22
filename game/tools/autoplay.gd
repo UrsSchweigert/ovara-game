@@ -24,6 +24,8 @@ func _init() -> void:
 	var item_ids: Array[String] = []
 	for item: Dictionary in _load_dir("res://content/items"):
 		item_ids.append(str(item.get("id", "")))
+	var people: Dictionary = _load_keyed("res://content/people")
+	var dialogues: Dictionary = _load_keyed("res://content/dialogue")
 	var errors: Array[String] = []
 	var played: int = 0
 	for area: RefCounted in areas:
@@ -34,7 +36,7 @@ func _init() -> void:
 		var found: Array[String] = [] if not (area.errors as Array).is_empty() else Walker.walk(area)
 		print("walker: %s %s" % [area.id, "OK" if found.is_empty() and (area.errors as Array).is_empty() else "FAILED"])
 		errors.append_array(found)
-	played += _play_quests(quests, item_ids, want, errors)
+	played += _play_quests(quests, item_ids, people, dialogues, want, errors)
 	if want != "" and played == 0:
 		errors.append("play: unknown id %s" % want)
 	for message: String in errors:
@@ -45,7 +47,7 @@ func _init() -> void:
 
 
 ## Main stages in chapter order on one world, then each side quest on a fresh world.
-func _play_quests(quests: Array[Dictionary], item_ids: Array[String], want: String, errors: Array[String]) -> int:
+func _play_quests(quests: Array[Dictionary], item_ids: Array[String], people: Dictionary, dialogues: Dictionary, want: String, errors: Array[String]) -> int:
 	var main: Array[Dictionary] = []
 	var sides: Array[Dictionary] = []
 	for q: Dictionary in quests:
@@ -54,7 +56,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], want: Stri
 	var played: int = 0
 	var shared: RefCounted = World.new()
 	for q: Dictionary in main:
-		var found: Array[String] = QuestPlayer.play(q, shared, quests, item_ids)
+		var found: Array[String] = QuestPlayer.play(q, shared, quests, item_ids, people, dialogues)
 		if want == "" or want == str(q["id"]):
 			played += 1
 			print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
@@ -64,7 +66,7 @@ func _play_quests(quests: Array[Dictionary], item_ids: Array[String], want: Stri
 			continue
 		var world: RefCounted = World.new()
 		world.chapter = int(q["chapters"][0])
-		var found: Array[String] = QuestPlayer.play(q, world, quests, item_ids)
+		var found: Array[String] = QuestPlayer.play(q, world, quests, item_ids, people, dialogues)
 		played += 1
 		print("quest: %s %s" % [q["id"], "OK" if found.is_empty() else "FAILED"])
 		errors.append_array(found)
@@ -80,4 +82,12 @@ func _load_dir(path: String) -> Array[Dictionary]:
 			var data: Dictionary = People.load_json(path.path_join(file))
 			if not data.is_empty():
 				out.append(data)
+	return out
+
+
+## Files of a content folder keyed by their "id".
+func _load_keyed(path: String) -> Dictionary:
+	var out: Dictionary = {}
+	for data: Dictionary in _load_dir(path):
+		out[str(data.get("id", ""))] = data
 	return out

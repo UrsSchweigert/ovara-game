@@ -3,14 +3,16 @@ extends RefCounted
 ## on a flag is helped only if some loaded quest can set that flag; otherwise the quest is stuck.
 
 const Quests: GDScript = preload("res://rules/quest_engine.gd")
+const People: GDScript = preload("res://rules/people.gd")
 ## Pack key for items granted to a party with no members.
 const STAND_IN_KEY: String = "quest_player"
 
 
 ## Error messages; empty if the quest was cleared. `all_quests` are the loaded quests whose
 ## flags may stand in for the world's other doings. `item_ids` are the items the player may be
-## given for steps that wait on holds.
-static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = []) -> Array[String]:
+## given for steps that wait on holds. `people` maps file id to person JSON and `dialogues` maps
+## dialogue id to dialogue JSON, for steps that wait on topics heard.
+static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}) -> Array[String]:
 	var id: String = str(quest["id"])
 	if not Quests.open(quest, world):
 		return ["quest %s: cannot open at chapter %d (chapters %s)" % [id, world.chapter, str(quest["chapters"])]]
@@ -22,6 +24,9 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		var held_errors: Array[String] = _grant_holds(quest, world, item_ids)
 		if not held_errors.is_empty():
 			return held_errors
+		var heard_errors: Array[String] = _hear_topics(quest, world, people, dialogues)
+		if not heard_errors.is_empty():
+			return heard_errors
 		Quests.update(quest, world)
 		if Quests.status(quest, world) == Quests.CLEARED:
 			return []
@@ -70,6 +75,37 @@ static func _grant_holds(quest: Dictionary, world: RefCounted, item_ids: Array[S
 					packs[hero] = {}
 				var mine: Dictionary = packs[hero]
 				mine[item_id] = int(mine.get(item_id, 0)) + missing
+	return errors
+
+
+## Has the hero ask the topics that undone steps wait on. The topic is first learned, as if the
+## world had taught it; the ask itself goes through People, so a refused ask is an error.
+static func _hear_topics(quest: Dictionary, world: RefCounted, people: Dictionary, dialogues: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	for step: Dictionary in quest["steps"]:
+		var cond: Dictionary = step.get("requires", {})
+		if Quests.is_done(quest, str(step["id"]), world):
+			continue
+		for entry: Variant in cond.get("heard", []):
+			var person_id: String = str(entry["person"])
+			var topic: String = str(entry["topic"])
+			if People.heard(person_id, topic, world):
+				continue
+			var where: String = "quest %s: step %s needs %s to tell %s" % [str(quest["id"]), str(step["id"]), person_id, topic]
+			if not people.has(person_id):
+				errors.append("%s, but the person is unknown" % where)
+				continue
+			var person: Dictionary = people[person_id]
+			var offered: bool = false
+			for t: Variant in person.get("topics", []):
+				offered = offered or str((t as Dictionary).get("topic", "")) == topic
+			if not offered:
+				errors.append("%s, but the topic is unknown" % where)
+				continue
+			People.learn_topic(world, topic)
+			var result: Dictionary = People.ask(person, dialogues, topic, world)
+			if not bool(result["ok"]):
+				errors.append("%s, but the ask was refused: %s" % [where, str(result["error"])])
 	return errors
 
 
