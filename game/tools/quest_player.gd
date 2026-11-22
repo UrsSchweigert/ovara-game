@@ -15,6 +15,7 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		for step: Dictionary in quest["steps"]:
 			if not step.has("requires"):
 				Quests.complete_step(quest, str(step["id"]), world)
+		_advance_days(quest, world)
 		Quests.update(quest, world)
 		if Quests.status(quest, world) == Quests.CLEARED:
 			return []
@@ -24,6 +25,17 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		if not Quests.is_done(quest, str(step["id"]), world):
 			stuck.append(str(step["id"]))
 	return ["quest %s: stuck at step %s" % [id, ", ".join(stuck)]]
+
+
+## Lets the days pass for undone steps that wait on a day; never moves the calendar back.
+static func _advance_days(quest: Dictionary, world: RefCounted) -> void:
+	for step: Dictionary in quest["steps"]:
+		var cond: Dictionary = step.get("requires", {})
+		if Quests.is_done(quest, str(step["id"]), world) or not cond.has("day_min"):
+			continue
+		var day_min: int = int(cond["day_min"])
+		if int(world.get("day")) < day_min:
+			world.advance_days(day_min - int(world.get("day")))
 
 
 ## Sets the flags that undone steps wait on, when another quest can set them.

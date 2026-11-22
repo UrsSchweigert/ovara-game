@@ -5,10 +5,12 @@ const Quests: GDScript = preload("res://rules/quest_engine.gd")
 const QuestPlayer: GDScript = preload("res://tools/quest_player.gd")
 
 
-func _quest(id: String, requires_flag: String, side: bool = false) -> Dictionary:
+func _quest(id: String, requires_flag: String, side: bool = false, day_min: int = 0) -> Dictionary:
 	var gated: Dictionary = {"id": "b", "intent": "Wait.", "points": 1, "difficulty": 8}
 	if requires_flag != "":
 		gated["requires"] = {"flag": requires_flag}
+	if day_min > 0:
+		gated["requires"] = {"day_min": day_min}
 	return {"id": id, "kind": "discover", "giver": "person.x", "chapters": [1, 1], "side": side,
 		"steps": [{"id": "a", "intent": "Go.", "points": 1, "difficulty": 8, "sets": ["%s.a" % id]}, gated],
 		"clears": "%s.done" % id, "sets": []}
@@ -38,3 +40,19 @@ func test_side_quest_leaves_chapter() -> void:
 	var q: Dictionary = _quest("side", "", true)
 	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
 	check_eq(w.chapter, 1, "chapter unchanged")
+
+
+func test_day_min_advances_forward() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = _quest("d1", "", false, 3)
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
+	check(Quests.is_done(q, "b", w), "step b done")
+	check_eq(w.day, 3, "day advanced to 3")
+
+
+func test_day_min_never_moves_back() -> void:
+	var w: RefCounted = World.new()
+	w.advance_days(4)
+	var q: Dictionary = _quest("d2", "", false, 3)
+	check_eq(QuestPlayer.play(q, w, [q] as Array[Dictionary]), [] as Array[String], "no errors")
+	check_eq(w.day, 5, "day unchanged past day_min")
