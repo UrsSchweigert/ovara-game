@@ -215,6 +215,16 @@ class PlaceholderTests(unittest.TestCase):
         self.assertTrue(used <= self.palette_hexes(), "dungeon picture uses off-palette colours")
         self.assertEqual(mp.render_corridor(self.root).size, (320, 180))
 
+    def test_review_pictures_match_generated(self):
+        mp.build(self.root)  # after portraits, so the contact sheet includes them
+        review = REAL / "docs" / "review"
+        sheet, _ = mp.contact_sheet(self.root)
+        picture = mp.dungeon_picture(self.root)
+        for name, generated in [("placeholders.png", sheet), ("dungeon-placeholder.png", picture)]:
+            committed = Image.open(review / name).convert("RGBA")
+            self.assertEqual(committed.size, generated.size, name)
+            self.assertEqual(committed.tobytes(), generated.convert("RGBA").tobytes(), f"docs/review/{name} is stale")
+
     def test_manifest_upsert_keeps_other_entries(self):
         assets = mp.assets_dir(self.root)
         (assets / "manifest.json").write_text(json.dumps({"assets": [
