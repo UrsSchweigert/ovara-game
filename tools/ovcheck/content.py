@@ -133,6 +133,14 @@ def _cross_check(root, found, errors):
         for t in p.get("topics", []):
             if t["dialogue"] not in ids.get("dialogue", set()):
                 errors.append(f"{f}: topic {t['topic']} names unknown dialogue {t['dialogue']!r}")
+    for f, q in found.get("quests", {}).values():
+        start = q.get("start")
+        if start:
+            target = found.get("areas", {}).get(start["area"])
+            if target is None:
+                errors.append(f"{f}: start names unknown area {start['area']!r}")
+            else:
+                _inside(f"{f}: start {start['area']}", start["cell"], target[1]["rows"], errors)
     canon = Path(root) / "canon"
     if canon.is_dir():
         from .canon import load_entries
