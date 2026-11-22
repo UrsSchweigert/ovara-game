@@ -22,6 +22,6 @@
     {"cell": [0, 3], "to": "low_anthem_dome_hall", "to_cell": [18, 4]}
   ],
   "things": [
-    {"id": "dead_lamp", "canon": "place.low-anthem", "cell": [6, 3]}
+    {"id": "dead_lamp", "canon": "place.low-anthem", "cell": [6, 3], "use": {"max": 3}}
   ]
 }

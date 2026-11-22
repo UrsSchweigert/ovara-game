@@ -10,7 +10,10 @@
       "points": 1,
       "difficulty": 8,
       "kind": "discover",
-      "area": "low_anthem_terraces"
+      "area": "low_anthem_terraces",
+      "requires": {
+        "entered": [{ "area": "low_anthem_terraces", "cell": [23, 6] }]
+      }
     },
     {
       "id": "dry_room_days",
@@ -50,7 +53,8 @@
       "kind": "fetch",
       "area": "low_anthem_terraces",
       "requires": {
-        "holds": { "frond": 10 }
+        "holds": { "frond": 10 },
+        "used": { "drying_rack_1": 1 }
       }
     },
     {
@@ -59,7 +63,10 @@
       "points": 3,
       "difficulty": 12,
       "kind": "puzzle",
-      "area": "low_anthem_terraces"
+      "area": "low_anthem_terraces",
+      "requires": {
+        "used": { "nursery_gate": 2 }
+      }
     },
     {
       "id": "night_crew_hammocks",
@@ -83,7 +90,8 @@
       "kind": "puzzle",
       "area": "low_anthem_meeting_hall",
       "requires": {
-        "day_min": 9
+        "day_min": 9,
+        "used": { "dead_lamp": 3 }
       }
     }
   ],
