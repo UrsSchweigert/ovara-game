@@ -142,8 +142,19 @@ def _cross_check(root, found, errors):
                 for ref in _canon_refs(data):
                     if ref not in entries:
                         errors.append(f"{f}: canon id {ref!r} does not exist")
+    things = {t["id"] for _, a in found.get("areas", {}).values()
+              for g in [a] + a.get("variants", []) for t in g.get("things", [])}
     for kind_files in found.values():
         for f, data in kind_files.values():
+            for key in _condition_nodes(data, "used"):
+                if key not in things:
+                    errors.append(f"{f}: used names unknown thing {key!r}")
+            for e in _condition_nodes(data, "entered"):
+                target = found.get("areas", {}).get(e.get("area"))
+                if target is None:
+                    errors.append(f"{f}: entered names unknown area {e.get('area')!r}")
+                else:
+                    _inside(f"{f}: entered {e['area']}", e["cell"], target[1]["rows"], errors)
             for key in _holds_keys(data):
                 if key not in ids.get("items", set()):
                     errors.append(f"{f}: holds names unknown item {key!r}")
@@ -164,16 +175,23 @@ def _canon_refs(node, key=""):
         yield node
 
 
-def _holds_keys(node):
-    """Item ids named as keys of any 'holds' dict in the content."""
+def _condition_nodes(node, name):
+    """The entries of every condition key `name` in the content: list items, or dict keys."""
     if isinstance(node, dict):
         for k, v in node.items():
-            if k == "holds" and isinstance(v, dict):
+            if k == name and isinstance(v, list):
+                yield from (e for e in v if isinstance(e, dict))
+            elif k == name and isinstance(v, dict):
                 yield from v.keys()
-            yield from _holds_keys(v)
+            yield from _condition_nodes(v, name)
     elif isinstance(node, list):
         for v in node:
-            yield from _holds_keys(v)
+            yield from _condition_nodes(v, name)
+
+
+def _holds_keys(node):
+    """Item ids named as keys of any 'holds' dict in the content."""
+    return _condition_nodes(node, "holds")
 
 
 def check_content(root):

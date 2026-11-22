@@ -163,6 +163,33 @@ func exit_at(world: RefCounted, cell: Vector2i) -> Dictionary:
 	return {}
 
 
+## The party enters a cell: records it and returns what is there, {"exit": ..., "encounter": ...}.
+func enter(world: RefCounted, cell: Vector2i) -> Dictionary:
+	world.call("record_entry", id, cell)
+	return {"exit": exit_at(world, cell), "encounter": encounter_at(world, cell)}
+
+
+## Uses a visible thing. Counts the use; a thing whose data has use.gives {item, count} puts
+## that item in the first party member's pack, up to use.max uses. Returns {"ok", "gave"}.
+func use_thing(world: RefCounted, thing_id: String, listened: bool = false) -> Dictionary:
+	for t: Dictionary in visible_things(world, listened):
+		if str(t.get("id", "")) != thing_id:
+			continue
+		var n: int = int(world.call("record_use", thing_id))
+		var gives: Dictionary = (t.get("use", {}) as Dictionary).get("gives", {})
+		var party: Array = world.get("party")
+		var max_uses: int = int((t["use"] as Dictionary).get("max", n)) if t.has("use") else n
+		if gives.is_empty() or party.is_empty() or n > max_uses:
+			return {"ok": true, "gave": {}}
+		var packs: Dictionary = world.get("packs")
+		var pack: Dictionary = packs.get(str(party[0]), {})
+		var item: String = str(gives["item"])
+		pack[item] = int(pack.get(item, 0)) + int(gives["count"])
+		packs[str(party[0])] = pack
+		return {"ok": true, "gave": {"item": item, "count": int(gives["count"])}}
+	return {"ok": false, "gave": {}}
+
+
 ## Moves the party to the exit's area by setting the world position. Returns the exit, or empty.
 func take_exit(world: RefCounted, cell: Vector2i) -> Dictionary:
 	var e: Dictionary = exit_at(world, cell)

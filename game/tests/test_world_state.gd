@@ -29,6 +29,8 @@ func _sample() -> RefCounted:
 	w.journal.append("first entry")
 	w.position = {"area": "a1", "x": 3, "y": 4}
 	w.mode = "dungeon"
+	w.record_entry("a1", Vector2i(3, 4))
+	w.record_use("stone")
 	w.dice_for("act.one")
 	return w
 
@@ -44,6 +46,8 @@ func test_round_trip_is_lossless() -> void:
 		check_eq(back.dice_for("act.one"), w.dice_for("act.one"), "stored dice are kept, not redrawn")
 		check_eq(back.get_flag("a.count"), 4, "flag stays an int")
 		check_eq(back.position["x"], 3, "position stays an int")
+		check(back.has_entered("a1", Vector2i(3, 4)), "entered kept")
+		check_eq(back.uses_of("stone"), 1, "used kept as int")
 
 
 func test_missing_version_refused() -> void:

@@ -43,6 +43,10 @@ var topics_heard: Dictionary = {}
 var quests: Dictionary = {}
 ## Person id to the quest points they hold.
 var points: Dictionary = {}
+## Area id -> {"x,y": true} for each cell the party has entered.
+var entered: Dictionary = {}
+## Thing id -> number of times the party has used it.
+var used: Dictionary = {}
 
 
 func _init(new_seed: int = 1) -> void:
@@ -123,6 +127,26 @@ func add_ebb(id: String, amount: int) -> void:
 	ebb[id] = ebb_of(id) + amount
 
 
+func record_entry(area_id: String, cell: Vector2i) -> void:
+	var cells: Dictionary = entered.get(area_id, {})
+	cells["%d,%d" % [cell.x, cell.y]] = true
+	entered[area_id] = cells
+
+
+func has_entered(area_id: String, cell: Vector2i) -> bool:
+	return (entered.get(area_id, {}) as Dictionary).has("%d,%d" % [cell.x, cell.y])
+
+
+## Counts one use of a thing and returns the new count.
+func record_use(thing_id: String) -> int:
+	used[thing_id] = uses_of(thing_id) + 1
+	return uses_of(thing_id)
+
+
+func uses_of(thing_id: String) -> int:
+	return int(used.get(thing_id, 0))
+
+
 func to_dict() -> Dictionary:
 	var sheet_data: Dictionary = {}
 	for id: Variant in sheets:
@@ -135,6 +159,7 @@ func to_dict() -> Dictionary:
 		"journal": journal.duplicate(), "position": position.duplicate(true), "mode": mode,
 		"topics_known": topics_known.duplicate(), "topics_heard": topics_heard.duplicate(true),
 		"quests": quests.duplicate(true), "points": points.duplicate(),
+		"entered": entered.duplicate(true), "used": used.duplicate(),
 	}
 
 
@@ -188,6 +213,8 @@ static func from_dict(data: Dictionary) -> Dictionary:
 		w.topics_heard[str(id)] = list
 	w.quests = _ints(data.get("quests", {}))
 	w.points = _ints(data.get("points", {}))
+	w.entered = _ints(data.get("entered", {}))
+	w.used = _ints(data.get("used", {}))
 	return {"state": w, "error": ""}
 
 

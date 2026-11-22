@@ -187,6 +187,25 @@ class StoryContentTests(ContentCase):
         self.put("dialogue", {**DIALOGUE, "topics": [topic]})
         self.assertFails("x.json", "unknown item 'nothing'")
 
+    def _used_topic(self, **when):
+        topic = {"topic": "place.low-anthem", "when": when, "panels": [PANEL]}
+        self.put("dialogue", {**DIALOGUE, "topics": [topic]})
+
+    def test_condition_used_unknown_thing_fails_known_passes(self):
+        self._used_topic(used={"lamp": 2})
+        self.assertFails("x.json", "used names unknown thing 'lamp'")
+        thing = {"id": "lamp", "canon": "place.low-anthem", "cell": [0, 0], "use": {"max": 2}}
+        self.put("areas", area(things=[thing]), "a.json")
+        self.assertEqual(self.errors(), [])
+
+    def test_condition_entered_checks_area_and_cell(self):
+        self._used_topic(entered=[{"area": "a", "cell": [1, 1]}])
+        self.assertFails("x.json", "entered names unknown area 'a'")
+        self.put("areas", area(), "a.json")
+        self.assertEqual(self.errors(), [])
+        self._used_topic(entered=[{"area": "a", "cell": [5, 5]}])
+        self.assertFails("x.json", "outside the area")
+
     def test_quest_bad_kind_fails(self):
         self.put("quests", {**QUEST, "kind": "battle"})
         self.assertFails("x.json", "/kind")
