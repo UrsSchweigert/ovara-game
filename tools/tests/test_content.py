@@ -130,6 +130,10 @@ class StoryContentTests(ContentCase):
         self.put("items", {**ITEM, "canon": "thing.nowhere"})
         self.assertFails("x.json", "canon id 'thing.nowhere' does not exist")
 
+    def test_item_canon_unchecked_without_canon_dir(self):
+        self.put("items", {**ITEM, "canon": "thing.nowhere"})
+        self.assertEqual(self.errors(), [])
+
     def test_item_known_canon_id_passes(self):
         machine = ("id: machine.hook\nname: Hook\ntype: machine\nkind: tool\n"
                    "summary: A hook.\nfacts:\n  - It is bent.\nsources: [world-bible.md#1]\n")
