@@ -167,3 +167,65 @@ func test_unsatisfiable_flag_beside_heard_names_flag_step() -> void:
 	var found: Array[String] = QuestPlayer.play(q, w, [q] as Array[Dictionary], [] as Array[String], _people(), _dialogues())
 	check_eq(found.size(), 1, "one message")
 	check(found.size() > 0 and "stuck at step c" in found[0] and not "step b" in found[0], "names only step c")
+
+
+const Area: GDScript = preload("res://rules/area.gd")
+
+
+func _real(dir: String) -> Dictionary:
+	var out: Dictionary = {}
+	for file: String in DirAccess.get_files_at("res://content/" + dir):
+		var d: Dictionary = People.load_json("res://content/%s/%s" % [dir, file])
+		out[str(d.get("id", ""))] = d
+	return out
+
+
+func _stage1_targets() -> Dictionary:
+	return {"follow_sefa": {"exit": "low_anthem_dome_hall"}, "cut_fronds": {"thing": "drying_rack_1"},
+		"nursery_gate": {"thing": "nursery_gate"}, "meeting_hall_lamp": {"thing": "dead_lamp"}}
+
+
+func _real_areas() -> Dictionary:
+	var out: Dictionary = {}
+	for d: Variant in _real("areas").values():
+		out[str((d as Dictionary)["id"])] = Area.from_dict(d)
+	return out
+
+
+func _play_stage1(people: Dictionary, w: RefCounted) -> Array[String]:
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	var items: Array[String] = ["frond"]
+	return QuestPlayer.play(q, w, [q] as Array[Dictionary], items, people, _real("dialogue"), _real_areas(), _stage1_targets())
+
+
+func test_stage1_needs_play() -> void:
+	var w: RefCounted = World.new()
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	Quests.open(q, w)
+	Quests.update(q, w)
+	check(Quests.status(q, w) != Quests.CLEARED, "update alone does not clear")
+	var w2: RefCounted = World.new()
+	check_eq(_play_stage1(_real("people"), w2), [] as Array[String], "no errors")
+	check_eq(w2.chapter, 2, "chapter advanced")
+
+
+func test_stage1_missing_topic_is_stuck() -> void:
+	var people: Dictionary = _real("people").duplicate(true)
+	var sefa: Dictionary = people["sefa"]
+	var kept: Array = []
+	for t: Variant in sefa["topics"]:
+		if str((t as Dictionary)["topic"]) != "person.jef":
+			kept.append(t)
+	sefa["topics"] = kept
+	var found: Array[String] = _play_stage1(people, World.new())
+	check(found.size() > 0 and "person.jef" in found[0], "names the missing topic")
+
+
+func test_walled_target_has_no_path() -> void:
+	var data: Dictionary = (_real("areas")["low_anthem_terraces"] as Dictionary).duplicate(true)
+	data["rows"] = ["#".repeat(str(data["rows"][0]).length())]
+	data["legend"]["#"] = {"blocks": true}
+	var areas: Dictionary = {"low_anthem_terraces": Area.from_dict(data)}
+	var q: Dictionary = People.load_json("res://content/quests/stage_1.json")
+	var found: Array[String] = QuestPlayer.play(q, World.new(), [q] as Array[Dictionary], [] as Array[String], {}, {}, areas, _stage1_targets())
+	check(found.size() > 0 and "no path" in found[0], "reports no path")

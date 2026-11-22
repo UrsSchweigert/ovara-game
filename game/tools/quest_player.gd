@@ -11,11 +11,16 @@ const STAND_IN_KEY: String = "quest_player"
 ## Error messages; empty if the quest was cleared. `all_quests` are the loaded quests whose
 ## flags may stand in for the world's other doings. `item_ids` are the items the player may be
 ## given for steps that wait on holds. `people` maps file id to person JSON and `dialogues` maps
-## dialogue id to dialogue JSON, for steps that wait on topics heard.
-static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}) -> Array[String]:
+## dialogue id to dialogue JSON, for steps that wait on topics heard. `areas` maps area id to Area
+## and `targets` maps step id to {"thing": id} or {"exit": area id}: the player must find a path
+## from the area's spawn to that thing or exit before the step is done.
+static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Dictionary], item_ids: Array[String] = [], people: Dictionary = {}, dialogues: Dictionary = {}, areas: Dictionary = {}, targets: Dictionary = {}) -> Array[String]:
 	var id: String = str(quest["id"])
 	if not Quests.open(quest, world):
 		return ["quest %s: cannot open at chapter %d (chapters %s)" % [id, world.chapter, str(quest["chapters"])]]
+	var walk_errors: Array[String] = _walk_to_steps(quest, world, areas, targets)
+	if not walk_errors.is_empty():
+		return walk_errors
 	for pass_number: int in 2:
 		for step: Dictionary in quest["steps"]:
 			if not step.has("requires"):
@@ -36,6 +41,38 @@ static func play(quest: Dictionary, world: RefCounted, all_quests: Array[Diction
 		if not Quests.is_done(quest, str(step["id"]), world):
 			stuck.append(str(step["id"]))
 	return ["quest %s: stuck at step %s" % [id, ", ".join(stuck)]]
+
+
+## Finds a path in the step's area from its spawn to the step's thing or exit; an error if none.
+static func _walk_to_steps(quest: Dictionary, world: RefCounted, areas: Dictionary, targets: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	for step: Dictionary in quest["steps"]:
+		var step_id: String = str(step["id"])
+		if not targets.has(step_id) or Quests.is_done(quest, step_id, world):
+			continue
+		var area_id: String = str(step.get("area", ""))
+		var where: String = "quest %s: step %s in %s" % [str(quest["id"]), step_id, area_id]
+		if not areas.has(area_id):
+			errors.append("%s: area is unknown" % where)
+			continue
+		var area: RefCounted = areas[area_id]
+		var target: Dictionary = targets[step_id]
+		var cell: Variant = null
+		if target.has("thing"):
+			for t: Variant in area.data.get("things", []):
+				if str((t as Dictionary)["id"]) == str(target["thing"]):
+					cell = area.cell_of((t as Dictionary)["cell"])
+		else:
+			for e: Variant in area.data.get("exits", []):
+				if str((e as Dictionary)["to"]) == str(target.get("exit", "")):
+					cell = area.cell_of((e as Dictionary)["cell"])
+		if cell == null:
+			errors.append("%s: no such thing or exit %s" % [where, str(target)])
+			continue
+		var from: Vector2i = area.cell_of(area.data.get("spawn", [0, 0]))
+		if area.find_path(world, from, cell as Vector2i).is_empty():
+			errors.append("%s: no path from %s to %s" % [where, str(from), str(cell)])
+	return errors
 
 
 ## Lets the days pass for undone steps that wait on a day; never moves the calendar back.
