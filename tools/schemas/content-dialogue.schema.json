@@ -62,6 +62,20 @@
                 }
               }
             }
+          },
+          "sets": {
+            "description": "Flags set when the topic has been heard; only flags listed in docs/design/quests.md.",
+            "type": "array",
+            "items": {
+              "$ref": "content-defs.schema.json#/$defs/flag"
+            }
+          },
+          "next": {
+            "description": "Topic ids this topic opens.",
+            "type": "array",
+            "items": {
+              "$ref": "content-defs.schema.json#/$defs/canon_id"
+            }
           }
         }
       }
