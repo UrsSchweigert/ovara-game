@@ -21,6 +21,14 @@ static func condition_met(cond: Dictionary, world: RefCounted) -> bool:
 	for h: Variant in cond.get("heard", []):
 		if not heard(str(h["person"]), str(h["topic"]), world):
 			return false
+	for e: Variant in cond.get("entered", []):
+		var cell: Array = (e as Dictionary)["cell"]
+		if not bool(world.call("has_entered", str(e["area"]), Vector2i(int(cell[0]), int(cell[1])))):
+			return false
+	var uses: Dictionary = cond.get("used", {})
+	for thing: Variant in uses:
+		if int(world.call("uses_of", str(thing))) < int(uses[thing]):
+			return false
 	var held: Dictionary = cond.get("holds", {})
 	for item: Variant in held:
 		var total: int = 0

@@ -106,3 +106,21 @@ func test_save_round_trip_keeps_quests() -> void:
 	check(Quests.is_done(q, "arrive", back), "step lost")
 	check_eq(back.points["sefa"], 1, "points lost")
 	check_eq(Quests.complete_step(q, "arrive", back), 0, "paid again after load")
+
+
+func test_step_requires_entry_and_use() -> void:
+	var w: RefCounted = _world()
+	var q: Dictionary = {"id": "q", "kind": "discover", "giver": "person.sefa", "chapters": [1, 1],
+		"steps": [
+			{"id": "go", "intent": "Go.", "points": 1, "difficulty": 8, "requires": {"entered": [{"area": "a", "cell": [1, 1]}]}},
+			{"id": "cut", "intent": "Cut.", "points": 1, "difficulty": 8, "requires": {"used": {"frond": 2}}},
+		],
+		"clears": "q.done", "sets": []}
+	Quests.open(q, w)
+	check(not Quests.update(q, w), "cleared untouched")
+	check(not w.has_flag("q.done"), "flag set untouched")
+	w.record_entry("a", Vector2i(1, 1))
+	w.record_use("frond")
+	check(not Quests.update(q, w), "cleared with one use")
+	w.record_use("frond")
+	check(Quests.update(q, w), "did not clear after entry and uses")
