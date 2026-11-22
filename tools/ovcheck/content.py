@@ -157,13 +157,28 @@ def _cross_check(root, found, errors):
         for i, st in enumerate(c["steps"]):
             if st["op"] in ("walk", "camera"):
                 _inside(f"{f}: step {i} {st['op']}", st["to"], target[1]["rows"], errors)
+    items = found.get("items", {})
+    for f, shop in found.get("shops", {}).values():
+        if "area" in shop and shop["area"] not in ids.get("areas", set()):
+            errors.append(f"{f}: shop stands in unknown area {shop['area']!r}")
+        for entry in shop["stock"]:
+            for t in entry.get("trades", []):
+                for side in ("gives", "wants"):
+                    for item in t[side]:
+                        if item not in items:
+                            errors.append(f"{f}: trade {side} unknown item {item!r}")
+                        elif side == "wants" and items[item][1].get("slot") == "key":
+                            errors.append(f"{f}: trade wants key item {item!r}")
     canon = Path(root) / "canon"
     if canon.is_dir():
         from .canon import load_entries
         entries = load_entries(canon, [], [])
-        for kind in ("areas", "people", "dialogue", "quests", "items"):
+        for kind in ("areas", "people", "dialogue", "quests", "items", "shops"):
             for f, data in found.get(kind, {}).values():
-                for ref in _canon_refs(data):
+                refs = list(_canon_refs(data))
+                if kind == "shops" and "keeper" in data:
+                    refs.append(data["keeper"]["place"])
+                for ref in refs:
                     if ref not in entries:
                         errors.append(f"{f}: canon id {ref!r} does not exist")
     things = {t["id"] for _, a in found.get("areas", {}).values()
@@ -243,7 +258,7 @@ def check_content(root):
                 errors.append(f"{f}: {path}: {e.message}")
             if problems:
                 continue
-            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items"):
+            if d.name in ("areas", "battles", "people", "dialogue", "quests", "items", "shops"):
                 found.setdefault(d.name, {})[data["id"]] = (f, data)
             if d.name not in LIMITS:
                 continue
