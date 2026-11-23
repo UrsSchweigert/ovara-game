@@ -83,6 +83,17 @@ func test_people_block_walking() -> void:
 	check_eq(to_person[-2], Vector2i(1, 0), "and the step before is the neighbour")
 
 
+func test_walk_in_another_area_does_not_move_a_person_here() -> void:
+	var c: Dictionary = _content()
+	(c["areas"]["b"] as Dictionary)["people"] = [{"id": "sefa", "cell": [2, 0]}]
+	c["people"] = {"sefa": {"canon": "person.sefa", "portrait": "portrait-mariners"}}
+	var s: RefCounted = Session.new_game(c, null)
+	s.world.position["area"] = "b"
+	s.world.call("set_figure_cell", "person.sefa", Vector2i(3, 2))
+	var here: Array[Dictionary] = s.people_here()
+	check_eq(here[0]["cell"], Vector2i(2, 0), "no cut scene set in b walked her, so the listed cell stands")
+
+
 func test_exit_and_quest_step() -> void:
 	var st: RefCounted = _store()
 	var s: RefCounted = Session.new_game(_content(), st)
