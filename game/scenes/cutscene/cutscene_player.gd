@@ -16,6 +16,8 @@ const FONT_SIZE: int = 16
 ## The light step's field in the cut-scene data, 0 dark to 1 full; split because the glossary bans the plain word.
 const LIGHT_KEY: String = "lev" + "el"
 const DARK: Color = Color(0.02, 0.02, 0.05)
+## A dark, half-clear layer under the speech panel so its text reads over a bright scene.
+const SHADE: Color = Color(0.0, 0.0, 0.03, 0.62)
 
 var _session: RefCounted = null
 var _paths: Dictionary = {}
@@ -25,6 +27,7 @@ var _camera_for: Callable = Callable()
 var _make_figure: Callable = Callable()
 var _tween: Tween = null
 var _panel: Control = null
+var _shade: ColorRect = null
 var _done: bool = false
 
 
@@ -135,6 +138,12 @@ func _say(step: Dictionary) -> void:
 	if (step["lines"] as Array).is_empty():
 		_next()
 		return
+	_shade = ColorRect.new()
+	_shade.color = SHADE
+	_shade.position = PANEL_AT
+	_shade.size = DialoguePanel.PANEL_SIZE
+	_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_shade)
 	_panel = DialoguePanel.new()
 	_panel.call("setup_lines", [{"speaker": str(step["speaker"]), "portrait": str(step["portrait"]), "lines": step["lines"]}], _paths)
 	_panel.position = PANEL_AT
@@ -143,6 +152,9 @@ func _say(step: Dictionary) -> void:
 
 
 func _close_panel() -> void:
+	if _shade != null:
+		_shade.queue_free()
+		_shade = null
 	if _panel != null:
 		_panel.queue_free()
 		_panel = null

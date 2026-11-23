@@ -122,12 +122,24 @@ func current_area() -> RefCounted:
 	return areas.get(area_id()) as RefCounted
 
 
-## The rules' path from the party's cell to `to`, both ends included; empty if none.
+## The rules' path from the party's cell to `to`, both ends included; empty if none. People and
+## walked-in figures are not walked through: the path goes round them and may end at one.
 func path_to(to: Vector2i) -> Array[Vector2i]:
 	var a: RefCounted = current_area()
 	if a == null:
 		return [] as Array[Vector2i]
-	return a.call("find_path", world, cell(), to)
+	return a.call("find_path", world, cell(), to, occupied_cells())
+
+
+## The cells where a person, a keeper or a figure a cut scene walked in stands, as cell -> true.
+## The party cannot enter them.
+func occupied_cells() -> Dictionary:
+	var out: Dictionary = {}
+	for who: Dictionary in people_here():
+		out[who["cell"]] = true
+	for walked: Dictionary in walked_here():
+		out[walked["cell"]] = true
+	return out
 
 
 ## The party enters one neighbouring cell. Returns {"ok", "area", "cell", "entered", "exit",
@@ -138,7 +150,7 @@ func step_to(to: Vector2i) -> Dictionary:
 	var here: Vector2i = cell()
 	var delta: Vector2i = (to - here).abs()
 	var out: Dictionary = {"ok": false, "area": area_id(), "cell": here, "entered": false, "exit": {}, "encounter": "", "steps_done": []}
-	if a == null or delta.x + delta.y != 1 or not bool(a.call("is_walkable", world, to)):
+	if a == null or delta.x + delta.y != 1 or not bool(a.call("is_walkable", world, to)) or occupied_cells().has(to):
 		return out
 	var before_area: String = area_id()
 	var before: Dictionary = _done_snapshot()

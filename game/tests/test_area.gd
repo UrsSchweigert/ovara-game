@@ -56,6 +56,15 @@ func test_blocked_tile() -> void:
 	check(not a.is_walkable(_world(), Vector2i(9, 9)), "out of bounds walkable")
 
 
+func test_blocked_cells_are_walked_round() -> void:
+	var a: RefCounted = _area()
+	var blocked: Dictionary = {Vector2i(0, 1): true}
+	var p: Array[Vector2i] = a.find_path(_world(), Vector2i(0, 0), Vector2i(0, 2), blocked)
+	check(not p.has(Vector2i(0, 1)), "went through a blocked cell")
+	var end: Array[Vector2i] = a.find_path(_world(), Vector2i(0, 0), Vector2i(0, 1), blocked)
+	check_eq(end[-1], Vector2i(0, 1), "the goal may be a blocked cell")
+
+
 func test_trait_blocked_tile() -> void:
 	var a: RefCounted = _area()
 	check(not a.is_walkable(_world(), Vector2i(3, 2)), "entered without trait")
