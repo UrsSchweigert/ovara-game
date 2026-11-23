@@ -185,13 +185,27 @@ func people_here() -> Array[Dictionary]:
 		if people.has(id) and Area.holds(d.get("when"), world):
 			var canon: String = str(_person(id).get("canon", ""))
 			var moved: Variant = world.call("figure_cell", canon)
-			var cell: Vector2i = moved if moved is Vector2i else Area.cell_of(d.get("cell", [0, 0]))
+			var cell: Vector2i = moved if moved is Vector2i and _walked_in_this_area(canon) else Area.cell_of(d.get("cell", [0, 0]))
 			out.append({"kind": "person", "id": id, "canon": canon, "cell": cell, "portrait": People.portrait_key(_person(id))})
 	for id: Variant in shops:
 		var shop: Dictionary = shops[id]
 		if str(shop.get("area", "")) == area_id():
 			out.append({"kind": "keeper", "id": str(id), "cell": Area.cell_of(shop.get("cell", [0, 0])), "portrait": ""})
 	return out
+
+
+## Whether a cut scene set in this area, and already seen, walked `canon`. Only then is the cell the
+## world holds for that figure a cell of this area; a walk in another area says nothing about here.
+func _walked_in_this_area(canon: String) -> bool:
+	for sid: Variant in cutscenes:
+		var data: Dictionary = cutscenes[sid]
+		if str(data.get("area", "")) != area_id() or not bool(world.call("has_seen_scene", str(sid))):
+			continue
+		for step: Variant in data.get("steps", []):
+			var d: Dictionary = step
+			if str(d.get("op", "")) == "walk" and str(d.get("who", "")) == canon:
+				return true
+	return false
 
 
 ## Who a finished cut scene set in this area walked in and the area does not list:
