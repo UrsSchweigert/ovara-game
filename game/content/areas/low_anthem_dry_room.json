@@ -20,6 +20,9 @@
   "exits": [
     {"cell": [3, 4], "to": "low_anthem_dome_hall", "to_cell": [5, 1]}
   ],
+  "people": [
+    {"id": "sefa", "cell": [4, 2]}
+  ],
   "things": [
     {"id": "guest_bed", "canon": "place.low-anthem", "cell": [1, 1]},
     {"id": "warm_stone", "canon": "place.low-anthem", "cell": [6, 1]}

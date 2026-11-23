@@ -26,6 +26,10 @@
     {"cell": [5, 0], "to": "low_anthem_dry_room", "to_cell": [3, 3]},
     {"cell": [19, 4], "to": "low_anthem_meeting_hall", "to_cell": [1, 3]}
   ],
+  "people": [
+    {"id": "ione", "cell": [6, 3]},
+    {"id": "davin", "cell": [12, 4]}
+  ],
   "things": [
     {"id": "air_heart", "canon": "place.low-anthem", "cell": [10, 1]},
     {"id": "lit_lamp", "canon": "place.low-anthem", "cell": [3, 2]},
