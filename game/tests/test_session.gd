@@ -66,6 +66,23 @@ func test_path_and_step() -> void:
 	check(s.world.has_entered("a", Vector2i(1, 0)), "entry recorded")
 
 
+func test_people_block_walking() -> void:
+	var c: Dictionary = _content()
+	(c["areas"]["a"] as Dictionary)["people"] = [{"id": "sefa", "cell": [2, 0]}]
+	c["people"] = {"sefa": {"canon": "person.sefa", "portrait": "portrait-mariners"}}
+	var s: RefCounted = Session.new_game(c)
+	check_eq(s.occupied_cells().keys(), [Vector2i(2, 0)], "the person's cell is occupied")
+	s.step_to(Vector2i(1, 0))
+	var onto: Dictionary = s.step_to(Vector2i(2, 0))
+	check(not onto["ok"], "cannot step onto a person")
+	check_eq(s.cell(), Vector2i(1, 0), "stayed")
+	var round: Array[Vector2i] = s.path_to(Vector2i(3, 0))
+	check(not round.has(Vector2i(2, 0)), "path goes round the person")
+	var to_person: Array[Vector2i] = s.path_to(Vector2i(2, 0))
+	check_eq(to_person[-1], Vector2i(2, 0), "a path may end at the person")
+	check_eq(to_person[-2], Vector2i(1, 0), "and the step before is the neighbour")
+
+
 func test_exit_and_quest_step() -> void:
 	var st: RefCounted = _store()
 	var s: RefCounted = Session.new_game(_content(), st)
