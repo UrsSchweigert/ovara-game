@@ -127,8 +127,9 @@ func is_walkable(world: RefCounted, cell: Vector2i) -> bool:
 
 
 ## Shortest path by breadth-first search over four neighbours, both ends included.
-## Empty if the goal cannot be reached.
-func find_path(world: RefCounted, from: Vector2i, to: Vector2i) -> Array[Vector2i]:
+## Empty if the goal cannot be reached. `blocked` maps cells that cannot be entered (where
+## people stand) to true; the goal itself may be one, so a path can end at a person.
+func find_path(world: RefCounted, from: Vector2i, to: Vector2i, blocked: Dictionary = {}) -> Array[Vector2i]:
 	var path: Array[Vector2i] = []
 	if not is_walkable(world, from) or not is_walkable(world, to):
 		return path
@@ -140,7 +141,7 @@ func find_path(world: RefCounted, from: Vector2i, to: Vector2i) -> Array[Vector2
 		head += 1
 		for step: Vector2i in STEPS:
 			var next: Vector2i = here + step
-			if not came.has(next) and is_walkable(world, next):
+			if not came.has(next) and is_walkable(world, next) and (next == to or not blocked.has(next)):
 				came[next] = here
 				queue.append(next)
 	if not came.has(to):
